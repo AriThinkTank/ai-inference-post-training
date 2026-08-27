@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chapter 05 · Reading Room — After the Model Is Trained</title>
+<meta name="description" content="A graded reading list, a searchable glossary of every term used, and ten questions to check whether any of it stuck.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/takshashila.css">
+</head>
+<body>
+<div class="progress" aria-hidden="true"></div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-mark" href="index.html">After the Model Is Trained <span>Takshashila</span></a>
+    <button class="nav-toggle" type="button" aria-expanded="false">Menu</button>
+    <div class="nav-links">
+      <a class="nav-link" href="index.html">The Map</a>
+      <a class="nav-link" href="01-what-pretraining-leaves.html">The Next-Token Machine</a>
+      <a class="nav-link" href="02-post-training.html">Post-Training</a>
+      <a class="nav-link" href="03-inference.html">Inference</a>
+      <a class="nav-link" href="04-policy.html">Why It Matters</a>
+      <a class="nav-link" href="05-reference.html" aria-current="page">Reading Room</a>
+    </div>
+  </div>
+</nav>
+
+<header class="section">
+  <div class="container">
+    <p class="crumbs" style="margin-bottom:22px"><a href="index.html">The Map</a> / Chapter 05</p>
+    <span class="eyebrow">Chapter 05 &middot; Reading and reference</span>
+    <h1 class="page-title" style="margin:16px 0 24px;max-width:18ch;font-size:56px;line-height:1.02;letter-spacing:-0.025em">The <em>Reading</em> Room</h1>
+    <div class="split">
+      <p class="lede">A graded reading list, a searchable glossary of every term used on this site, and ten questions. Everything below is freely available online. Where a source is a vendor blog rather than a peer-reviewed paper, it says so, because the difference matters more in this field than in most.</p>
+      <div class="jump">
+        <a href="#start"><b>E.01</b>If only a weekend is available</a>
+        <a href="#post"><b>E.02</b>Post-training in depth</a>
+        <a href="#inf"><b>E.03</b>Inference in depth</a>
+        <a href="#glossary"><b>E.04</b>Glossary</a>
+        <a href="#quiz"><b>E.05</b>Ten questions</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============================ E.01 ============================ -->
+<section class="section deep" id="start">
+  <div class="container">
+    <span class="eyebrow">E.01 &middot; If only a weekend is available</span>
+    <h2 class="h-section" style="margin:14px 0 30px;max-width:28ch">Four sources that cover most of this properly</h2>
+
+    <div class="card-grid-2">
+      <div class="card">
+        <span class="code-no">R.01</span>
+        <h3 class="h-card" style="margin:8px 0 10px">Nathan Lambert, <i>Reinforcement Learning from Human Feedback</i></h3>
+        <p class="meta" style="text-transform:none;letter-spacing:0;margin-bottom:12px">Free at rlhfbook.com; also arXiv:2504.12501; print edition from Manning, 2026.</p>
+        <p class="body-s">The single best source for chapter 02. Chapters 4 to 7 cover instruction tuning, reward models, policy gradients and reasoning. Written by the post-training lead at the Allen Institute, so it is a practitioner account rather than a survey.</p>
+        <p class="mt-m"><a class="link" href="https://rlhfbook.com" rel="noopener">rlhfbook.com <span class="arrow">&#8599;</span></a></p>
+      </div>
+      <div class="card">
+        <span class="code-no">R.02</span>
+        <h3 class="h-card" style="margin:8px 0 10px">Jacob Austin and others, <i>How To Scale Your Model</i></h3>
+        <p class="meta" style="text-transform:none;letter-spacing:0;margin-bottom:12px">Free at jax-ml.github.io/scaling-book; Google DeepMind, 2025.</p>
+        <p class="body-s">The single best source for chapter 03. Chapter 7 on transformer inference gives the arithmetic of prefill, decode and the KV cache, and chapter 8 works through the cost of serving a real model. Assumes algebra and nothing more.</p>
+        <p class="mt-m"><a class="link" href="https://jax-ml.github.io/scaling-book" rel="noopener">jax-ml.github.io/scaling-book <span class="arrow">&#8599;</span></a></p>
+      </div>
+      <div class="card">
+        <span class="code-no">R.03</span>
+        <h3 class="h-card" style="margin:8px 0 10px">Epoch AI, Trends dashboard and Gradient Updates</h3>
+        <p class="meta" style="text-transform:none;letter-spacing:0;margin-bottom:12px">Free at epoch.ai/trends and epochai.substack.com; updated continuously.</p>
+        <p class="body-s">The best source for chapter 04. Independent, publishes its method and data, and the most reliable place to check any claim about where AI compute goes or what it costs.</p>
+        <p class="mt-m"><a class="link" href="https://epoch.ai/trends" rel="noopener">epoch.ai/trends <span class="arrow">&#8599;</span></a></p>
+      </div>
+      <div class="card">
+        <span class="code-no">R.04</span>
+        <h3 class="h-card" style="margin:8px 0 10px">Georgia Tech CS 7643, lecture 23</h3>
+        <p class="meta" style="text-transform:none;letter-spacing:0;margin-bottom:12px">Slides, Spring 2026, at faculty.cc.gatech.edu.</p>
+        <p class="body-s">Covers supervised fine-tuning through to GRPO in one sitting, with the equations included. Useful if the mathematics is wanted in compact form, and short enough to read on a train.</p>
+      </div>
+    </div>
+    <span class="source">All four are freely available online. Publication details as listed above.</span>
+  </div>
+</section>
+
+<!-- ============================ E.02 ============================ -->
+<section class="section" id="post">
+  <div class="container">
+    <span class="eyebrow">E.02 &middot; Post-training in depth</span>
+    <h2 class="h-section" style="margin:14px 0 30px;max-width:26ch">Primary sources for chapter 02</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Source</th><th>What it is for</th><th>Grade</th></tr></thead>
+        <tbody>
+          <tr><td>Ouyang et al., &lsquo;Training language models to follow instructions with human feedback&rsquo;, arXiv:2203.02155</td><td>The original RLHF paper. Read for the loop in its first form.</td><td><span class="chip chip-soft">Peer-reviewed, primary</span></td></tr>
+          <tr><td>Rafailov et al., &lsquo;Direct Preference Optimization&rsquo;, arXiv:2305.18290</td><td>The derivation, and why the reward model can be dissolved into the loss.</td><td><span class="chip chip-soft">Peer-reviewed, primary</span></td></tr>
+          <tr><td>Bai et al., &lsquo;Constitutional AI: Harmlessness from AI Feedback&rsquo;, arXiv:2212.08073</td><td>The method behind written constitutions, including the critique-and-revise loop.</td><td><span class="chip">Primary, developer-authored</span></td></tr>
+          <tr><td>Shao et al., DeepSeekMath, arXiv:2402.03300</td><td>Where GRPO was introduced. Read alongside the DeepSeek-R1 report for how it was used at scale.</td><td><span class="chip">Primary, developer-authored</span></td></tr>
+          <tr><td>&lsquo;Reinforcement Learning for LLM Post-Training: A Survey&rsquo;, openreview.net/forum?id=UdsXTNzzvg</td><td>A map of the whole field as of 2026, useful for placing any method not covered here.</td><td><span class="chip chip-soft">Survey, peer-reviewed</span></td></tr>
+          <tr><td>Frantar et al., &lsquo;GPTQ&rsquo;, arXiv:2210.17323</td><td>The standard reference for post-training quantisation.</td><td><span class="chip chip-soft">Peer-reviewed, primary</span></td></tr>
+          <tr><td>&lsquo;Scaling Agentic RL with Tunix&rsquo;, Google, 2026; &lsquo;Efficient RL Training for the Agentic Era&rsquo;, Salesforce, 2026</td><td>The systems problems in agentic training. Read for what these teams built, not for comparative benchmarks.</td><td><span class="chip chip-neg">Developer blog, unverified</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <span class="source">Grades follow the three tiers set out in chapter 04, D.05.</span>
+  </div>
+</section>
+
+<!-- ============================ E.03 ============================ -->
+<section class="section deep" id="inf">
+  <div class="container">
+    <span class="eyebrow">E.03 &middot; Inference in depth</span>
+    <h2 class="h-section" style="margin:14px 0 30px;max-width:26ch">Primary sources for chapter 03</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Source</th><th>What it is for</th><th>Grade</th></tr></thead>
+        <tbody>
+          <tr><td>Kwon et al., &lsquo;Efficient Memory Management for LLM Serving with PagedAttention&rsquo;, SOSP 2023, arXiv:2309.06180</td><td>Paged attention, and the block-sharing mechanism prefix caching is built on. Short and readable.</td><td><span class="chip chip-soft">Peer-reviewed, primary</span></td></tr>
+          <tr><td>Pope et al., &lsquo;Efficiently Scaling Transformer Inference&rsquo;, arXiv:2211.05102</td><td>The mathematical foundation for the whole chapter.</td><td><span class="chip chip-soft">Peer-reviewed, primary</span></td></tr>
+          <tr><td>Leviathan et al., &lsquo;Fast Inference from Transformers via Speculative Decoding&rsquo;, arXiv:2211.17192</td><td>Speculative decoding, including the proof that the output distribution is preserved.</td><td><span class="chip chip-soft">Peer-reviewed, primary</span></td></tr>
+          <tr><td>Ainslie et al., &lsquo;GQA&rsquo;, arXiv:2305.13245; Shazeer, &lsquo;Fast Transformer Decoding&rsquo;, arXiv:1911.02150</td><td>The attention variants, and what each one gives up.</td><td><span class="chip chip-soft">Peer-reviewed, primary</span></td></tr>
+          <tr><td>&lsquo;LLM Inference Acceleration: A Comprehensive Hardware Perspective&rsquo;, arXiv:2410.04466</td><td>A survey linking the serving techniques to the hardware they run on.</td><td><span class="chip chip-soft">Survey</span></td></tr>
+          <tr><td>Epoch AI, Trends dashboard and Gradient Updates (epoch.ai/trends)</td><td>The compute-split figures in chapter 04. The most reliable quantitative source, and it publishes its method.</td><td><span class="chip chip-soft">Independent, method published</span></td></tr>
+          <tr><td>Vendor engineering guides on batching, KV cache and quantisation, 2026</td><td>Useful for current practice and for terminology. Benchmarks are self-reported and not reproducible.</td><td><span class="chip chip-neg">Vendor, unverified</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="aside mt-l" style="max-width:78ch">
+      <span class="aside-title">A caution</span>
+      <p>A good deal of 2026 material on serving practice sits on search-optimised sites with unverifiable figures, and is best avoided for published work. If a page gives a throughput number without a batch size and a context length, it is not telling you anything.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ E.04 GLOSSARY ============================ -->
+<section class="section" id="glossary">
+  <div class="container">
+    <span class="eyebrow">E.04 &middot; Glossary</span>
+    <h2 class="h-section" style="margin:14px 0 30px;max-width:26ch">Every term used on this site</h2>
+    <div data-widget="glossary" class="reveal"></div>
+  </div>
+</section>
+
+<!-- ============================ E.05 QUIZ ============================ -->
+<section class="section deep" id="quiz">
+  <div class="container">
+    <span class="eyebrow">E.05 &middot; Ten questions</span>
+    <h2 class="h-section" style="margin:14px 0 18px;max-width:26ch">Did any of it stick?</h2>
+    <p class="lede" style="max-width:62ch;margin-bottom:30px">Nothing is recorded and nothing is sent anywhere. Each answer points back to the chapter it came from.</p>
+    <div data-widget="quiz" class="reveal"></div>
+  </div>
+</section>
+
+<!-- ============================ CLOSING ============================ -->
+<section class="section ink">
+  <div class="container">
+    <div class="split">
+      <div>
+        <span class="eyebrow">In closing</span>
+        <h2 class="h-section" style="margin:16px 0 24px;max-width:20ch">Pretraining built the capability.<br>Post-training made it <em>usable</em>.<br>Inference decides who can <em>afford</em> it.</h2>
+        <p class="lede" style="color:rgba(255,255,255,0.85);max-width:52ch">If a single idea survives from all five chapters, let it be that &ldquo;training&rdquo; is not one thing, and that the moment a question is answered is now one of the places where capability is decided.</p>
+      </div>
+      <div class="stack-m">
+        <div>
+          <h3 class="h-sub" style="color:#fff;margin-bottom:8px">About this site</h3>
+          <p class="body-s" style="color:rgba(255,255,255,0.7)">Built from a briefing deck prepared for the High-Tech Geopolitics Programme at the Takshashila Institution, August 2026. A draft for discussion. Every panel carries its sources. Frameworks assembled for the deck are marked as such, and no claim to novelty is made for them.</p>
+        </div>
+        <div>
+          <h3 class="h-sub" style="color:#fff;margin-bottom:8px">On the dialogue</h3>
+          <p class="body-s" style="color:rgba(255,255,255,0.7)">Ira, Echo, Mark and Vera are inventions. The behaviour they illustrate is not: every exchange stands on a cited mechanism, and where the underlying evidence is thin the panel beside it says so.</p>
+        </div>
+        <div>
+          <h3 class="h-sub" style="color:#fff;margin-bottom:8px">Corrections</h3>
+          <p class="body-s" style="color:rgba(255,255,255,0.7)">Welcome, particularly on the four points listed under <a class="link" href="04-policy.html#limits">D.05</a>. Prepared with an AI assistant.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="pager">
+  <a href="04-policy.html"><span class="meta">&larr; Previous</span><span style="display:block;font-size:19px;margin-top:6px">Chapter 04 &middot; Why It Matters</span></a>
+  <a class="next" href="index.html"><span class="meta">Back to the start &rarr;</span><span style="display:block;font-size:19px;margin-top:6px">The Map</span></a>
+</div>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <p class="footer-tag">Pretraining built the capability.<br>Post-training made it usable.<br>Inference decides who can afford it.</p>
+      <p class="footer-addr" style="margin-top:24px">Prepared for the High-Tech Geopolitics Programme,<br>Takshashila Institution, Bengaluru. A draft for discussion.</p>
+    </div>
+    <div>
+      <h4>Chapters</h4>
+      <ul>
+        <li><a href="index.html">The Map</a></li>
+        <li><a href="01-what-pretraining-leaves.html">The Next-Token Machine</a></li>
+        <li><a href="02-post-training.html">Post-Training</a></li>
+        <li><a href="03-inference.html">Inference</a></li>
+        <li><a href="04-policy.html">Why It Matters</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Reference</h4>
+      <ul>
+        <li><a href="05-reference.html#start">Start Here</a></li>
+        <li><a href="05-reference.html#glossary">Glossary</a></li>
+        <li><a href="05-reference.html#quiz">Ten Questions</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Sources</h4>
+      <ul>
+        <li><a href="https://rlhfbook.com" rel="noopener">Lambert, RLHF Book <span class="arrow">&#8599;</span></a></li>
+        <li><a href="https://jax-ml.github.io/scaling-book" rel="noopener">Austin et al., Scaling Book <span class="arrow">&#8599;</span></a></li>
+        <li><a href="https://epoch.ai/trends" rel="noopener">Epoch AI Trends <span class="arrow">&#8599;</span></a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-base">
+    <span>August 2026 &middot; Draft for discussion &middot; Prepared with an AI assistant</span>
+    <span>Every panel carries its sources</span>
+  </div>
+</footer>
+
+<script src="assets/js/comic.js"></script>
+<script src="assets/js/widgets-train.js"></script>
+<script src="assets/js/widgets-serve.js"></script>
+</body>
+</html>

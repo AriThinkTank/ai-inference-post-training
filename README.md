@@ -1,0 +1,72 @@
+# After the Model Is Trained
+
+A five-chapter explainer on post-training and inference, built from a briefing deck prepared for the High-Tech Geopolitics Programme, Takshashila Institution.
+
+Plain HTML, CSS and JavaScript. No build step, no framework, no dependencies beyond two Google Fonts loaded from a CDN.
+
+## Deploying to GitHub Pages
+
+1. Create a repository and push the contents of this folder to the root of the default branch.
+
+   ```
+   git init
+   git add .
+   git commit -m "Initial commit"
+   git branch -M main
+   git remote add origin https://github.com/<user>/<repo>.git
+   git push -u origin main
+   ```
+
+2. In the repository, go to **Settings → Pages**.
+3. Under **Source**, choose **Deploy from a branch**. Set the branch to `main` and the folder to `/ (root)`. Save.
+4. The site appears at `https://<user>.github.io/<repo>/` within a minute or two.
+
+The `.nojekyll` file stops GitHub from running the pages through Jekyll, which would otherwise ignore some paths. Leave it in place.
+
+To serve the site from a subdirectory instead, move these files into that directory and choose it in step 3. All internal links are relative, so nothing needs editing.
+
+## Running it locally
+
+Opening `index.html` directly in a browser works. To serve it properly:
+
+```
+python3 -m http.server 8000
+```
+
+Then visit `http://localhost:8000`.
+
+## Structure
+
+```
+index.html                      The map, the cast, the vocabulary
+01-what-pretraining-leaves.html Chapter 01 — the next-token machine
+02-post-training.html           Chapter 02 — four teachers
+03-inference.html               Chapter 03 — inference
+04-policy.html                  Chapter 04 — why it matters
+05-reference.html               Chapter 05 — reading, glossary, quiz
+assets/css/takshashila.css      The whole design system
+assets/js/comic.js              Cast figures, navigation, scroll behaviour
+assets/js/widgets-train.js      Widgets for chapters 01 and 02, plus shared helpers
+assets/js/widgets-serve.js      Widgets for chapters 03 and 05
+```
+
+## How the widgets work
+
+Every interactive element is a `<div data-widget="name">`. On load, the scripts find each one and build it. To add a widget, register it with `T.widget('name', function (node) { ... })` and drop the matching div into a page.
+
+`widgets-train.js` defines the shared helpers, so where both files are used it must be loaded first.
+
+## Editorial conventions
+
+- Wine marks a change to the weights. Marigold marks compute spent per request. This is used consistently and is explained on the cover.
+- Every figure carries its source in the `.source` line beneath it. Where a number comes from a vendor benchmark nobody outside the vendor can reproduce, the source line says so.
+- Illustrative numbers are labelled as illustrative. The KV cache figures are computed from a stated formula so a reader can check them.
+- No emoji, no exclamation marks, no border radius, no drop shadows. These are deliberate, and follow the Takshashila design language.
+
+## Accessibility
+
+Interactive controls are real buttons and inputs, reachable by keyboard, with a visible wine focus ring. Charts carry `role="img"` and a label. Animation is suppressed under `prefers-reduced-motion`. The one known weakness is that a few widgets convey state partly through colour; each also states it in text.
+
+## Corrections
+
+The four points listed under D.05 in chapter 04 are where the material is least secure. Corrections are welcome there first.

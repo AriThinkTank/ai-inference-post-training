@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>After the Model Is Trained — post-training and inference, explained like you are ten</title>
+<meta name="description" content="A comic-strip explainer on what happens to a language model after pretraining: post-training, inference, and why both matter for policy. Takshashila Institution, High-Tech Geopolitics Programme.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/takshashila.css">
+</head>
+<body>
+<div class="progress" aria-hidden="true"></div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-mark" href="index.html">After the Model Is Trained <span>Takshashila</span></a>
+    <button class="nav-toggle" type="button" aria-expanded="false">Menu</button>
+    <div class="nav-links">
+      <a class="nav-link" href="index.html" aria-current="page">The Map</a>
+      <a class="nav-link" href="01-what-pretraining-leaves.html">The Next-Token Machine</a>
+      <a class="nav-link" href="02-post-training.html">Post-Training</a>
+      <a class="nav-link" href="03-inference.html">Inference</a>
+      <a class="nav-link" href="04-policy.html">Why It Matters</a>
+      <a class="nav-link" href="05-reference.html">Reading Room</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============================ HERO ============================ -->
+<header class="section">
+  <div class="container">
+    <span class="eyebrow">Takshashila Institution &middot; High-Tech Geopolitics Programme</span>
+    <h1 class="display" style="margin:22px 0 26px;max-width:16ch">After the Model <em>Is Trained</em></h1>
+    <div class="split">
+      <p class="lede">Most explanations of large language models stop at the end of pretraining: assemble a very large corpus, predict the next token, scale up. Almost everything that has changed in the past two years happens after that point. This is that part, drawn out in panels, for a reader who has never opened a machine-learning textbook and has no intention of starting.</p>
+      <div>
+        <div class="row" style="margin-bottom:18px">
+          <span class="chip chip-gold">Explain like I am ten</span>
+          <span class="chip">Five chapters</span>
+          <span class="chip">Twenty-odd things to click</span>
+        </div>
+        <p class="body-s">Every panel carries its source. Where a claim rests on a vendor benchmark that nobody outside the vendor can reproduce, the panel says so.</p>
+        <a class="btn" href="#map" style="margin-top:14px">Start with the map <span class="arrow">&rarr;</span></a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============================ OPENING STRIP ============================ -->
+<section class="section deep">
+  <div class="container">
+    <span class="eyebrow">Strip 01 &middot; The handover</span>
+    <h2 class="h-section" style="margin:14px 0 30px;max-width:22ch">A machine that has read almost everything, and cannot answer a question</h2>
+
+    <div class="strip reveal">
+      <div class="panel">
+        <span class="panel-code">01</span>
+        <div class="caption-box">Pretraining has just finished. Three hundred billion words have gone in.</div>
+        <div class="bubble"><span class="bubble-who">Ira</span>Right. Ask it something.</div>
+        <div class="panel-art"><div class="cast" data-char="ira" data-mood="happy" data-size="112"></div></div>
+      </div>
+      <div class="panel">
+        <span class="panel-code">02</span>
+        <div class="bubble"><span class="bubble-who">Ira</span>What does the 2019 ethanol import restriction do?</div>
+        <div class="panel-art between">
+          <div class="cast" data-char="ira" data-mood="point" data-size="104"></div>
+          <div class="cast flip" data-char="echo" data-mood="blank" data-size="104"></div>
+        </div>
+      </div>
+      <div class="panel">
+        <span class="panel-code">03</span>
+        <div class="bubble right"><span class="bubble-who">Echo</span>What does the 2020 sugar levy do? What does the 2021 blending target do? What does&hellip;</div>
+        <div class="panel-art"><div class="cast" data-char="echo" data-mood="blank" data-size="112"></div></div>
+      </div>
+      <div class="panel deep wide">
+        <span class="panel-code">04</span>
+        <div class="bubble"><span class="bubble-who">Ira</span>It did not answer me. It just kept going.</div>
+        <div class="bubble right"><span class="bubble-who">Echo</span>I was not asked to answer. I was asked what comes next. A question is usually followed by more questions.</div>
+        <div class="panel-art between">
+          <div class="cast" data-char="ira" data-mood="doubt" data-size="100"></div>
+          <div class="cast flip" data-char="echo" data-mood="blank" data-size="100"></div>
+        </div>
+      </div>
+      <div class="panel">
+        <span class="panel-code">05</span>
+        <div class="caption-box">Everything in this explainer is about the distance between panel 03 and a useful reply.</div>
+        <p class="panel-note">Two stages sit in that gap. <b style="font-weight:500">Post-training</b> changes the weights. <b style="font-weight:500">Inference</b> is what happens when those weights are run against a live request.</p>
+        <div class="sfx">The gap</div>
+      </div>
+    </div>
+    <span class="source">Behaviour of base models as described in Georgia Tech CS 7643, Spring 2026, lecture 23; N. Lambert, <i>Reinforcement Learning from Human Feedback</i>, arXiv:2504.12501, ch. 4. Dialogue is invented; the behaviour it illustrates is not.</span>
+  </div>
+</section>
+
+<!-- ============================ WHAT THIS IS ============================ -->
+<section class="section">
+  <div class="container">
+    <div class="split">
+      <div>
+        <span class="eyebrow">Orientation</span>
+        <h2 class="h-section" style="margin:14px 0 22px;max-width:20ch">What this is for, and what it is not</h2>
+        <div class="aside">
+          <span class="aside-title">The central point, in one breath</span>
+          <p>Capability is no longer mostly a property of the pretraining run. It is increasingly a property of what is done to the weights afterwards, and of how much compute is spent at the moment a question is answered.</p>
+          <p class="body-s">That shift is what drives almost every policy question in chapter 04. If you read nothing else, read that sentence twice.</p>
+        </div>
+      </div>
+      <div class="stack-m">
+        <div class="card">
+          <span class="code-no">01</span>
+          <h3 class="h-card" style="margin:8px 0 8px">The machinery, not the products</h3>
+          <p class="body-s">No brand names are being compared here. The subject is the machinery that sits between a finished pretraining run and something you can actually talk to.</p>
+        </div>
+        <div class="card">
+          <span class="code-no">02</span>
+          <h3 class="h-card" style="margin:8px 0 8px">Readable without a machine-learning background</h3>
+          <p class="body-s">Every idea is introduced in plain terms before any jargon is attached to it. Where mathematics is unavoidable, this site says what the mathematics is doing rather than reproducing it.</p>
+        </div>
+        <div class="card">
+          <span class="code-no">03</span>
+          <h3 class="h-card" style="margin:8px 0 8px">A map of a moving field, graded honestly</h3>
+          <p class="body-s">Serving practice in 2026 is documented mainly in vendor notes whose benchmarks cannot be reproduced independently. Where a claim rests on that, the panel says so.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ HOW TO READ ============================ -->
+<section class="section deep">
+  <div class="container">
+    <span class="eyebrow">How to read the panels</span>
+    <h2 class="h-section" style="margin:14px 0 30px;max-width:24ch">Two colours carry the whole argument</h2>
+    <div class="gapless cols-4">
+      <div>
+        <span style="display:block;height:10px;background:var(--wine);margin-bottom:14px"></span>
+        <h3 class="h-card" style="margin-bottom:8px">Wine</h3>
+        <p class="body-s">A change to the weights. Something the developer does once, before release, and everybody afterwards inherits.</p>
+      </div>
+      <div>
+        <span style="display:block;height:10px;background:var(--gold);margin-bottom:14px"></span>
+        <h3 class="h-card" style="margin-bottom:8px">Marigold</h3>
+        <p class="body-s">Compute spent per request. Paid again for every single question, by whoever is serving the model and, in the end, by you.</p>
+      </div>
+      <div>
+        <span class="code-no" style="display:block;margin-bottom:14px;font-size:16px">P.04&nbsp;&nbsp;B.21&nbsp;&nbsp;C.36</span>
+        <h3 class="h-card" style="margin-bottom:8px">Mono codes</h3>
+        <p class="body-s">Every element carries a short code so it can be pointed at in discussion without ambiguity. They match the codes in the underlying briefing deck.</p>
+      </div>
+      <div>
+        <span class="chip chip-soft" style="margin-bottom:14px">Grown-up version</span>
+        <h3 class="h-card" style="margin-bottom:8px">The boxes at the side</h3>
+        <p class="body-s">Each strip is followed by the precise technical statement of the same thing, for a reader who wants the real vocabulary rather than the picture.</p>
+      </div>
+    </div>
+
+    <h3 class="h-feature" style="margin:44px 0 22px">The four you will keep meeting</h3>
+    <div class="gapless cols-4">
+      <div>
+        <div class="cast" data-char="ira" data-mood="happy" data-size="120"></div>
+        <div class="cast-name">Ira &middot; age ten</div>
+        <p class="body-s mt-s">Asks the naive question, which is usually the one the field has not settled either.</p>
+      </div>
+      <div>
+        <div class="cast" data-char="echo" data-mood="blank" data-size="120"></div>
+        <div class="cast-name">Echo &middot; the model</div>
+        <p class="body-s mt-s">Literal to a fault. Says exactly what it is doing, which is why it is so often misunderstood.</p>
+      </div>
+      <div>
+        <div class="cast" data-char="mark" data-mood="blank" data-size="120"></div>
+        <div class="cast-name">Mark &middot; the judge</div>
+        <p class="body-s mt-s">A second model, trained to guess what a human would have preferred. Confident, cheap, and fooled more easily than anyone would like.</p>
+      </div>
+      <div>
+        <div class="cast" data-char="vera" data-mood="pass" data-size="120"></div>
+        <div class="cast-name">Vera &middot; the checker</div>
+        <p class="body-s mt-s">Not a model at all. A program that runs the code, or compares the answer, and says pass or fail. Cannot be flattered.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ THE MAP ============================ -->
+<section class="section" id="map">
+  <div class="container">
+    <span class="eyebrow">The map &middot; one screen</span>
+    <h2 class="h-section" style="margin:14px 0 18px;max-width:24ch">From raw text to an answer on a screen, in seven stages</h2>
+    <p class="lede" style="max-width:62ch;margin-bottom:30px">The first five change the weights. The last two spend compute at the moment of use. Almost every confusion in public discussion comes from treating all seven as one thing called &ldquo;training&rdquo;.</p>
+    <div data-widget="map" class="reveal"></div>
+
+    <div class="split-even mt-l">
+      <div class="aside">
+        <span class="aside-title">The loop that makes this hard to separate</span>
+        <p class="body-s">Stages P.03 to P.05 run the model in order to generate their own training data. Training now consumes very large amounts of inference, so the two halves of the map are no longer independent activities with independent costs. When somebody quotes a training figure and an inference figure, ask which column the rollouts were counted in. Often, neither.</p>
+      </div>
+      <div class="gapless cols-3" style="align-self:start">
+        <div>
+          <span class="meta">True in 2022</span>
+          <p class="body-s mt-s">Almost all capability came from pretraining. Post-training was a thin supervised layer.</p>
+        </div>
+        <div>
+          <span class="meta">True in 2026</span>
+          <p class="body-s mt-s">Preference training, verifiable rewards and agentic reinforcement learning carry a large and rising share of compute and capability.</p>
+        </div>
+        <div>
+          <span class="meta">Still contested</span>
+          <p class="body-s mt-s">Whether these stages create capability, or only make capability that was already there reliable.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ VOCABULARY ============================ -->
+<section class="section deep">
+  <div class="container">
+    <span class="eyebrow">Vocabulary</span>
+    <h2 class="h-section" style="margin:14px 0 18px;max-width:26ch">Six words that get used interchangeably, and should not be</h2>
+    <p class="lede" style="max-width:62ch;margin-bottom:30px">Each implies a different cost, a different actor, and a different point at which a government could intervene. Much of the confusion in policy discussion comes from these sliding into one another.</p>
+    <div data-widget="vocab" class="reveal"></div>
+  </div>
+</section>
+
+<!-- ============================ CHAPTERS ============================ -->
+<section class="section">
+  <div class="container">
+    <span class="eyebrow">Contents</span>
+    <h2 class="h-section" style="margin:14px 0 30px">Five chapters</h2>
+    <div class="rowlist">
+      <a class="rowlist-item" href="01-what-pretraining-leaves.html">
+        <span><span class="code-no">01</span><span style="display:block;font-size:21px;font-weight:500;margin-top:4px">The Next-Token Machine</span>
+        <span class="body-s" style="display:block;margin-top:4px;max-width:58ch">What a base model already has, what it is missing, and the claim that post-training only teaches format.</span></span>
+        <span class="meta">Chapter 01 <span class="arrow">&rarr;</span></span>
+      </a>
+      <a class="rowlist-item" href="02-post-training.html">
+        <span><span class="code-no">02</span><span style="display:block;font-size:21px;font-weight:500;margin-top:4px">Post-Training</span>
+        <span class="body-s" style="display:block;margin-top:4px;max-width:58ch">Four teachers, four kinds of signal. Copying, ranking, checking, and doing. Plus every way each of them can be gamed.</span></span>
+        <span class="meta">Chapter 02 <span class="arrow">&rarr;</span></span>
+      </a>
+      <a class="rowlist-item" href="03-inference.html">
+        <span><span class="code-no">03</span><span style="display:block;font-size:21px;font-weight:500;margin-top:4px">Inference</span>
+        <span class="body-s" style="display:block;margin-top:4px;max-width:58ch">No weights change here. Caches, batching, speculation, routing, and the decision to think for longer.</span></span>
+        <span class="meta">Chapter 03 <span class="arrow">&rarr;</span></span>
+      </a>
+      <a class="rowlist-item" href="04-policy.html">
+        <span><span class="code-no">04</span><span style="display:block;font-size:21px;font-weight:500;margin-top:4px">Why It Matters</span>
+        <span class="body-s" style="display:block;margin-top:4px;max-width:58ch">What the technical picture does to compute thresholds, export controls, evaluation and disclosure. Each claim graded.</span></span>
+        <span class="meta">Chapter 04 <span class="arrow">&rarr;</span></span>
+      </a>
+      <a class="rowlist-item" href="05-reference.html">
+        <span><span class="code-no">05</span><span style="display:block;font-size:21px;font-weight:500;margin-top:4px">Reading Room</span>
+        <span class="body-s" style="display:block;margin-top:4px;max-width:58ch">A graded reading list, a searchable glossary, and ten questions to check whether any of it stuck.</span></span>
+        <span class="meta">Chapter 05 <span class="arrow">&rarr;</span></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <p class="footer-tag">Pretraining built the capability.<br>Post-training made it usable.<br>Inference decides who can afford it.</p>
+      <a class="btn btn-gold" href="01-what-pretraining-leaves.html">Begin chapter 01 <span class="arrow">&rarr;</span></a>
+      <p class="footer-addr" style="margin-top:24px">Prepared for the High-Tech Geopolitics Programme,<br>Takshashila Institution, Bengaluru. A draft for discussion.</p>
+    </div>
+    <div>
+      <h4>Chapters</h4>
+      <ul>
+        <li><a href="index.html">The Map</a></li>
+        <li><a href="01-what-pretraining-leaves.html">The Next-Token Machine</a></li>
+        <li><a href="02-post-training.html">Post-Training</a></li>
+        <li><a href="03-inference.html">Inference</a></li>
+        <li><a href="04-policy.html">Why It Matters</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Reference</h4>
+      <ul>
+        <li><a href="05-reference.html#start">Start Here</a></li>
+        <li><a href="05-reference.html#glossary">Glossary</a></li>
+        <li><a href="05-reference.html#quiz">Ten Questions</a></li>
+        <li><a href="04-policy.html#limits">What Is Not Settled</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Sources</h4>
+      <ul>
+        <li><a href="https://rlhfbook.com" rel="noopener">Lambert, RLHF Book <span class="arrow">&#8599;</span></a></li>
+        <li><a href="https://jax-ml.github.io/scaling-book" rel="noopener">Austin et al., Scaling Book <span class="arrow">&#8599;</span></a></li>
+        <li><a href="https://epoch.ai/trends" rel="noopener">Epoch AI Trends <span class="arrow">&#8599;</span></a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-base">
+    <span>August 2026 &middot; Draft for discussion &middot; Prepared with an AI assistant</span>
+    <span>Every panel carries its sources</span>
+  </div>
+</footer>
+
+<script src="assets/js/comic.js"></script>
+<script src="assets/js/widgets-train.js"></script>
+</body>
+</html>

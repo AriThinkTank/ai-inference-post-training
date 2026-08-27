@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chapter 04 · Why It Matters — After the Model Is Trained</title>
+<meta name="description" content="What post-training and inference do to compute thresholds, export controls, evaluation and disclosure. Each claim stated as a conditional and graded.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/takshashila.css">
+</head>
+<body>
+<div class="progress" aria-hidden="true"></div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-mark" href="index.html">After the Model Is Trained <span>Takshashila</span></a>
+    <button class="nav-toggle" type="button" aria-expanded="false">Menu</button>
+    <div class="nav-links">
+      <a class="nav-link" href="index.html">The Map</a>
+      <a class="nav-link" href="01-what-pretraining-leaves.html">The Next-Token Machine</a>
+      <a class="nav-link" href="02-post-training.html">Post-Training</a>
+      <a class="nav-link" href="03-inference.html">Inference</a>
+      <a class="nav-link" href="04-policy.html" aria-current="page">Why It Matters</a>
+      <a class="nav-link" href="05-reference.html">Reading Room</a>
+    </div>
+  </div>
+</nav>
+
+<header class="section">
+  <div class="container">
+    <p class="crumbs" style="margin-bottom:22px"><a href="index.html">The Map</a> / Chapter 04</p>
+    <span class="eyebrow">Chapter 04 &middot; Why it matters for policy</span>
+    <h1 class="page-title" style="margin:16px 0 24px;max-width:20ch;font-size:56px;line-height:1.02;letter-spacing:-0.025em">The Instruments Were Built for a <em>Different Picture</em></h1>
+    <div class="split">
+      <p class="lede">The technical material in the first three chapters has a small number of consequences for how AI capability is measured, controlled and governed. Each is stated below as a conditional claim, with the evidence for it graded. None of them is a recommendation.</p>
+      <div class="jump">
+        <a href="#split"><b>D.01</b>Where the compute goes</a>
+        <a href="#controls"><b>D.02</b>What it does to controls</a>
+        <a href="#diffusion"><b>D.03</b>Diffusion outpaces creation</a>
+        <a href="#artefact"><b>D.04</b>Not a fixed artefact</a>
+        <a href="#limits"><b>D.05</b>What is not settled</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============================ D.01 ============================ -->
+<section class="section deep" id="split">
+  <div class="container">
+    <span class="eyebrow">D.01 &middot; The numbers, and why they disagree</span>
+    <h2 class="h-section" style="margin:14px 0 18px;max-width:30ch">Inference has become the larger share of compute, on most accounts</h2>
+    <p class="lede" style="max-width:64ch;margin-bottom:30px">Published estimates of the split differ widely, mostly over what is being counted rather than over the trend.</p>
+
+    <div class="gapless cols-3">
+      <div>
+        <span class="meta">Estimate 1 &middot; one firm, 2024</span>
+        <div class="kpi kpi-gold" style="margin:12px 0 8px">~30%</div>
+        <p class="body-s">About 30 per cent of one developer&rsquo;s compute spending went on inference. Epoch AI&rsquo;s estimate. The denominator is one company&rsquo;s own spending, in a year before reasoning models were widely deployed.</p>
+      </div>
+      <div>
+        <span class="meta">Estimate 2 &middot; industry, 2026</span>
+        <div class="kpi kpi-gold" style="margin:12px 0 8px">~2/3</div>
+        <p class="body-s">About two-thirds of all AI compute now goes on inference. A consultancy forecast reported second-hand, with a stated path from a third in 2023 through a half in 2025.</p>
+      </div>
+      <div>
+        <span class="meta">Estimate 3 &middot; the robust one</span>
+        <div class="kpi kpi-gold" style="margin:12px 0 8px">54&ndash;62%</div>
+        <p class="body-s">Share of operating costs taken by compute at the firms Epoch can model. Research and inference compute together, and the figure most robust to the counting problem below.</p>
+      </div>
+    </div>
+
+    <h3 class="h-feature" style="margin:44px 0 20px">Why the first two figures are not comparable</h3>
+    <div class="gapless cols-3">
+      <div><span class="code-no">01 &middot; Different denominators</span><p class="body-s mt-s">One firm&rsquo;s spending against the world&rsquo;s installed capacity. Frontier developers are estimated to use under half of global AI compute.</p></div>
+      <div><span class="code-no">02 &middot; A boundary problem</span><p class="body-s mt-s">The rollouts reinforcement learning consumes are inference runs, and are sometimes counted in neither column.</p></div>
+      <div><span class="code-no">03 &middot; Different source quality</span><p class="body-s mt-s">Epoch publishes its method and data. The industry-wide figure is a consultancy forecast reported second-hand.</p></div>
+    </div>
+
+    <div class="aside mt-l" style="max-width:76ch">
+      <span class="aside-title">What can safely be said</span>
+      <p>Inference is a large and rising share of AI compute. Any percentage needs its source and its denominator attached, and a figure quoted without both should not be load-bearing in an argument.</p>
+    </div>
+    <span class="source">Epoch AI, Trends dashboard and Data Insights, February 2026 (epoch.ai/trends); Epoch AI, &lsquo;Frontier labs don&rsquo;t use most AI compute (yet)&rsquo;, May 2026; Deloitte 2026 TMT Predictions as reported in trade coverage, not independently verified.</span>
+  </div>
+</section>
+
+<!-- ============================ D.02 ============================ -->
+<section class="section" id="controls">
+  <div class="container">
+    <span class="eyebrow">D.02 &middot; Implication</span>
+    <h2 class="h-section" style="margin:14px 0 30px;max-width:30ch">What the technical picture does to compute-based controls</h2>
+
+    <div class="strip strip-4 reveal">
+      <div class="panel">
+        <span class="panel-code">01</span>
+        <div class="caption-box">The picture the instruments were designed around</div>
+        <p class="panel-note">Capability is created once, in a very large training run, on identifiable hardware, by a small number of firms.</p>
+      </div>
+      <div class="panel">
+        <span class="panel-code">02</span>
+        <div class="bubble"><span class="bubble-who">Ira</span>But you said the capability keeps arriving afterwards. In lots of smaller runs. And then again when someone decides to let you think for longer.</div>
+        <div class="panel-art"><div class="cast" data-char="ira" data-mood="doubt" data-size="102"></div></div>
+      </div>
+      <div class="panel deep">
+        <span class="panel-code">03</span>
+        <div class="bubble right"><span class="bubble-who">Echo</span>And a smaller model can be taught most of what I can do, from my own outputs, in a few weeks.</div>
+        <div class="panel-art"><div class="cast" data-char="echo" data-mood="blank" data-size="102"></div></div>
+      </div>
+      <div class="panel winesoft">
+        <span class="panel-code">04</span>
+        <div class="caption-box">The narrow claim</div>
+        <p class="panel-note" style="font-size:15px">Each element of the original picture is now weaker than it was. That is not the same as saying the instruments do not work.</p>
+      </div>
+    </div>
+
+    <div class="table-wrap mt-l">
+      <table>
+        <thead><tr><th>Assumption in the original design</th><th>What chapters 02 and 03 show</th><th>Consequence</th><th>Evidence grade</th></tr></thead>
+        <tbody>
+          <tr><td>Capability comes from one large pretraining run</td><td>A large and rising share now comes from post-training, in many smaller runs</td><td>A threshold set on a single run&rsquo;s compute captures less of what matters</td><td><span class="chip chip-soft">Strong</span></td></tr>
+          <tr><td>Training compute is the quantity to measure</td><td>Post-training consumes inference, and answer-time compute adds capability after release</td><td>One number at one moment describes the artefact less well than it did</td><td><span class="chip chip-soft">Strong</span></td></tr>
+          <tr><td>Capability stays with whoever paid for it</td><td>Distillation reproduces much of a model&rsquo;s useful behaviour cheaply</td><td>Restricting access to the largest models does not restrict the behaviour they enable</td><td><span class="chip">Moderate</span></td></tr>
+          <tr><td>Hardware quantity maps to capability</td><td>Serving efficiency has improved several-fold at layer 4 of the stack</td><td>The same controlled hardware delivers more capability each year, with no change in what was exported</td><td><span class="chip">Moderate</span></td></tr>
+          <tr><td>Compute is concentrated in frontier developers</td><td>Frontier labs are estimated to use under half of the world&rsquo;s AI compute</td><td>Instruments aimed only at frontier developers reach a minority of deployed compute</td><td><span class="chip">Moderate</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card mt-l" style="border-left:2px solid var(--wine);max-width:82ch">
+      <span class="chip chip-gold">The fair counter-argument</span>
+      <h3 class="h-feature" style="margin:14px 0 12px;font-size:26px">None of this shows that compute controls do not work</h3>
+      <p>Very large pretraining runs remain difficult to hide and impossible to do without advanced accelerators, and hardware is still the most observable input in the whole system. Nothing in the first three chapters changes that.</p>
+      <p class="body-s">The narrower claim is that the share of capability those controls reach appears to be falling, and that anything measured only at training time now misses more than it once did. Those are different claims and should not be run together.</p>
+    </div>
+    <span class="source">Compute-share estimates: Epoch AI, &lsquo;Frontier labs don&rsquo;t use most AI compute (yet)&rsquo;, May 2026. Post-training compute growth: Lambert, arXiv:2504.12501, ch. 1. Grades are the author&rsquo;s judgement, not a published scale.</span>
+  </div>
+</section>
+
+<!-- ============================ D.03 ============================ -->
+<section class="section deep" id="diffusion">
+  <div class="container">
+    <span class="eyebrow">D.03 &middot; Implication</span>
+    <h2 class="h-section" style="margin:14px 0 18px;max-width:30ch">Capability diffuses on a much shorter clock than it is created</h2>
+    <p class="lede" style="max-width:64ch;margin-bottom:30px">Three mechanisms from chapter 02, taken together, compress the gap between a frontier release and widely available capability of a similar kind.</p>
+
+    <div class="gapless cols-3">
+      <div>
+        <span class="code-no">Mechanism 1</span>
+        <h3 class="h-card" style="margin:8px 0 10px">Distillation</h3>
+        <p class="body-s">A frontier model&rsquo;s outputs, including its reasoning traces, train much smaller models that reproduce a good deal of its behaviour on the tasks distilled.</p>
+      </div>
+      <div>
+        <span class="code-no">Mechanism 2</span>
+        <h3 class="h-card" style="margin:8px 0 10px">Published methods</h3>
+        <p class="body-s">The techniques in chapter 02 are documented in the open literature within months. Sequence and data quality are the hard parts, not the algorithms.</p>
+      </div>
+      <div>
+        <span class="code-no">Mechanism 3</span>
+        <h3 class="h-card" style="margin:8px 0 10px">Quantisation</h3>
+        <p class="body-s">Once a capable open model exists, compression moves it onto progressively cheaper hardware, and eventually onto machines no control regime observes.</p>
+      </div>
+    </div>
+
+    <div class="split mt-l">
+      <div class="card">
+        <span class="chip chip-gold">What follows for a country in India&rsquo;s position</span>
+        <h3 class="h-feature" style="margin:14px 0 12px;font-size:26px">The binding constraint may not be access to weights</h3>
+        <p>The practical question is less about access to the largest models and more about whether the complements are in place: accelerators to run inference at national scale, engineering capacity at layer 4 of the serving stack, and verifiable-reward environments for domains that matter locally.</p>
+        <p class="body-s">On the present evidence the binding constraints appear to be serving capacity and evaluation capability rather than access to weights. That judgement is an inference from the technical picture, not a measured finding, and it is offered as such.</p>
+      </div>
+      <div class="aside">
+        <span class="aside-title">The honest qualification</span>
+        <p>Diffusion is uneven, and shallower than headlines suggest. A distilled model matches its teacher on the distribution it was distilled for and degrades away from it.</p>
+        <p class="body-s">Agentic capability, which depends on maintained environments rather than on weights, has diffused much more slowly than reasoning ability. Anyone arguing that everything diffuses in weeks should be asked about environments.</p>
+      </div>
+    </div>
+    <span class="source">Mechanisms as cited in chapter 02. The judgement about binding constraints is the author&rsquo;s, offered as an inference from the technical picture rather than as a measured finding.</span>
+  </div>
+</section>
+
+<!-- ============================ D.04 ============================ -->
+<section class="section" id="artefact">
+  <div class="container">
+    <span class="eyebrow">D.04 &middot; Implication</span>
+    <h2 class="h-section" style="margin:14px 0 18px;max-width:30ch">Evaluating a model no longer means evaluating a fixed thing</h2>
+    <p class="lede" style="max-width:64ch;margin-bottom:30px">The same weights, deployed with different answer-time budgets, behave like different systems. This complicates every regime that attaches obligations to a model rather than to a deployment.</p>
+
+    <div class="gapless cols-3">
+      <div>
+        <span class="meta">Configuration A</span>
+        <h3 class="h-card" style="margin:8px 0 12px">Minimum budget</h3>
+        <div class="barline"><span class="lbl">Capability</span><span class="track"><span class="fill" style="width:30%"></span></span><span class="num">&nbsp;</span></div>
+        <p class="body-s mt-s">No extended thinking, one sample, no tools.</p>
+      </div>
+      <div>
+        <span class="meta">Configuration B</span>
+        <h3 class="h-card" style="margin:8px 0 12px">Extended thinking</h3>
+        <div class="barline"><span class="lbl">Capability</span><span class="track"><span class="fill" style="width:58%"></span></span><span class="num">&nbsp;</span></div>
+        <p class="body-s mt-s">A long reasoning chain before answering.</p>
+      </div>
+      <div>
+        <span class="meta">Configuration C</span>
+        <h3 class="h-card" style="margin:8px 0 12px">Thinking, sampling and tools</h3>
+        <div class="barline"><span class="lbl">Capability</span><span class="track"><span class="fill" style="width:78%"></span></span><span class="num">&nbsp;</span></div>
+        <p class="body-s mt-s">Many attempts, a verifier, a search loop, retries.</p>
+      </div>
+    </div>
+    <span class="source">Same weights, different deployed capability. Bar lengths are illustrative and are not measurements. Try the dial on <a class="link" href="03-inference.html#budget">chapter 03</a>.</span>
+
+    <div class="split-3 mt-l">
+      <div>
+        <span class="meta">For evaluation</span>
+        <p class="body-s mt-s">A benchmark result is a property of a model <em>and</em> a budget. Results reported without the budget are not comparable, and the budget is rarely disclosed.</p>
+      </div>
+      <div>
+        <span class="meta">For disclosure</span>
+        <p class="body-s mt-s">A safety evaluation performed at one budget says little about behaviour at ten times that budget, which a deployer may simply choose to allow.</p>
+      </div>
+      <div>
+        <span class="meta">For thresholds</span>
+        <p class="body-s mt-s">Any rule defined over training compute leaves answer-time compute unbounded. The two are substitutable to a degree that is not yet well characterised.</p>
+      </div>
+    </div>
+
+    <div class="card mt-l" style="border-left:2px solid var(--wine);max-width:82ch">
+      <span class="chip chip-soft">A constructive reading</span>
+      <h3 class="h-feature" style="margin:14px 0 12px;font-size:26px">This also suggests where useful disclosure could sit</h3>
+      <p>On the deployment configuration rather than on the weights. Reporting the answer-time budget alongside an evaluation result would cost a developer very little and would make published figures comparable with one another. That is offered as an option rather than as a recommendation.</p>
+    </div>
+    <span class="source">Answer-time scaling behaviour: Lambert, arXiv:2504.12501, ch. 7. The disclosure suggestion is the author&rsquo;s.</span>
+  </div>
+</section>
+
+<!-- ============================ D.05 ============================ -->
+<section class="section deep" id="limits">
+  <div class="container">
+    <span class="eyebrow">D.05 &middot; Limitations</span>
+    <h2 class="h-section" style="margin:14px 0 18px;max-width:28ch">What is not settled, stated plainly</h2>
+    <p class="lede" style="max-width:64ch;margin-bottom:30px">The material in chapters 02 and 03 is a mixture of published research, developer disclosure and vendor engineering claims of varying quality. These are the points where this site is least secure.</p>
+
+    <div class="split">
+      <div class="rowlist">
+        <div class="rowlist-item"><span><span class="code-no">U.01</span> <b style="font-weight:500">Whether reinforcement learning creates capability or reveals it</b>
+        <span class="body-s" style="display:block;margin-top:4px">Contested in the 2026 literature. If it mostly elicits capability already present, the case for controlling pretraining compute is stronger than this site implies.</span></span></div>
+        <div class="rowlist-item"><span><span class="code-no">U.02</span> <b style="font-weight:500">How far answer-time compute substitutes for training compute</b>
+        <span class="body-s" style="display:block;margin-top:4px">Both are known to help. The exchange rate between them is not well characterised, and it very likely differs by task type.</span></span></div>
+        <div class="rowlist-item"><span><span class="code-no">U.03</span> <b style="font-weight:500">The true training and inference compute split</b>
+        <span class="body-s" style="display:block;margin-top:4px">No reliable public series exists. The estimates on this page differ by a factor of two and are not measuring the same quantity.</span></span></div>
+        <div class="rowlist-item"><span><span class="code-no">U.04</span> <b style="font-weight:500">Serving performance figures</b>
+        <span class="body-s" style="display:block;margin-top:4px">Most 2026 numbers on batching, caching and speculation come from the vendors whose systems they describe, and have not been independently reproduced.</span></span></div>
+      </div>
+      <div class="stack-m">
+        <div class="card">
+          <span class="meta">How the sources were graded</span>
+          <h3 class="h-card" style="margin:8px 0 10px">Three tiers, applied throughout</h3>
+          <p class="body-s">Peer-reviewed papers and primary technical reports are treated as reliable for mechanism. Developer blogs are treated as reliable for what that developer did, and unreliable for comparison. Consultancy forecasts and vendor benchmarks are reported with the source named, and are not relied on for any load-bearing claim.</p>
+        </div>
+        <div class="card">
+          <span class="meta">On the frameworks</span>
+          <h3 class="h-card" style="margin:8px 0 10px">Organising devices, not findings</h3>
+          <p class="body-s">The supervision taxonomy, the verifiability gradient and the six-layer stack were assembled for the underlying deck. They are organising devices, and no claim to novelty is made for them.</p>
+        </div>
+      </div>
+    </div>
+    <span class="source">Contested status of elicitation versus capability: arXiv:2602.01599 and related 2026 work. Compute-split estimates: Epoch AI, February 2026, against Deloitte 2026 TMT Predictions.</span>
+  </div>
+</section>
+
+<!-- ============================ THREE HABITS ============================ -->
+<section class="section ink">
+  <div class="container">
+    <span class="eyebrow">In closing</span>
+    <h2 class="h-section" style="margin:16px 0 30px;max-width:26ch">Three habits, which are the part worth keeping</h2>
+    <div class="gapless cols-3" style="border-color:rgba(255,255,255,0.18)">
+      <div style="border-color:rgba(255,255,255,0.18)">
+        <span class="code-no" style="color:var(--gold)">01</span>
+        <h3 class="h-card" style="margin:10px 0 10px;color:#fff">When a model release is announced</h3>
+        <p class="body-s" style="color:rgba(255,255,255,0.7)">Ask which measures it was trained against. That predicts both its strengths and its disappointments, and it is usually answerable from the release notes.</p>
+      </div>
+      <div style="border-color:rgba(255,255,255,0.18)">
+        <span class="code-no" style="color:var(--gold)">02</span>
+        <h3 class="h-card" style="margin:10px 0 10px;color:#fff">When a benchmark figure is quoted</h3>
+        <p class="body-s" style="color:rgba(255,255,255,0.7)">Ask at what answer-time budget it was obtained. A number without a budget is not comparable to another number without a budget.</p>
+      </div>
+      <div style="border-color:rgba(255,255,255,0.18)">
+        <span class="code-no" style="color:var(--gold)">03</span>
+        <h3 class="h-card" style="margin:10px 0 10px;color:#fff">When a compute figure is quoted</h3>
+        <p class="body-s" style="color:rgba(255,255,255,0.7)">Ask what was counted and what was left out. The rollouts that reinforcement learning consumes are the usual missing column.</p>
+      </div>
+    </div>
+    <p class="lede mt-l" style="color:rgba(255,255,255,0.85);max-width:56ch">Corrections and disagreements are welcome, particularly on the four points listed under D.05.</p>
+  </div>
+</section>
+
+<div class="pager">
+  <a href="03-inference.html"><span class="meta">&larr; Previous</span><span style="display:block;font-size:19px;margin-top:6px">Chapter 03 &middot; Inference</span></a>
+  <a class="next" href="05-reference.html"><span class="meta">Next &rarr;</span><span style="display:block;font-size:19px;margin-top:6px">Chapter 05 &middot; Reading Room</span></a>
+</div>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <p class="footer-tag">Pretraining built the capability.<br>Post-training made it usable.<br>Inference decides who can afford it.</p>
+      <p class="footer-addr" style="margin-top:24px">Prepared for the High-Tech Geopolitics Programme,<br>Takshashila Institution, Bengaluru. A draft for discussion.</p>
+    </div>
+    <div>
+      <h4>Chapters</h4>
+      <ul>
+        <li><a href="index.html">The Map</a></li>
+        <li><a href="01-what-pretraining-leaves.html">The Next-Token Machine</a></li>
+        <li><a href="02-post-training.html">Post-Training</a></li>
+        <li><a href="03-inference.html">Inference</a></li>
+        <li><a href="04-policy.html">Why It Matters</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Reference</h4>
+      <ul>
+        <li><a href="05-reference.html#start">Start Here</a></li>
+        <li><a href="05-reference.html#glossary">Glossary</a></li>
+        <li><a href="05-reference.html#quiz">Ten Questions</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Sources</h4>
+      <ul>
+        <li><a href="https://epoch.ai/trends" rel="noopener">Epoch AI Trends <span class="arrow">&#8599;</span></a></li>
+        <li><a href="https://rlhfbook.com" rel="noopener">Lambert, RLHF Book <span class="arrow">&#8599;</span></a></li>
+        <li><a href="https://jax-ml.github.io/scaling-book" rel="noopener">Austin et al., Scaling Book <span class="arrow">&#8599;</span></a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-base">
+    <span>August 2026 &middot; Draft for discussion &middot; Prepared with an AI assistant</span>
+    <span>Every panel carries its sources</span>
+  </div>
+</footer>
+
+<script src="assets/js/comic.js"></script>
+</body>
+</html>
