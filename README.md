@@ -40,6 +40,7 @@ Then visit `http://localhost:8000`.
 ```
 index.html                      The map, the cast, the vocabulary
 01-what-pretraining-leaves.html Chapter 01 — the next-token machine
+01b-inside.html                 Chapter 01½ — attention, the stack, the sampler
 02-post-training.html           Chapter 02 — four teachers
 03-inference.html               Chapter 03 — inference
 04-policy.html                  Chapter 04 — why it matters
@@ -48,6 +49,7 @@ assets/css/takshashila.css      The whole design system
 assets/js/comic.js              Cast figures, navigation, scroll behaviour
 assets/js/widgets-train.js      Widgets for chapters 01 and 02, plus shared helpers
 assets/js/widgets-serve.js      Widgets for chapters 03 and 05
+assets/js/widgets-extra.js      Sampler, attention, transformer, RLHF recipe
 assets/js/guide.js              Widget briefs and hover definitions
 ```
 
@@ -55,7 +57,9 @@ assets/js/guide.js              Widget briefs and hover definitions
 
 **Widget briefs.** Every `data-widget` gets a yellow explainer injected above it: what it is, what you're changing, what to watch for, and a link to the source. They all live in the `BRIEFS` table at the top of `guide.js`. Edit the text there, not in the widget.
 
-**Hover definitions.** Write `<b class="def" data-t="kv-cache">KV cache</b>` anywhere and it picks up a definition and a source link from the `DEFS` table in `guide.js`. Thirty-three terms so far. A term with no entry gets a grey underline instead of an orange one, so mistakes are visible rather than silent.
+**Diagrams.** Hand-written inline SVG inside `<div class="fig">`. They use the shared `.d-box`, `.d-lbl`, `.d-sub`, `.d-arr` classes so they follow the colour tokens and respond to the stylesheet. Arrowheads come from `<marker id="ah">` and `<marker id="ahg">`, which must be defined once per page — the CSS references those ids, so a page with a figure and no defs gets lines with no heads.
+
+**Hover definitions.** Write `<b class="def" data-t="kv-cache">KV cache</b>` anywhere and it picks up a definition and a source link from the `DEFS` table in `guide.js`. Fifty-two terms so far. A term with no entry gets a grey underline instead of an orange one, so mistakes are visible rather than silent.
 
 `guide.js` must load last, after the widget scripts.
 

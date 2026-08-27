@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chapter 01½ · Inside the Machine</title>
+<meta name="description" content="Attention, embeddings, the transformer stack, and the sampler explained step by step. What temperature, top-k and top-p actually do.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;500&family=Bungee&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/takshashila.css">
+</head>
+<body>
+<div class="progress" aria-hidden="true"></div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-mark" href="index.html">After the Model Is Trained <span>Takshashila</span></a>
+    <button class="nav-toggle" type="button" aria-expanded="false">Menu</button>
+    <div class="nav-links">
+      <a class="nav-link" href="index.html">The Map</a>
+      <a class="nav-link" href="01-what-pretraining-leaves.html">Next-Token</a>
+      <a class="nav-link" href="01b-inside.html" aria-current="page">Inside</a>
+      <a class="nav-link" href="02-post-training.html">Post-Training</a>
+      <a class="nav-link" href="03-inference.html">Inference</a>
+      <a class="nav-link" href="04-policy.html">Why It Matters</a>
+      <a class="nav-link" href="05-reference.html">Reading Room</a>
+    </div>
+  </div>
+</nav>
+
+<header class="section">
+  <div class="container">
+    <p class="crumbs" style="margin-bottom:26px"><a href="index.html">The Map</a> / Chapter 01&frac12;</p>
+    <span class="chapter-no">01&frac12;</span>
+    <h1 class="page-title" style="margin:10px 0 26px;max-width:14ch;font-size:56px;line-height:1.02;letter-spacing:-0.025em">Inside the <em>Machine</em></h1>
+    <div class="split">
+      <div>
+        <p class="lede">Chapter 01 said the model scores every possible next word. This chapter opens the box and shows how, and what happens to those scores afterwards.</p>
+        <p class="body-s prose" style="margin-top:20px">Skippable if you only care about policy. Worth twenty minutes if you want to know why the words temperature, attention and context window mean what they mean, because they turn up constantly and are almost never explained.</p>
+      </div>
+      <div class="jump">
+        <a href="#attention"><b>I.01</b>Attention, the actual idea</a>
+        <a href="#stack"><b>I.02</b>The stack, layer by layer</a>
+        <a href="#sampler"><b>I.03</b>Temperature, k and p</a>
+        <a href="#others"><b>I.04</b>Six more dials</a>
+        <a href="#scaling"><b>I.05</b>Why models are the size they are</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============================ I.01 ATTENTION ============================ -->
+<section class="section deep" id="attention">
+  <div class="container">
+    <span class="eyebrow">I.01</span>
+    <h2 class="h-section" style="margin:14px 0 34px;max-width:24ch">Attention is a very good filing system</h2>
+
+    <div class="strip reveal">
+      <div class="panel">
+        <span class="panel-code">01</span>
+        <div class="bubble"><span class="bubble-who">Ira</span>When you get to the end of a long sentence, how do you remember what it was about?</div>
+        <div class="panel-art"><div class="cast" data-char="ira" data-mood="doubt" data-size="102"></div></div>
+      </div>
+      <div class="panel dots">
+        <span class="panel-code">02</span>
+        <div class="bubble right"><span class="bubble-who">Echo</span>I don't remember. I look. Every word can reach back and read every earlier word directly, in one hop. Distance costs me nothing.</div>
+        <div class="panel-art"><div class="cast" data-char="echo" data-mood="proud" data-size="102"></div></div>
+      </div>
+      <div class="panel wide dots-gold">
+        <span class="panel-code">03</span>
+        <span class="sfx sfx-l">Three questions</span>
+        <p class="panel-note" style="margin-top:14px;font-size:15px">Each word writes a <b>query</b> — what am I looking for. Each word also puts out a <b>key</b> — here's what I am. And a <b>value</b> — here's what I've got. Match the queries against the keys and you know who should listen to whom.</p>
+        <span class="scribble scribble-arrow" style="margin-top:14px">that's it. that's attention.</span>
+      </div>
+    </div>
+
+    <div class="fig mt-l reveal">
+      <span class="fig-t">Query, key, value: one word deciding what to listen to</span>
+      <svg viewBox="0 0 880 300" role="img" aria-label="Diagram showing a query from the word 'was' matched against keys from earlier words, producing weights that select values">
+        <defs>
+          <marker id="ah" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6" fill="none" stroke="#171413" stroke-width="1.6"/></marker>
+          <marker id="ahg" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6" fill="none" stroke="#f1a222" stroke-width="1.8"/></marker>
+        </defs>
+
+        <text class="d-sub" x="0" y="14">THE SENTENCE SO FAR</text>
+        <rect class="d-box" x="0" y="26" width="106" height="40"/><text class="d-lbl" x="53" y="51" text-anchor="middle">ethanol</text>
+        <rect class="d-box wine" x="116" y="26" width="106" height="40"/><text class="d-lbl" x="169" y="51" text-anchor="middle">policy</text>
+        <rect class="d-box" x="232" y="26" width="106" height="40"/><text class="d-lbl" x="285" y="51" text-anchor="middle">ministry</text>
+        <rect class="d-box gold" x="348" y="26" width="106" height="40"/><text class="d-lbl" x="401" y="51" text-anchor="middle">was</text>
+
+        <text class="d-sub" x="470" y="14">THE ASKING WORD</text>
+
+        <rect class="d-box deep" x="0" y="116" width="106" height="34"/><text class="d-sub" x="53" y="137" text-anchor="middle">key: substance</text>
+        <rect class="d-box deep" x="116" y="116" width="106" height="34"/><text class="d-sub" x="169" y="137" text-anchor="middle">key: subject</text>
+        <rect class="d-box deep" x="232" y="116" width="106" height="34"/><text class="d-sub" x="285" y="137" text-anchor="middle">key: actor</text>
+
+        <path class="d-arr-g" d="M420,68 C430,96 300,92 178,113"/>
+        <path class="d-arr" d="M395,68 C392,92 330,98 292,113"/>
+        <path class="d-arr" d="M378,68 C360,100 190,96 62,113"/>
+        <rect class="d-box gold" x="470" y="26" width="200" height="40"/>
+        <text class="d-sub" x="570" y="51" text-anchor="middle">query: what am I about?</text>
+
+        <text class="d-sub" x="0" y="192">MATCH SCORES BECOME WEIGHTS</text>
+        <rect x="0" y="204" width="106" height="16" fill="#e8e5e2"/><rect x="0" y="204" width="11" height="16" fill="#2f6b6b"/>
+        <text class="d-sub" x="0" y="236">10%</text>
+        <rect x="116" y="204" width="106" height="16" fill="#e8e5e2"/><rect x="116" y="204" width="76" height="16" fill="#620d3c"/>
+        <text class="d-sub" x="116" y="236">72% · WINNER</text>
+        <rect x="232" y="204" width="106" height="16" fill="#e8e5e2"/><rect x="232" y="204" width="19" height="16" fill="#f1a222"/>
+        <text class="d-sub" x="232" y="236">18%</text>
+
+        <path class="d-arr" d="M169,246 L169,266"/>
+        <rect class="d-box wine" x="0" y="266" width="454" height="34"/>
+        <text class="d-sub" x="227" y="281" text-anchor="middle">A BLEND OF THE VALUES, MOSTLY &ldquo;POLICY&rdquo;,</text>
+        <text class="d-sub" x="227" y="295" text-anchor="middle">HANDED UP TO THE NEXT LAYER</text>
+
+        <path class="d-dash" d="M470,80 L470,300"/>
+        <text class="d-sub" x="486" y="104">DO THIS 64 TIMES IN PARALLEL,</text>
+        <text class="d-sub" x="486" y="122">EACH WITH ITS OWN QUERIES AND KEYS,</text>
+        <text class="d-sub" x="486" y="140">AND YOU HAVE MULTI-HEAD ATTENTION.</text>
+        <text class="d-sub" x="486" y="170">ONE HEAD TRACKS SUBJECTS. ANOTHER</text>
+        <text class="d-sub" x="486" y="188">TRACKS QUOTATION MARKS. NOBODY</text>
+        <text class="d-sub" x="486" y="206">ASSIGNED THEM THOSE JOBS.</text>
+        <text class="d-sub" x="486" y="236">THE KEYS AND VALUES ARE WHAT GETS</text>
+        <text class="d-sub" x="486" y="254">STORED IN THE KV CACHE. THAT IS</text>
+        <text class="d-sub" x="486" y="272">WHERE CHAPTER 03&rsquo;S BILL COMES FROM.</text>
+      </svg>
+      <span class="fig-cap">Simplified. Real attention scales the match scores and passes them through a softmax before they become weights. Mechanism: Vaswani et al., arXiv:1706.03762.</span>
+    </div>
+
+    <div class="mt-l" data-widget="qkv"></div>
+
+    <div class="split mt-l">
+      <div class="sticker">
+        <div class="cast" data-char="ira" data-mood="think" data-size="76"></div>
+        <div class="sticker-txt"><b>Why this was such a big deal in 2017</b>The models before it read left to right, one word at a time, and the beginning of a sentence faded as you went. Attention throws that out. Every position sees every earlier position at full strength, and the whole thing computes in parallel, which is what made training on the entire internet possible at all.</div>
+      </div>
+      <div class="card" style="border-left:3px solid var(--marigold)">
+        <h3 class="h-feature" style="margin:0 0 12px;font-size:26px">And why it costs what it does</h3>
+        <p class="body-s">Every word looking at every other word means the work grows with the square of the length. Double the context, quadruple the attention. Nearly every efficiency trick in the last five years — <b class="def" data-t="flash-attention">flash attention</b>, <b class="def" data-t="gqa">grouped-query attention</b>, sliding windows — is an attempt to get out from under that square.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ I.02 STACK ============================ -->
+<section class="section" id="stack">
+  <div class="container">
+    <span class="eyebrow">I.02</span>
+    <h2 class="h-section" style="margin:14px 0 12px;max-width:26ch">The whole stack, from your text to a list of scores</h2>
+    <p class="body-s prose" style="margin-bottom:34px">Eighty of these layers, stacked. Same two operations every time, with different learned weights.</p>
+
+    <div class="fig reveal">
+      <span class="fig-t">One pass through the model</span>
+      <svg viewBox="0 0 880 420" role="img" aria-label="Diagram of the transformer forward pass from tokenisation through repeated attention and feed-forward layers to logits">
+        <rect class="d-box" x="0" y="0" width="150" height="46"/><text class="d-lbl" x="75" y="22" text-anchor="middle">Your text</text><text class="d-sub" x="75" y="38" text-anchor="middle">"ethanol policy"</text>
+        <path class="d-arr" d="M158,23 L196,23"/>
+        <rect class="d-box" x="204" y="0" width="150" height="46"/><text class="d-lbl" x="279" y="22" text-anchor="middle">Tokens</text><text class="d-sub" x="279" y="38" text-anchor="middle">[15339, 4272]</text>
+        <path class="d-arr" d="M362,23 L400,23"/>
+        <rect class="d-box deep" x="408" y="0" width="150" height="46"/><text class="d-lbl" x="483" y="22" text-anchor="middle">Embeddings</text><text class="d-sub" x="483" y="38" text-anchor="middle">4,096 numbers each</text>
+        <path class="d-arr" d="M566,23 L604,23"/>
+        <rect class="d-box deep" x="612" y="0" width="150" height="46"/><text class="d-lbl" x="687" y="22" text-anchor="middle">+ position</text><text class="d-sub" x="687" y="38" text-anchor="middle">where it sits</text>
+
+        <path class="d-arr" d="M687,54 L687,84 L120,84 L120,112"/>
+
+        <rect class="d-dash" x="30" y="104" width="500" height="196" fill="none"/>
+        <text class="d-sub" x="42" y="126">ONE LAYER &middot; REPEATED 80 TIMES</text>
+
+        <rect class="d-box wine" x="60" y="140" width="200" height="52"/>
+        <text class="d-lbl" x="160" y="163" text-anchor="middle">Attention</text><text class="d-sub" x="160" y="181" text-anchor="middle">look at the other words</text>
+        <path class="d-arr" d="M268,166 L306,166"/>
+        <rect class="d-box gold" x="314" y="140" width="200" height="52"/>
+        <text class="d-lbl" x="414" y="163" text-anchor="middle">Feed-forward</text><text class="d-sub" x="414" y="181" text-anchor="middle">think about it alone</text>
+
+        <path class="d-arr" d="M414,200 L414,224 L160,224 L160,248"/>
+        <rect class="d-box" x="60" y="248" width="454" height="40"/>
+        <text class="d-sub" x="287" y="272" text-anchor="middle">ADD TO THE RUNNING TOTAL, DON&rsquo;T REPLACE IT &mdash; THE RESIDUAL STREAM</text>
+        <path class="d-dash" d="M540,194 L560,194"/>
+        <path class="d-arr" d="M540,268 L580,268 L580,330 L120,330 L120,352"/>
+
+        <rect class="d-box deep" x="60" y="352" width="230" height="46"/>
+        <text class="d-lbl" x="175" y="374" text-anchor="middle">Unembed</text><text class="d-sub" x="175" y="390" text-anchor="middle">compare against every token</text>
+        <path class="d-arr" d="M298,375 L336,375"/>
+        <rect class="d-box gold" x="344" y="352" width="230" height="46"/>
+        <text class="d-lbl" x="459" y="374" text-anchor="middle">128,000 logits</text><text class="d-sub" x="459" y="390" text-anchor="middle">one score per token</text>
+        <path class="d-arr-g" d="M578,375 L622,375"/>
+        <rect class="d-box" x="628" y="352" width="230" height="46"/>
+        <text class="d-lbl" x="743" y="374" text-anchor="middle">The sampler</text><text class="d-sub" x="743" y="390" text-anchor="middle">section I.03, below</text>
+
+        <text class="d-sub" x="600" y="140">WHERE THE PARAMETERS ARE:</text>
+        <text class="d-sub" x="600" y="160">ROUGHLY TWO-THIRDS SIT IN THE</text>
+        <text class="d-sub" x="600" y="180">FEED-FORWARD BLOCKS, NOT IN</text>
+        <text class="d-sub" x="600" y="200">ATTENTION. MOST OF WHAT A MODEL</text>
+        <text class="d-sub" x="600" y="220">KNOWS IS THOUGHT TO LIVE THERE.</text>
+        <text class="d-sub" x="600" y="250">A MIXTURE-OF-EXPERTS MODEL SPLITS</text>
+        <text class="d-sub" x="600" y="270">EXACTLY THIS BLOCK INTO MANY AND</text>
+        <text class="d-sub" x="600" y="290">WAKES ONLY A COUPLE PER TOKEN.</text>
+      </svg>
+      <span class="fig-cap">Layer normalisation is omitted for clarity. Proportions of parameters vary by architecture. Sources: Vaswani et al., arXiv:1706.03762; Austin et al., How To Scale Your Model, ch. 1.</span>
+    </div>
+
+    <div class="mt-l" data-widget="transformer"></div>
+
+    <div class="split-3 mt-l">
+      <div>
+        <span class="meta">Why depth helps</span>
+        <p class="body-s mt-s">Early layers do grammar and word identity. Middle layers do syntax and reference. Late layers do task and intent. Nobody assigned that division of labour. It shows up on its own.</p>
+      </div>
+      <div>
+        <span class="meta">The <b class="def" data-t="residual-stream">residual stream</b></span>
+        <p class="body-s mt-s">Each layer adds to a running total rather than overwriting it. Without that, stacks this deep simply fail to train. It also gives interpretability researchers a place to read from.</p>
+      </div>
+      <div>
+        <span class="meta">Where the bill comes from</span>
+        <p class="body-s mt-s">Chapter 03's whole argument is that this entire diagram has to run once for every single word of output. Not once per question. Once per word.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ I.03 SAMPLER ============================ -->
+<section class="section deep" id="sampler">
+  <div class="container">
+    <span class="eyebrow">I.03 &middot; The bit everyone gets wrong</span>
+    <h2 class="h-section" style="margin:14px 0 12px;max-width:26ch">What temperature, k and p actually do</h2>
+    <p class="body-s prose" style="margin-bottom:34px">These three settings sit in every API and are described in documentation as "controls creativity", which explains nothing. Here is the arithmetic, one stage at a time. Move a dial and the affected stage lights up.</p>
+
+    <div class="fig reveal">
+      <span class="fig-t">The pipeline, before you play with it</span>
+      <svg viewBox="0 0 880 190" role="img" aria-label="Six-stage pipeline from logits through temperature, softmax, truncation, renormalisation and sampling">
+        <rect class="d-box" x="0" y="30" width="128" height="56"/>
+        <text class="d-lbl" x="64" y="54" text-anchor="middle">Logits</text><text class="d-sub" x="64" y="72" text-anchor="middle">raw scores</text>
+        <path class="d-arr" d="M136,58 L166,58"/>
+        <rect class="d-box gold" x="174" y="30" width="128" height="56"/>
+        <text class="d-lbl" x="238" y="54" text-anchor="middle">&divide; temperature</text><text class="d-sub" x="238" y="72" text-anchor="middle">stretch or squash</text>
+        <path class="d-arr" d="M310,58 L340,58"/>
+        <rect class="d-box" x="348" y="30" width="128" height="56"/>
+        <text class="d-lbl" x="412" y="54" text-anchor="middle">Softmax</text><text class="d-sub" x="412" y="72" text-anchor="middle">now they sum to 1</text>
+        <path class="d-arr" d="M484,58 L514,58"/>
+        <rect class="d-box gold" x="522" y="30" width="128" height="56"/>
+        <text class="d-lbl" x="586" y="54" text-anchor="middle">Cut: k or p</text><text class="d-sub" x="586" y="72" text-anchor="middle">bin the tail</text>
+        <path class="d-arr" d="M658,58 L688,58"/>
+        <rect class="d-box" x="696" y="30" width="128" height="56"/>
+        <text class="d-lbl" x="760" y="54" text-anchor="middle">Renormalise</text><text class="d-sub" x="760" y="72" text-anchor="middle">sum to 1 again</text>
+        <path class="d-arr-g" d="M760,94 L760,120"/>
+        <rect class="d-box wine" x="640" y="120" width="184" height="46"/>
+        <text class="d-lbl" x="732" y="143" text-anchor="middle">Draw one token</text><text class="d-sub" x="732" y="159" text-anchor="middle">roll the dice, append, repeat</text>
+
+        <text class="d-sub" x="0" y="128">EVERYTHING TO THE LEFT OF THE</text>
+        <text class="d-sub" x="0" y="146">GOLD ARROW HAPPENS OUTSIDE THE</text>
+        <text class="d-sub" x="0" y="164">MODEL. NO WEIGHTS ARE INVOLVED.</text>
+        <text class="d-sub" x="0" y="182">YOU CAN CHANGE ALL OF IT FOR FREE.</text>
+      </svg>
+      <span class="fig-cap">Order matters: truncation happens after the probabilities exist, not before. Sources: Vaswani et al., arXiv:1706.03762; Holtzman et al., arXiv:1904.09751.</span>
+    </div>
+
+    <div class="mt-l" data-widget="sampler"></div>
+
+    <div class="split-even mt-l">
+      <div class="card" style="border-left:3px solid var(--wine)">
+        <span class="chip">Top-k</span>
+        <h3 class="h-feature" style="margin:14px 0 10px;font-size:26px">k is a headcount</h3>
+        <p class="body-s">"Keep the best 40." Always 40, whether the model is certain or hasn't a clue. When it's certain, you've let 39 bad options stay in the running. When it's lost, you've thrown away good ones. Blunt, but easy to reason about.</p>
+      </div>
+      <div class="card" style="border-left:3px solid var(--marigold)">
+        <span class="chip chip-gold">Top-p</span>
+        <h3 class="h-feature" style="margin:14px 0 10px;font-size:26px">p is a share of the probability</h3>
+        <p class="body-s">"Keep whatever it takes to cover 90% of the belief." Sometimes that's two tokens, sometimes two hundred. It adapts to how sure the model is, which is why it's the default nearly everywhere and why it's also called nucleus sampling.</p>
+      </div>
+    </div>
+
+    <div class="sticker gold mt-l" style="max-width:82ch">
+      <div class="cast" data-char="echo" data-mood="think" data-size="76"></div>
+      <div class="sticker-txt"><b>Temperature 0 is a lie people tell</b>Dividing by zero isn't a thing. What providers actually do at "temperature 0" is skip the dice entirely and take the highest-scoring token every time. That's greedy decoding, and it isn't quite deterministic either: batching and floating-point ordering on a GPU can still shuffle the result between runs. If you've ever seen "temperature 0" produce two different answers, that's why.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ I.04 OTHERS ============================ -->
+<section class="section" id="others">
+  <div class="container">
+    <span class="eyebrow">I.04</span>
+    <h2 class="h-section" style="margin:14px 0 12px;max-width:26ch">Six more settings you'll meet in an API</h2>
+    <p class="body-s prose" style="margin-bottom:34px">None of these touch the weights either. All of them change what you get.</p>
+
+    <div class="gapless cols-3">
+      <div>
+        <span class="code-no">01</span>
+        <h3 class="h-card" style="margin:8px 0 8px">Repetition penalty</h3>
+        <p class="body-s">Docks points from tokens that have already appeared. Fixes the model getting stuck in a loop. Push it too far and it starts avoiding words it genuinely needs, like the subject of the sentence.</p>
+      </div>
+      <div>
+        <span class="code-no">02</span>
+        <h3 class="h-card" style="margin:8px 0 8px">Max tokens</h3>
+        <p class="body-s">A hard stop. The model doesn't wrap up gracefully when it hits this, it just stops mid-word. If replies keep ending abruptly, this is usually why.</p>
+      </div>
+      <div>
+        <span class="code-no">03</span>
+        <h3 class="h-card" style="margin:8px 0 8px">Stop sequences</h3>
+        <p class="body-s">Text that ends generation on sight. Useful when you're using the model inside a larger format and need it to stay in its lane.</p>
+      </div>
+      <div>
+        <span class="code-no">04</span>
+        <h3 class="h-card" style="margin:8px 0 8px">Seed</h3>
+        <p class="body-s">Fixes the dice so the same request gives the same reply. Providers describe this as best-effort, for the floating-point reasons above.</p>
+      </div>
+      <div>
+        <span class="code-no">05</span>
+        <h3 class="h-card" style="margin:8px 0 8px">Constrained decoding</h3>
+        <p class="body-s">Blank out every token that would break a grammar, so the output is valid JSON by construction rather than by hope. This is how "guaranteed structured output" works, and it's the sampler doing it, not the model.</p>
+      </div>
+      <div>
+        <span class="code-no">06</span>
+        <h3 class="h-card" style="margin:8px 0 8px">Logit bias</h3>
+        <p class="body-s">Add or subtract a fixed amount from named tokens before anything else. Crude, powerful, and the bluntest content control there is.</p>
+      </div>
+    </div>
+
+    <div class="aside mt-l" style="max-width:78ch">
+      <span class="aside-title">The point of this section</span>
+      <p>A great deal of what looks like model behaviour is sampler behaviour. Before concluding that a model is creative, repetitive, terse or unreliable, find out what these six were set to. Usually nobody wrote it down.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ I.05 SCALING ============================ -->
+<section class="section deep" id="scaling">
+  <div class="container">
+    <span class="eyebrow">I.05</span>
+    <h2 class="h-section" style="margin:14px 0 34px;max-width:26ch">Why models are the size they are</h2>
+
+    <div class="strip strip-4 reveal">
+      <div class="panel">
+        <span class="panel-code">01</span>
+        <div class="caption-box">2020: bigger is better</div>
+        <p class="panel-note">Performance improved smoothly and predictably with size, data and compute. The industry read this as: build the largest model you can afford.</p>
+      </div>
+      <div class="panel dots">
+        <span class="panel-code">02</span>
+        <div class="caption-box">2022: Chinchilla</div>
+        <p class="panel-note">DeepMind showed that for a fixed compute budget, most models of the era were far too large for the amount of data they'd been fed. A smaller model trained on more text beat a bigger one.</p>
+        <span class="scribble scribble-arrow">everyone's model was the wrong shape</span>
+      </div>
+      <div class="panel">
+        <span class="panel-code">03</span>
+        <div class="caption-box">2024: serving wins</div>
+        <p class="panel-note">You train a model once and serve it billions of times. So it became worth over-training a small model well past the compute-optimal point, purely to make it cheap to run.</p>
+      </div>
+      <div class="panel dots-gold">
+        <span class="panel-code">04</span>
+        <span class="sfx sfx-s">2026: a third axis</span>
+        <p class="panel-note" style="margin-top:12px">Now there's compute at training time <i>and</i> compute at answer time, and they trade against each other. How they trade is <a class="link" href="04-policy.html#limits">one of the four things nobody has pinned down</a>.</p>
+      </div>
+    </div>
+
+    <div class="split mt-l">
+      <div class="card" style="border-left:3px solid var(--wine)">
+        <h3 class="h-feature" style="margin:0 0 12px;font-size:26px">Why any of this matters to a policy reader</h3>
+        <p class="body-s">Compute thresholds assume a stable relationship between compute and capability. <b class="def" data-t="scaling-laws">Scaling laws</b> are what makes that assumption look reasonable. But the shape of the curve has been revised twice in five years, and a third variable arrived in 2025.</p>
+        <p class="body-s">A rule calibrated to the 2022 understanding of scaling is not calibrated to the 2026 one.</p>
+      </div>
+      <div class="stack-m">
+        <div><span class="meta">The original</span><p class="body-s mt-s">Kaplan et al., <a class="link" href="https://arxiv.org/abs/2001.08361" target="_blank" rel="noopener">arXiv:2001.08361</a>.</p></div>
+        <div><span class="meta">The correction</span><p class="body-s mt-s">Hoffmann et al., Chinchilla, <a class="link" href="https://arxiv.org/abs/2203.15556" target="_blank" rel="noopener">arXiv:2203.15556</a>.</p></div>
+        <div><span class="meta">The current picture</span><p class="body-s mt-s"><a class="link" href="https://epoch.ai/trends" target="_blank" rel="noopener">Epoch AI</a> tracks this continuously and publishes its method.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section ink">
+  <div class="container">
+    <div class="split">
+      <div>
+        <span class="eyebrow">Chapter 01&frac12;, in one line</span>
+        <h2 class="h-section" style="margin:16px 0 20px;max-width:24ch">Half of what you'd blame on the <em>model</em> is really the <em>sampler</em>.</h2>
+        <p class="lede" style="color:rgba(255,255,255,0.85);max-width:50ch">And none of the sampler cost anyone a training run.</p>
+      </div>
+      <div style="display:flex;align-items:flex-end">
+        <a class="btn btn-gold" href="02-post-training.html">On to the teachers &rarr;</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="pager">
+  <a href="01-what-pretraining-leaves.html"><span class="meta">&larr; Previous</span><span style="display:block;font-size:19px;margin-top:6px">Chapter 01 &middot; The Next-Token Machine</span></a>
+  <a class="next" href="02-post-training.html"><span class="meta">Next &rarr;</span><span style="display:block;font-size:19px;margin-top:6px">Chapter 02 &middot; Four Teachers</span></a>
+</div>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <p class="footer-tag">Pretraining built the capability.<br>Post-training made it usable.<br>Inference decides who can afford it.</p>
+      <p class="footer-addr" style="margin-top:24px">High-Tech Geopolitics Programme,<br>Takshashila Institution, Bengaluru. A draft for discussion.</p>
+    </div>
+    <div>
+      <h4>Chapters</h4>
+      <ul>
+        <li><a href="index.html">The Map</a></li>
+        <li><a href="01-what-pretraining-leaves.html">The Next-Token Machine</a></li>
+        <li><a href="02-post-training.html">Post-Training</a></li>
+        <li><a href="03-inference.html">Inference</a></li>
+        <li><a href="04-policy.html">Why It Matters</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Reference</h4>
+      <ul>
+        <li><a href="05-reference.html#start">Start Here</a></li>
+        <li><a href="05-reference.html#glossary">Glossary</a></li>
+        <li><a href="05-reference.html#quiz">Ten Questions</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Sources</h4>
+      <ul>
+        <li><a href="https://arxiv.org/abs/1706.03762" rel="noopener">Attention Is All You Need <span class="arrow">&#8599;</span></a></li>
+        <li><a href="https://arxiv.org/abs/1904.09751" rel="noopener">Nucleus Sampling <span class="arrow">&#8599;</span></a></li>
+        <li><a href="https://arxiv.org/abs/2203.15556" rel="noopener">Chinchilla <span class="arrow">&#8599;</span></a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-base">
+    <span>August 2026 &middot; Draft for discussion &middot; Prepared with an AI assistant</span>
+    <span>Every panel carries its sources</span>
+  </div>
+</footer>
+
+<script src="assets/js/comic.js"></script>
+<script src="assets/js/widgets-train.js"></script>
+<script src="assets/js/widgets-extra.js"></script>
+<script src="assets/js/guide.js"></script>
+</body>
+</html>

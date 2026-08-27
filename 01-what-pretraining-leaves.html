@@ -19,7 +19,8 @@
     <button class="nav-toggle" type="button" aria-expanded="false">Menu</button>
     <div class="nav-links">
       <a class="nav-link" href="index.html">The Map</a>
-      <a class="nav-link" href="01-what-pretraining-leaves.html" aria-current="page">The Next-Token Machine</a>
+      <a class="nav-link" href="01-what-pretraining-leaves.html" aria-current="page">Next-Token</a>
+      <a class="nav-link" href="01b-inside.html">Inside</a>
       <a class="nav-link" href="02-post-training.html">Post-Training</a>
       <a class="nav-link" href="03-inference.html">Inference</a>
       <a class="nav-link" href="04-policy.html">Why It Matters</a>
@@ -104,7 +105,7 @@
           <div>
             <span class="code-no">Step 3</span>
             <h4 class="h-card" style="margin:8px 0 8px">A score for everything</h4>
-            <p class="body-s">Out comes one number for every token in the vocabulary. Not an answer. An enormous list of scores.</p>
+            <p class="body-s">Out comes one number for every token in the vocabulary. These are the <b class="def" data-t="logits">logits</b>. Not an answer, and not yet probabilities.</p>
           </div>
         </div>
       </div>
@@ -116,6 +117,26 @@
 
     <div class="mt-l" data-widget="tokeniser"></div>
     <div class="mt-l" data-widget="nexttoken"></div>
+
+    <div class="beat mt-l"><span>&middot; &middot; &middot;</span></div>
+
+    <div class="mt-l">
+      <span class="eyebrow">A.01b &middot; A real one, not a made-up one</span>
+      <h3 class="h-feature" style="margin:14px 0 14px;font-size:32px">This is what a base model genuinely says</h3>
+      <p class="body-s prose" style="margin-bottom:30px">Everything above is illustrative. This isn't. Below are two real answers to the same prompt, from two models of the same size &mdash; one straight out of pretraining, one after post-training. It's the clearest demonstration of the gap that exists.</p>
+      <div data-widget="basevpost" class="reveal"></div>
+
+      <div class="sticker gold mt-l" style="max-width:82ch">
+        <div class="cast" data-char="ira" data-mood="think" data-size="76"></div>
+        <div class="sticker-txt"><b>Look at what the base model does after the first four words</b>It gets the answer right immediately, then keeps going: other 2006 political facts, a September news item, a stray <i>search:</i> line, and finally a Wikipedia-style summary of 2009. It's reproducing the furniture of a web page, because that's what usually surrounds a sentence like this one. The knowledge was never the problem.</div>
+      </div>
+      <span class="source">Both responses quoted from Lambert, <a class="link" href="https://rlhfbook.com" target="_blank" rel="noopener">rlhfbook.com</a>, ch. 3. Llama 3.1 405B Base and T&uuml;lu 3 405B.</span>
+    </div>
+
+    <div class="sticker mt-l" style="max-width:82ch">
+      <div class="cast" data-char="echo" data-mood="point" data-size="76"></div>
+      <div class="sticker-txt"><b>Want to know how the scoring actually works?</b><a class="link" href="01b-inside.html">Chapter 01&frac12;</a> opens the box: attention, the layer stack, and a step-by-step walk through exactly what temperature, top-k and top-p do to those numbers.</div>
+    </div>
   </div>
 </section>
 
@@ -129,13 +150,13 @@
     <div class="gapless cols-4">
       <div>
         <span class="code-no">Dial 1</span>
-        <h3 class="h-card" style="margin:8px 0 8px">Temperature</h3>
-        <p class="body-s">Flattens or sharpens the scores before anything is picked. Low is predictable and a little dead. High is lively and occasionally deranged.</p>
+        <h3 class="h-card" style="margin:8px 0 8px"><b class="def" data-t="temperature">Temperature</b></h3>
+        <p class="body-s">Every score gets divided by it. Below 1 stretches the gaps apart. Above 1 squashes them together. <a class="link" href="01b-inside.html#sampler">Watch it happen</a>.</p>
       </div>
       <div>
         <span class="code-no">Dial 2</span>
         <h3 class="h-card" style="margin:8px 0 8px">The sampling rule</h3>
-        <p class="body-s">Decides how much of the tail is eligible at all. Top-k keeps a fixed number of candidates. Top-p keeps as many as it takes to reach a probability mass.</p>
+        <p class="body-s"><b class="def" data-t="top-k">Top-k</b> keeps a fixed headcount. <b class="def" data-t="top-p">Top-p</b> keeps as many as it takes to cover a share of the probability, so the count changes with the model’s confidence.</p>
       </div>
       <div>
         <span class="code-no">Dial 3</span>
@@ -286,6 +307,7 @@
 
 <script src="assets/js/comic.js"></script>
 <script src="assets/js/widgets-train.js"></script>
+<script src="assets/js/widgets-extra.js"></script>
 <script src="assets/js/guide.js"></script>
 </body>
 </html>

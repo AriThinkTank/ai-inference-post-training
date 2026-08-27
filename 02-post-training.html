@@ -19,7 +19,8 @@
     <button class="nav-toggle" type="button" aria-expanded="false">Menu</button>
     <div class="nav-links">
       <a class="nav-link" href="index.html">The Map</a>
-      <a class="nav-link" href="01-what-pretraining-leaves.html">The Next-Token Machine</a>
+      <a class="nav-link" href="01-what-pretraining-leaves.html">Next-Token</a>
+      <a class="nav-link" href="01b-inside.html">Inside</a>
       <a class="nav-link" href="02-post-training.html" aria-current="page">Post-Training</a>
       <a class="nav-link" href="03-inference.html">Inference</a>
       <a class="nav-link" href="04-policy.html">Why It Matters</a>
@@ -39,6 +40,7 @@
         <p class="body-s prose" style="margin-top:20px">That trade is the whole story. You start with a human writing the perfect answer, which is slow and expensive. You end with a program that runs the code and says pass or fail, which is instant and free, and can only mark the small fraction of tasks a program can check.</p>
       </div>
       <div class="jump">
+        <a href="#recipe"><b>B.00</b>The classic recipe</a>
         <a href="#sft"><b>B.01</b>Copying</a>
         <a href="#preference"><b>B.02</b>Ranking</a>
         <a href="#hacking"><b>B.03</b>When the judge gets gamed</a>
@@ -59,6 +61,121 @@
     <h2 class="h-section" style="margin:14px 0 12px;max-width:24ch">The marker gets weaker at every step</h2>
     <p class="body-s prose" style="margin-bottom:34px">Climb the staircase and watch who is doing the marking. A human writing the answer. A human ranking answers. A model imitating that human. Then no human at all.</p>
     <div data-widget="staircase" class="reveal"></div>
+  </div>
+</section>
+
+<!-- ============================ B.00b THE RECIPE ============================ -->
+<section class="section" id="recipe">
+  <div class="container">
+    <span class="eyebrow">B.00b &middot; The recipe everyone still starts from</span>
+    <h2 class="h-section" style="margin:14px 0 12px;max-width:26ch">Three stages, 2022, and it still shapes everything</h2>
+    <p class="body-s prose" style="margin-bottom:34px">OpenAI's InstructGPT set the pattern. Modern recipes run many more stages and go round many more times, but the shape below is still the thing they're variations on. The data volumes are worth knowing, because they're far smaller than most people guess.</p>
+
+    <div data-widget="pipeline3" class="reveal"></div>
+
+    <div class="fig mt-l reveal">
+      <span class="fig-t">Where each stage gets its signal from</span>
+      <svg viewBox="0 0 880 310" role="img" aria-label="Diagram of the three-stage RLHF pipeline showing how human data feeds each stage and where the reward model sits">
+        <defs>
+          <marker id="ah" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6" fill="none" stroke="#171413" stroke-width="1.6"/></marker>
+          <marker id="ahg" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6" fill="none" stroke="#f1a222" stroke-width="1.8"/></marker>
+        </defs>
+        <g stroke-linecap="square">
+
+        <text class="d-sub" x="190" y="14">WHAT PEOPLE HAD TO WRITE</text>
+        <rect class="d-box deep" x="190" y="24" width="180" height="52"/>
+        <text class="d-sub" x="280" y="46" text-anchor="middle">~10,000 WRITTEN</text>
+        <text class="d-sub" x="280" y="63" text-anchor="middle">QUESTION-ANSWER PAIRS</text>
+        <rect class="d-box deep" x="420" y="24" width="190" height="52"/>
+        <text class="d-sub" x="515" y="46" text-anchor="middle">~100,000 PAIRWISE</text>
+        <text class="d-sub" x="515" y="63" text-anchor="middle">HUMAN COMPARISONS</text>
+
+        <path class="d-arr" d="M280,76 L280,124"/>
+        <path class="d-arr" d="M515,76 L515,124"/>
+
+        <rect class="d-box" x="0" y="130" width="150" height="56"/>
+        <text class="d-lbl" x="75" y="154" text-anchor="middle">Base model</text>
+        <text class="d-sub" x="75" y="172" text-anchor="middle">text continuer</text>
+        <path class="d-arr" d="M150,158 L184,158"/>
+
+        <rect class="d-box wine" x="190" y="130" width="180" height="56"/>
+        <text class="d-lbl" x="280" y="154" text-anchor="middle">Instruction tuned</text>
+        <text class="d-sub" x="280" y="172" text-anchor="middle">answers questions</text>
+        <path class="d-arr" d="M370,158 L414,158"/>
+
+        <rect class="d-box wine" x="420" y="130" width="190" height="56"/>
+        <text class="d-lbl" x="515" y="154" text-anchor="middle">RLHF tuned</text>
+        <text class="d-sub" x="515" y="172" text-anchor="middle">answers well</text>
+        <path class="d-arr" d="M610,158 L654,158"/>
+
+        <rect class="d-box gold" x="660" y="130" width="150" height="56"/>
+        <text class="d-lbl" x="735" y="154" text-anchor="middle">Shipped</text>
+        <text class="d-sub" x="735" y="172" text-anchor="middle">what you talk to</text>
+
+        <path class="d-dash" d="M280,186 L280,232 L414,232"/>
+        <rect class="d-box gold" x="420" y="210" width="190" height="52"/>
+        <text class="d-lbl" x="515" y="232" text-anchor="middle">Reward model</text>
+        <text class="d-sub" x="515" y="250" text-anchor="middle">the stand-in judge</text>
+        <path class="d-arr-g" d="M515,208 L515,190"/>
+
+        <text class="d-sub" x="0" y="228">THE REWARD MODEL IS</text>
+        <text class="d-sub" x="0" y="245">TRAINED FROM THE</text>
+        <text class="d-sub" x="0" y="262">INSTRUCTION-TUNED</text>
+        <text class="d-sub" x="0" y="279">CHECKPOINT, NOT FROM</text>
+        <text class="d-sub" x="0" y="296">THE BASE MODEL.</text>
+
+        <path class="d-dash" d="M735,186 L735,300 L230,300"/>
+        <path class="d-arr" d="M230,300 L230,192"/>
+        <text class="d-sub" x="720" y="294" text-anchor="end">MODERN RECIPES RUN THIS WHOLE LOOP MANY TIMES OVER</text>
+        </g>
+      </svg>
+      <span class="fig-cap">Volumes from Ouyang et al., arXiv:2203.02155, as summarised in Lambert, rlhfbook.com, ch. 3. The paper itself used 33,000 prompts for the reward model and 31,000 for the RLHF stage, and does not record whether prompts were reused between stages.</span>
+    </div>
+
+    <div class="strip strip-4 mt-l reveal">
+      <div class="panel">
+        <span class="panel-code">01</span>
+        <div class="bubble"><span class="bubble-who">Ira</span>If post-training is only a few per cent of the compute, how can it matter this much?</div>
+        <div class="panel-art"><div class="cast" data-char="ira" data-mood="doubt" data-size="96"></div></div>
+      </div>
+      <div class="panel dots">
+        <span class="panel-code">02</span>
+        <div class="caption-box">Think about Formula 1</div>
+        <p class="panel-note">Every team starts the season with a new chassis and engine. That's pretraining. Enormously expensive, done once, and it fixes the space of what the car could ever be.</p>
+      </div>
+      <div class="panel">
+        <span class="panel-code">03</span>
+        <div class="caption-box">Then they spend the whole year on it</div>
+        <p class="panel-note">Aerodynamics, systems, setup. Small changes, constantly. The best teams improve far more across a single season than they do from one chassis to the next.</p>
+        <span class="scribble scribble-arrow">that's post-training</span>
+      </div>
+      <div class="panel dots-gold">
+        <span class="panel-code">04</span>
+        <span class="sfx sfx-s">The chassis defines the limit</span>
+        <p class="panel-note" style="margin-top:12px">Pretraining decides what's possible. Post-training decides how much of it you actually get. Which of those two a policy instrument should be watching is the argument in <a class="link" href="04-policy.html#controls">chapter 04</a>.</p>
+      </div>
+    </div>
+    <span class="source">The Formula 1 analogy is Lambert's, <a class="link" href="https://rlhfbook.com" target="_blank" rel="noopener">rlhfbook.com</a>, ch. 3. It is an analogy, and like all of them it will break if you lean on it.</span>
+
+    <div class="mt-l">
+      <h3 class="h-feature" style="margin-bottom:14px;font-size:32px">The two teachers work in completely different ways</h3>
+      <p class="body-s prose" style="margin-bottom:26px">People treat instruction tuning and RLHF as two strengths of the same medicine. They aren't. One corrects you a word at a time against a single right answer. The other judges whole responses against each other, and that difference is what lets negative feedback in at all.</p>
+      <div data-widget="pertoken" class="reveal"></div>
+    </div>
+
+    <div class="table-wrap mt-l">
+      <table>
+        <thead><tr><th>Tool</th><th>What it does</th><th>Where it sits</th></tr></thead>
+        <tbody>
+          <tr><td><strong><b class="def" data-t="instruction-tuning">Instruction tuning</b></strong></td><td>Teaches the question-and-answer format by imitating chosen examples</td><td>A prerequisite for everything else</td></tr>
+          <tr><td><strong><b class="def" data-t="reward-model">Reward modelling</b></strong></td><td>Learns from collected preference data, then outputs a number standing for quality</td><td>The optimisation target for RLHF</td></tr>
+          <tr><td><strong><b class="def" data-t="rejection-sampling">Rejection sampling</b></strong></td><td>Generates candidate answers, keeps the ones a reward model likes, trains on those</td><td>The simplest useful RLHF technique, and still common</td></tr>
+          <tr><td><strong><b class="def" data-t="policy-gradient">Policy gradients</b></strong></td><td>Updates the parameters against the reward signal, in small steps</td><td>PPO, GRPO and the rest of that family</td></tr>
+          <tr><td><strong>Direct alignment</strong></td><td>Optimises straight from pairwise preferences with no reward model in the middle</td><td><b class="def" data-t="dpo">DPO</b> and its descendants</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <span class="source">Tool descriptions follow Lambert, <a class="link" href="https://rlhfbook.com" target="_blank" rel="noopener">rlhfbook.com</a>, chs. 4-9. Modern RLHF-trained models always use instruction tuning followed by some mixture of the rest.</span>
   </div>
 </section>
 
@@ -462,6 +579,7 @@
 
 <script src="assets/js/comic.js"></script>
 <script src="assets/js/widgets-train.js"></script>
+<script src="assets/js/widgets-extra.js"></script>
 <script src="assets/js/guide.js"></script>
 </body>
 </html>

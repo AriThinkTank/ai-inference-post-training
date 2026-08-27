@@ -24,6 +24,42 @@ window.T = window.T || {};
      ========================================================================= */
 
   var BRIEFS = {
+    sampler: {
+      is: 'The complete journey from the model\u2019s raw output to one chosen word, broken into six stages.',
+      k: 'Move a dial at any point and the affected stage jumps forward so you can see exactly what changed.',
+      w: 'Stage 2 for what temperature literally does (it divides), and stage 4 for what k and p literally mean. Top-p keeps a different number of tokens depending on how confident the model is. Top-k always keeps the same number.',
+      r: ['Holtzman et al. on nucleus sampling', 'https://arxiv.org/abs/1904.09751']
+    },
+    basevpost: {
+      is: 'The same question put to a base model and to a post-trained model of the same size.',
+      k: 'Flip between the two.',
+      w: 'The base model gets the answer right in four words and then keeps writing the rest of the web page. Nothing was missing from its knowledge. What was missing was the idea that a question is a request.',
+      r: ['Lambert, ch. 3', 'https://rlhfbook.com']
+    },
+    qkv: {
+      is: 'What one word is looking at when the model decides what comes after it.',
+      k: 'Tap any highlighted word.',
+      w: 'How far back the strong links reach. The model is not reading left to right and forgetting: every word can reach every earlier word in one hop, and that is the whole trick.',
+      r: ['Vaswani et al., 2017', 'https://arxiv.org/abs/1706.03762']
+    },
+    transformer: {
+      is: 'A single token\u2019s route through the entire model, from text to a list of scores.',
+      k: 'Walk the seven steps.',
+      w: 'Step 5. Most of the parameters and most of the stored knowledge sit in the feed-forward layers, not in attention, which surprises most people.',
+      r: ['Austin et al., ch. 1', 'https://jax-ml.github.io/scaling-book']
+    },
+    pipeline3: {
+      is: 'The original three-stage RLHF recipe from 2022, with the actual data volumes.',
+      k: 'Tap a stage.',
+      w: 'The numbers. Ten thousand examples to teach the format, a hundred thousand comparisons to learn taste. Post-training runs on far less data than people assume.',
+      r: ['Ouyang et al., 2022', 'https://arxiv.org/abs/2203.02155']
+    },
+    pertoken: {
+      is: 'Why instruction tuning and RLHF are not two flavours of the same thing.',
+      k: 'Flip between them.',
+      w: 'Instruction tuning corrects one token at a time against one right answer. RLHF judges whole responses against each other, which is the only way negative feedback gets in.',
+      r: ['Lambert, ch. 3', 'https://rlhfbook.com']
+    },
     map: {
       is: 'The whole pipeline on one strip, from a blank model to a live answer.',
       k: 'Tap any stage to open it.',
@@ -200,6 +236,25 @@ window.T = window.T || {};
      ========================================================================= */
 
   var DEFS = {
+    'logits': ['The raw scores a model produces, one per token in the vocabulary. Not probabilities: they can be negative and do not add up to anything. Only the gaps between them matter.', 'https://arxiv.org/abs/1706.03762', 'Vaswani et al.'],
+    'softmax': ['The function that turns raw scores into probabilities. Exponentiate each one, then divide by the total. Because it is exponential, small gaps in scores become large gaps in probability.', 'https://arxiv.org/abs/1706.03762', 'Vaswani et al.'],
+    'temperature': ['A single number every logit gets divided by before anything else happens. Below 1 stretches the gaps and makes the favourite run away with it. Above 1 squashes them and gives outsiders a chance.', 'https://arxiv.org/abs/1904.09751', 'Holtzman et al.'],
+    'top-k': ['Keep the k highest-scoring tokens and bin everything else, whatever the probabilities happen to be. A fixed headcount, which is blunt when the model is very sure or very unsure.', 'https://arxiv.org/abs/1904.09751', 'Holtzman et al.'],
+    'top-p': ['Also called nucleus sampling. Work down the ranked list adding probabilities and stop once you reach p. The number of tokens kept changes with how confident the model is, which is why it is the usual default.', 'https://arxiv.org/abs/1904.09751', 'Holtzman et al.'],
+    'attention': ['Each token asks a question, every token offers a label and some content. Matching questions to labels decides who listens to whom. It lets any word reach any earlier word in one hop.', 'https://arxiv.org/abs/1706.03762', 'Vaswani et al.'],
+    'embedding': ['A list of a few thousand numbers standing in for a token. Words used in similar ways end up with similar lists. The table is learned during pretraining, not designed.', 'https://arxiv.org/abs/1706.03762', 'Vaswani et al.'],
+    'feed-forward': ['The two-layer network each token passes through alone, between attention steps. Most of a model\u2019s parameters live here, and most of its stored facts are thought to as well.', 'https://arxiv.org/abs/1706.03762', 'Vaswani et al.'],
+    'residual-stream': ['Each layer adds to a running total rather than replacing it. That is what lets stacks eighty layers deep train at all, and it gives interpretability researchers something to read.', 'https://arxiv.org/abs/1512.03385', 'He et al.'],
+    'contrastive-loss': ['A loss computed by comparing two or more examples against each other rather than scoring each alone. It is how negative feedback gets into training at all.', 'https://rlhfbook.com', 'Lambert, ch. 3'],
+    'instruction-tuning': ['The first post-training stage. Around ten thousand question-and-answer pairs teach the model the shape of a conversation. A per-token correction against one right answer.', 'https://arxiv.org/abs/2203.02155', 'Ouyang et al.'],
+    'rejection-sampling': ['Have the model write its own answers, keep only the ones a reward model likes, then train on those. The simplest useful RLHF technique, and still widely used.', 'https://rlhfbook.com', 'Lambert, ch. 9'],
+    'policy-gradient': ['The family of reinforcement learning algorithms that nudge a model\u2019s parameters in the direction of higher reward, in small steps. PPO and GRPO are both in this family.', 'https://arxiv.org/abs/1707.06347', 'Schulman et al.'],
+    'flash-attention': ['A way of computing attention that never writes the big intermediate matrix to slow memory. Same maths, same answer, several times faster and far less memory.', 'https://arxiv.org/abs/2205.14135', 'Dao et al.'],
+    'chain-of-thought': ['Getting a model to write its working before its answer. Discovered as a prompting trick in 2022, later trained in directly with verifiable rewards.', 'https://arxiv.org/abs/2201.11903', 'Wei et al.'],
+    'rag': ['Retrieval-augmented generation. Fetch relevant documents and paste them into the prompt before the model answers. Changes what it can see, never what it knows.', 'https://arxiv.org/abs/2005.11401', 'Lewis et al.'],
+    'context-window': ['The maximum number of tokens a model can hold at once, prompt and reply together. A hard architectural ceiling, and quite separate from how much memory a conversation actually uses.', 'https://jax-ml.github.io/scaling-book', 'Austin et al.'],
+    'scaling-laws': ['The observed relationship between model size, data and performance. Chinchilla found that most models of its era were far too large for the data they were trained on.', 'https://arxiv.org/abs/2203.15556', 'Hoffmann et al.'],
+    'lora': ['Low-rank adaptation. Freeze the model and train a small patch alongside it. Cuts the cost of fine-tuning enormously, which is why almost all open-model tuning uses it.', 'https://arxiv.org/abs/2106.09685', 'Hu et al.'],
     'token': ['A chunk of text, usually a few characters. Models read and write in tokens, not words. Roughly four characters each in English, and fewer in most Indian languages.', 'https://arxiv.org/abs/1706.03762', 'Vaswani et al.'],
     'base-model': ['What you have the moment pretraining ends. It continues text and knows an enormous amount. It will not answer a question, because nobody has yet asked it to.', 'https://rlhfbook.com', 'Lambert, ch. 3'],
     'pretraining': ['The single enormous run that reads most of the internet and learns to predict the next token. Done once, and it is where nearly all the knowledge comes from.', 'https://rlhfbook.com', 'Lambert, ch. 3'],
