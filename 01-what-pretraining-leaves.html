@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Chapter 01 · The Next-Token Machine — After the Model Is Trained</title>
-<meta name="description" content="What a base model actually does, what pretraining hands over, and the claim that post-training only teaches format.">
+<title>Chapter 01 · The Next-Token Machine</title>
+<meta name="description" content="What a hundred million dollars of pretraining buys you, and what it doesn't. With a tokeniser and a sampler you can break.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;500&family=Bungee&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/takshashila.css">
 </head>
 <body>
@@ -30,16 +30,19 @@
 
 <header class="section">
   <div class="container">
-    <p class="crumbs" style="margin-bottom:22px"><a href="index.html">The Map</a> / Chapter 01</p>
-    <span class="eyebrow">Chapter 01 &middot; What pretraining leaves behind</span>
-    <h1 class="page-title" style="margin:16px 0 24px;max-width:18ch;font-size:56px;line-height:1.02;letter-spacing:-0.025em">The <em>Next-Token</em> Machine</h1>
+    <p class="crumbs" style="margin-bottom:26px"><a href="index.html">The Map</a> / Chapter 01</p>
+    <span class="chapter-no">01</span>
+    <h1 class="page-title" style="margin:10px 0 26px;max-width:14ch;font-size:56px;line-height:1.02;letter-spacing:-0.025em">The <em>Next-Token</em> Machine</h1>
     <div class="split">
-      <p class="lede">A base model is a very good text-continuation engine and a very poor assistant. Knowing exactly which capabilities are present at the end of pretraining, and which are absent, is what makes everything after it legible.</p>
+      <div>
+        <p class="lede">A hundred million dollars buys you a machine that knows a staggering amount and won't answer a single question.</p>
+        <p class="body-s prose" style="margin-top:20px">This chapter is about what that machine actually does, and about the gap between knowing something and being willing to say it. Two things to play with: a tokeniser, and the sampler that decides which word comes out.</p>
+      </div>
       <div class="jump">
         <a href="#one-thing"><b>A.01</b>The one thing it does</a>
-        <a href="#dials"><b>A.02</b>Four dials on the machine</a>
-        <a href="#handover"><b>A.03</b>Present, and absent</a>
-        <a href="#hypothesis"><b>A.04</b>A claim worth tracking</a>
+        <a href="#dials"><b>A.02</b>The dials on the outside</a>
+        <a href="#handover"><b>A.03</b>What survives, what doesn't</a>
+        <a href="#hypothesis"><b>A.04</b>An argument still running</a>
       </div>
     </div>
   </div>
@@ -48,254 +51,211 @@
 <!-- ============================ A.01 ============================ -->
 <section class="section deep" id="one-thing">
   <div class="container">
-    <span class="eyebrow">A.01 &middot; The base model</span>
-    <h2 class="h-section" style="margin:14px 0 30px;max-width:26ch">It scores every possible next word, and then somebody picks one</h2>
+    <span class="eyebrow">A.01</span>
+    <h2 class="h-section" style="margin:14px 0 34px;max-width:22ch">It does one thing, over and over</h2>
 
     <div class="strip reveal">
       <div class="panel">
         <span class="panel-code">01</span>
-        <div class="bubble"><span class="bubble-who">Ira</span>What are you thinking about right now?</div>
-        <div class="panel-art"><div class="cast" data-char="ira" data-mood="point" data-size="106"></div></div>
+        <div class="bubble"><span class="bubble-who">Ira</span>What are you actually doing in there?</div>
+        <div class="panel-art"><div class="cast" data-char="ira" data-mood="doubt" data-size="104"></div></div>
+      </div>
+      <div class="panel dots">
+        <span class="panel-code">02</span>
+        <div class="bubble right"><span class="bubble-who">Echo</span>I look at everything so far and score every word I know for how likely it is to come next. All hundred and twenty-eight thousand of them.</div>
+        <div class="panel-art"><div class="cast" data-char="echo" data-mood="think" data-size="104"></div></div>
       </div>
       <div class="panel">
-        <span class="panel-code">02</span>
-        <div class="bubble right"><span class="bubble-who">Echo</span>Nothing. I have five words. I am producing a number for each of the 128,000 words that could come sixth.</div>
-        <div class="panel-art"><div class="cast" data-char="echo" data-mood="think" data-size="106"></div></div>
-      </div>
-      <div class="panel deep">
         <span class="panel-code">03</span>
         <div class="bubble"><span class="bubble-who">Ira</span>And then?</div>
-        <div class="bubble right"><span class="bubble-who">Echo</span>Somebody picks one. It gets added to the end. Then I do it again.</div>
+        <div class="bubble right"><span class="bubble-who">Echo</span>Then someone picks one, sticks it on the end, and asks me again.</div>
         <div class="panel-art between">
-          <div class="cast" data-char="ira" data-mood="doubt" data-size="98"></div>
-          <div class="cast flip" data-char="echo" data-mood="blank" data-size="98"></div>
+          <div class="cast" data-char="ira" data-mood="blank" data-size="90"></div>
+          <div class="cast flip" data-char="echo" data-mood="blank" data-size="90"></div>
         </div>
       </div>
-      <div class="panel wide winesoft">
+      <div class="panel wide dots-gold">
         <span class="panel-code">04</span>
-        <div class="caption-box">Nothing inside a base model knows about questions, answers, users or helpfulness.</div>
-        <p class="panel-note" style="font-size:15px">There is no plan, no draft, no intention to be useful. There is a sequence of tokens in, and a probability for every token that could come next. Text appears by picking one, appending it, and repeating. That is the whole mechanism.</p>
-        <div class="sfx">Again. And again.</div>
+        <span class="sfx sfx-l">That's it</span>
+        <p class="panel-note" style="margin-top:14px;font-size:15px">Everything a language model appears to do sits on top of this loop. Reasoning, translating, writing code, refusing a request. All of it is scoring the next <b class="def" data-t="token">token</b> and picking one, a few hundred times a second.</p>
+        <span class="scribble scribble-arrow" style="margin-top:16px">the model never chooses. it only scores.</span>
       </div>
       <div class="panel">
         <span class="panel-code">05</span>
-        <div class="caption-box">Why this matters for everything that follows</div>
-        <p class="panel-note">Every technique in the next two chapters either <b style="font-weight:500">reshapes that list of numbers</b>, <b style="font-weight:500">computes it more cheaply</b>, or <b style="font-weight:500">draws from it more times</b> before settling on a reply. There is nothing else to do.</p>
-      </div>
-    </div>
-    <span class="source">Mechanism: A. Vaswani et al., &lsquo;Attention Is All You Need&rsquo;, arXiv:1706.03762; J. Austin et al., <i>How To Scale Your Model</i>, ch. 4 (jax-ml.github.io/scaling-book). Dialogue is invented.</span>
-  </div>
-</section>
-
-<!-- ============================ THREE STEPS ============================ -->
-<section class="section">
-  <div class="container">
-    <span class="eyebrow">The grown-up version</span>
-    <h2 class="h-section" style="margin:14px 0 30px;max-width:24ch">One turn of the machine, in three steps</h2>
-    <div class="gapless cols-3">
-      <div>
-        <span class="code-no">Step 1</span>
-        <h3 class="h-card" style="margin:8px 0 12px">The prompt, broken into tokens</h3>
-        <div class="tok-row" style="margin-bottom:12px">
-          <span class="tok tok-wine">India</span><span class="tok tok-wine">&middot;has</span><span class="tok tok-wine">&middot;a</span><span class="tok tok-wine">&middot;large</span><span class="tok tok-wine">&middot;ethanol</span>
-        </div>
-        <p class="body-s">A token is a fragment of text, roughly three-quarters of an English word. Not a character and not a word. Everything the model reads, writes and is billed for is counted in these.</p>
-      </div>
-      <div>
-        <span class="code-no">Step 2</span>
-        <h3 class="h-card" style="margin:8px 0 12px">The forward pass</h3>
-        <p class="body-s">Hundreds of billions of arithmetic operations, arranged as layers of attention and feed-forward blocks. This is the expensive part, and chapter 03 is entirely about making it cheaper.</p>
-        <p class="body-s" style="margin-top:12px">Nothing in this step is aware of what it is producing. It is matrix multiplication all the way down.</p>
-      </div>
-      <div>
-        <span class="code-no">Step 3</span>
-        <h3 class="h-card" style="margin:8px 0 12px">A probability for every token</h3>
-        <div class="stack-s">
-          <div class="barline"><span class="lbl">programme</span><span class="track"><span class="fill" style="width:31%"></span></span><span class="num">31%</span></div>
-          <div class="barline"><span class="lbl">blending</span><span class="track"><span class="fill" style="width:24%"></span></span><span class="num">24%</span></div>
-          <div class="barline"><span class="lbl">industry</span><span class="track"><span class="fill" style="width:17%"></span></span><span class="num">17%</span></div>
-          <div class="barline"><span class="lbl">sector</span><span class="track"><span class="fill" style="width:11%"></span></span><span class="num">11%</span></div>
-          <div class="barline"><span class="lbl">policy</span><span class="track"><span class="fill" style="width:6%"></span></span><span class="num">6%</span></div>
-          <div class="barline"><span class="lbl">128,000 others</span><span class="track"><span class="fill gold" style="width:11%"></span></span><span class="num">11%</span></div>
-        </div>
-      </div>
-    </div>
-    <span class="source">Probabilities are illustrative, not measured. They are the figures used in the underlying briefing deck, chosen to show the shape of a typical distribution.</span>
-  </div>
-</section>
-
-<!-- ============================ WIDGETS ============================ -->
-<section class="section deep">
-  <div class="container">
-    <div class="stack-l">
-      <div>
-        <span class="eyebrow">Try it &middot; A.01a</span>
-        <h2 class="h-section" style="margin:14px 0 18px;max-width:24ch">Cut a sentence up the way a model sees it</h2>
-        <p class="lede" style="max-width:60ch;margin-bottom:26px">Long words break into pieces. Numbers break into digits. A space belongs to the word after it. This is why a model can spell badly, why some languages cost more per sentence than others, and why your bill is measured in a unit you never chose.</p>
-        <div data-widget="tokeniser" class="reveal"></div>
-      </div>
-
-      <div>
-        <span class="eyebrow">Try it &middot; A.01b</span>
-        <h2 class="h-section" style="margin:14px 0 18px;max-width:26ch">Turn the dials on the probability list</h2>
-        <p class="lede" style="max-width:60ch;margin-bottom:26px">Temperature flattens or sharpens the list before a token is drawn. Top-k keeps the best few. Top-p keeps as many as it takes to cover a share of the probability. Push temperature past 1.5 and watch the 128,000 unnamed tokens swallow the list, which is exactly what happens in a real model and exactly why nobody serves at that setting.</p>
-        <div data-widget="nexttoken" class="reveal"></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============================ A.02 DIALS ============================ -->
-<section class="section" id="dials">
-  <div class="container">
-    <span class="eyebrow">A.02 &middot; Vocabulary</span>
-    <h2 class="h-section" style="margin:14px 0 30px;max-width:24ch">Four words that describe the machine, not the model</h2>
-    <div class="gapless cols-4">
-      <div>
-        <span class="meta">Token</span>
-        <p class="body-s mt-s">A fragment of text, roughly three-quarters of an English word. The unit of everything: context, billing, memory.</p>
-      </div>
-      <div>
-        <span class="meta">Temperature</span>
-        <p class="body-s mt-s">How flat the list is made before a token is drawn. Low values almost always pick the top entry. It is a knob on the sampling, not a change to the model.</p>
-      </div>
-      <div>
-        <span class="meta">Sampling</span>
-        <p class="body-s mt-s">The rule for drawing from the list: greedy, top-k, top-p, or beam search. Two people asking the same model the same question can get different answers because of this alone.</p>
-      </div>
-      <div>
-        <span class="meta">Context</span>
-        <p class="body-s mt-s">How many earlier tokens may be attended to. Every one of them costs memory during serving, which chapter 03 works out in gigabytes.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============================ A.03 HANDOVER ============================ -->
-<section class="section deep" id="handover">
-  <div class="container">
-    <span class="eyebrow">A.03 &middot; The handover</span>
-    <h2 class="h-section" style="margin:14px 0 18px;max-width:26ch">What is already in the box, and what has to be added</h2>
-    <p class="lede" style="max-width:62ch;margin-bottom:30px">This is the most useful list on the site. The five on the left arrive free with pretraining and cannot easily be added later. The five on the right are absent at the handover, and every one of them is the work of chapter 02.</p>
-
-    <div class="split-even">
-      <div>
-        <h3 class="h-feature" style="margin-bottom:18px">Present &middot; acquired from the corpus</h3>
-        <div class="rowlist">
-          <div class="rowlist-item"><span><span class="code-no">01</span> <b style="font-weight:500">Broad factual and world knowledge</b><span class="body-s" style="display:block">Almost everything the model will ever know about the world arrives at this stage.</span></span></div>
-          <div class="rowlist-item"><span><span class="code-no">02</span> <b style="font-weight:500">Fluent language, in many languages</b><span class="body-s" style="display:block">Grammar, register, idiom, and the ability to move between them.</span></span></div>
-          <div class="rowlist-item"><span><span class="code-no">03</span> <b style="font-weight:500">In-context learning</b><span class="body-s" style="display:block">Picking up a pattern from examples inside the prompt, with no weight change at all.</span></span></div>
-          <div class="rowlist-item"><span><span class="code-no">04</span> <b style="font-weight:500">Latent reasoning ability</b><span class="body-s" style="display:block">The capacity is there but unreliable and hard to elicit on demand.</span></span></div>
-          <div class="rowlist-item"><span><span class="code-no">05</span> <b style="font-weight:500">Some code and mathematics</b><span class="body-s" style="display:block">Learned incidentally from the corpus rather than taught deliberately.</span></span></div>
-        </div>
-      </div>
-      <div>
-        <h3 class="h-feature" style="margin-bottom:18px">Absent &middot; must be added afterwards</h3>
-        <div class="rowlist">
-          <div class="rowlist-item"><span><span class="code-no">06</span> <b style="font-weight:500">Answering rather than continuing</b><span class="body-s" style="display:block">Given a question, a base model may produce five more questions. That is a faithful continuation of its corpus.</span></span></div>
-          <div class="rowlist-item"><span><span class="code-no">07</span> <b style="font-weight:500">Knowing when to stop</b><span class="body-s" style="display:block">Nothing in pretraining teaches a natural end to a reply.</span></span></div>
-          <div class="rowlist-item"><span><span class="code-no">08</span> <b style="font-weight:500">Refusal and safety behaviour</b><span class="body-s" style="display:block">The corpus contains harmful text, and a base model reproduces it on request.</span></span></div>
-          <div class="rowlist-item"><span><span class="code-no">09</span> <b style="font-weight:500">Tool and function-call syntax</b><span class="body-s" style="display:block">Emitting a structured call that an external system can execute.</span></span></div>
-          <div class="rowlist-item"><span><span class="code-no">10</span> <b style="font-weight:500">Reliable long-form reasoning</b><span class="body-s" style="display:block">Working through a problem in steps, on demand, and checking the result.</span></span></div>
-        </div>
-      </div>
-    </div>
-    <span class="source">Georgia Tech CS 7643, Spring 2026, lecture 23, &lsquo;Pre-training: what it gives and what it misses&rsquo;; Lambert, arXiv:2504.12501, ch. 4.</span>
-
-    <div class="mt-l" data-widget="handover"></div>
-  </div>
-</section>
-
-<!-- ============================ A.04 HYPOTHESIS ============================ -->
-<section class="section" id="hypothesis">
-  <div class="container">
-    <span class="eyebrow">A.04 &middot; A claim worth tracking</span>
-    <h2 class="h-section" style="margin:14px 0 30px;max-width:26ch">The claim that post-training only teaches manners</h2>
-
-    <div class="strip strip-4 reveal">
-      <div class="panel">
-        <span class="panel-code">01</span>
-        <div class="caption-box">The superficial alignment hypothesis, as originally stated</div>
-        <div class="bubble flat">Models acquire nearly all their knowledge during pretraining. Post-training does not teach new knowledge. It teaches the model which format to use when expressing knowledge it already holds.</div>
-      </div>
-      <div class="panel">
-        <span class="panel-code">02</span>
-        <div class="bubble"><span class="bubble-who">Ira</span>So it is just table manners? It already knew everything, it just did not know how to say it?</div>
-        <div class="panel-art"><div class="cast" data-char="ira" data-mood="doubt" data-size="104"></div></div>
-      </div>
-      <div class="panel deep">
-        <span class="panel-code">03</span>
-        <div class="bubble right"><span class="bubble-who">Echo</span>That was a fair reading in 2023. A few thousand good examples were enough to turn me into something usable.</div>
-        <div class="panel-art"><div class="cast" data-char="echo" data-mood="blank" data-size="104"></div></div>
-      </div>
-      <div class="panel winesoft">
-        <span class="panel-code">04</span>
-        <div class="bubble right"><span class="bubble-who">Echo</span>It is doing less work than it used to. Nobody wrote down the long chains of self-correcting working I now produce. Those came out of being marked by a program, thousands of times.</div>
-        <div class="panel-art"><div class="cast" data-char="echo" data-mood="think" data-size="104"></div></div>
+        <div class="caption-box">Worth holding on to</div>
+        <p class="panel-note">The picking happens outside the model, in a few lines of code you can change without retraining anything. That code is the next section.</p>
       </div>
     </div>
 
     <div class="split mt-l">
       <div>
-        <h3 class="h-feature" style="margin-bottom:16px">How to grade the claim</h3>
-        <div class="aside">
-          <span class="aside-title">The hypothesis has not been refuted. It has been narrowed.</span>
-          <p>Knowledge does still seem to arrive almost entirely during pretraining. What has changed is the claim about <em>capability</em>. Eliciting a latent ability reliably, at length, and under verification now looks less like formatting and more like teaching a skill.</p>
-          <p class="body-s">The distinction is not academic. It decides whether pretraining compute is the right quantity to measure or control &mdash; which is the argument of chapter 04.</p>
+        <h3 class="h-feature" style="margin-bottom:20px;font-size:30px">The loop, in three steps</h3>
+        <div class="gapless cols-3">
+          <div>
+            <span class="code-no">Step 1</span>
+            <h4 class="h-card" style="margin:8px 0 8px">Chop it up</h4>
+            <p class="body-s">Your sentence becomes a list of numbers. Not words, not letters. Something in between, called tokens.</p>
+          </div>
+          <div>
+            <span class="code-no">Step 2</span>
+            <h4 class="h-card" style="margin:8px 0 8px">One sweep</h4>
+            <p class="body-s">The whole list passes through every layer of the model once. This is the expensive part.</p>
+          </div>
+          <div>
+            <span class="code-no">Step 3</span>
+            <h4 class="h-card" style="margin:8px 0 8px">A score for everything</h4>
+            <p class="body-s">Out comes one number for every token in the vocabulary. Not an answer. An enormous list of scores.</p>
+          </div>
         </div>
       </div>
-      <div class="stack-m">
-        <div class="card">
-          <span class="code-no">R.01</span>
-          <h4 class="h-card" style="margin:8px 0 8px">Behaviour that was not in the data</h4>
-          <p class="body-s">Long chains of self-correcting working emerged from reinforcement learning against automatic checkers. No human wrote those chains as demonstrations.</p>
-        </div>
-        <div class="card">
-          <span class="code-no">R.02</span>
-          <h4 class="h-card" style="margin:8px 0 8px">The compute share has moved</h4>
-          <p class="body-s">Post-training has gone from a rounding error to a large and rising fraction of the compute used to build a frontier model.</p>
-        </div>
-        <div class="card">
-          <span class="code-no">R.03</span>
-          <h4 class="h-card" style="margin:8px 0 8px">Gains now attributed to it</h4>
-          <p class="body-s">Developers increasingly attribute benchmark movement between releases to post-training rather than to a larger base model.</p>
-        </div>
+      <div class="sticker">
+        <div class="cast" data-char="ira" data-mood="point" data-size="76"></div>
+        <div class="sticker-txt"><b>Why tokens and not words?</b>The model needs a fixed vocabulary, and English alone has millions of words. Tokens are the compromise. Type into the box below and you'll see the seams.</div>
       </div>
     </div>
 
-    <div class="card mt-l" style="border-left:2px solid var(--wine)">
-      <span class="chip chip-soft">Open question &middot; actively contested</span>
-      <h3 class="h-feature" style="margin:14px 0 10px;max-width:34ch">Does reinforcement learning add capability, or only sharpen access to capability already present?</h3>
-      <p class="body-s" style="max-width:70ch">Several 2026 papers argue the effect is largely elicitation from a sparse existing subnetwork. The answer bears directly on how much a small actor can achieve with a strong open base model, and on whether a control aimed at pretraining compute reaches the thing it is aimed at. This site does not settle it, and neither does anyone else yet.</p>
-      <span class="source">Hypothesis as summarised in Georgia Tech CS 7643 lecture 23. Contested in, among others, &lsquo;The Multiple Ticket Hypothesis: Random Sparse Subnetworks Suffice for RLVR&rsquo;, arXiv:2602.01599.</span>
+    <div class="mt-l" data-widget="tokeniser"></div>
+    <div class="mt-l" data-widget="nexttoken"></div>
+  </div>
+</section>
+
+<!-- ============================ A.02 ============================ -->
+<section class="section" id="dials">
+  <div class="container">
+    <span class="eyebrow">A.02</span>
+    <h2 class="h-section" style="margin:14px 0 12px;max-width:24ch">Four dials that sit outside the model</h2>
+    <p class="body-s prose" style="margin-bottom:34px">None of these change a single weight. All four change what you get back, which is why the same model can feel sharp on Monday and vague on Tuesday.</p>
+
+    <div class="gapless cols-4">
+      <div>
+        <span class="code-no">Dial 1</span>
+        <h3 class="h-card" style="margin:8px 0 8px">Temperature</h3>
+        <p class="body-s">Flattens or sharpens the scores before anything is picked. Low is predictable and a little dead. High is lively and occasionally deranged.</p>
+      </div>
+      <div>
+        <span class="code-no">Dial 2</span>
+        <h3 class="h-card" style="margin:8px 0 8px">The sampling rule</h3>
+        <p class="body-s">Decides how much of the tail is eligible at all. Top-k keeps a fixed number of candidates. Top-p keeps as many as it takes to reach a probability mass.</p>
+      </div>
+      <div>
+        <span class="code-no">Dial 3</span>
+        <h3 class="h-card" style="margin:8px 0 8px">The system prompt</h3>
+        <p class="body-s">Text you never see, pasted in front of yours. Cheapest way to change behaviour, and the easiest to talk a model out of.</p>
+      </div>
+      <div>
+        <span class="code-no">Dial 4</span>
+        <h3 class="h-card" style="margin:8px 0 8px">Context length</h3>
+        <p class="body-s">How much it holds at once. Sold as a feature, priced like one. Chapter 03 explains why it costs what it does.</p>
+      </div>
+    </div>
+
+    <div class="aside mt-l" style="max-width:74ch">
+      <span class="aside-title">Why this matters when you read a benchmark claim</span>
+      <p>Two labs can publish different numbers for the same weights simply because they set these dials differently. Almost nobody reports the settings.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ A.03 ============================ -->
+<section class="section deep" id="handover">
+  <div class="container">
+    <span class="eyebrow">A.03</span>
+    <h2 class="h-section" style="margin:14px 0 12px;max-width:26ch">The handover: what pretraining leaves behind</h2>
+    <p class="body-s prose" style="margin-bottom:34px">An enormous amount of knowledge, and almost no manners. Have a guess at the ten items below before you check.</p>
+
+    <div data-widget="handover" class="reveal"></div>
+
+    <div class="split mt-l">
+      <div class="card" style="border-left:3px solid var(--wine)">
+        <h3 class="h-feature" style="margin:0 0 12px;font-size:26px">The pattern, once you've done all ten</h3>
+        <p class="body-s">Facts, grammar, code syntax, the shape of an argument, a rough sense of how the world works: all there. Answering when asked, stopping when finished, refusing when it should, admitting it doesn't know: all missing.</p>
+        <p class="body-s">Knowledge comes from reading. Behaviour has to be taught, and that teaching is <a class="link" href="02-post-training.html">chapter 02</a>.</p>
+      </div>
+      <div class="sticker gold">
+        <div class="cast" data-char="echo" data-mood="sad" data-size="76"></div>
+        <div class="sticker-txt"><b>Something odd about base models</b>Ask one the same question three times and you may get three different answers, all confident, all in different formats. Consistency is a taught behaviour too.</div>
+      </div>
+    </div>
+    <span class="source">Handover framing follows Lambert, <a class="link" href="https://arxiv.org/abs/2504.12501" target="_blank" rel="noopener">arXiv:2504.12501</a>, ch. 3.</span>
+  </div>
+</section>
+
+<!-- ============================ A.04 ============================ -->
+<section class="section" id="hypothesis">
+  <div class="container">
+    <span class="eyebrow">A.04</span>
+    <h2 class="h-section" style="margin:14px 0 34px;max-width:26ch">One argument nobody has settled</h2>
+
+    <div class="strip strip-4 reveal">
+      <div class="panel">
+        <span class="panel-code">01</span>
+        <div class="caption-box">The claim, made in 2023</div>
+        <p class="panel-note">Post-training teaches a model nothing new. It only teaches it which of the things it already knows to say out loud. Call it the surface hypothesis.</p>
+      </div>
+      <div class="panel dots">
+        <span class="panel-code">02</span>
+        <div class="bubble"><span class="bubble-who">Ira</span>So all that expensive teaching is just&hellip; manners?</div>
+        <div class="panel-art"><div class="cast" data-char="ira" data-mood="doubt" data-size="98"></div></div>
+      </div>
+      <div class="panel">
+        <span class="panel-code">03</span>
+        <div class="caption-box">Evidence for</div>
+        <p class="panel-note">A thousand carefully chosen examples get you most of the way. The knowledge clearly isn't arriving at that point. And the same base model can be aligned in wildly different directions.</p>
+      </div>
+      <div class="panel dots-gold">
+        <span class="panel-code">04</span>
+        <div class="caption-box">Evidence against</div>
+        <p class="panel-note">Reasoning models trained with verifiable rewards solve problems their base models couldn't solve at any temperature, with any number of tries. That looks like new ability, not better manners.</p>
+        <span class="scribble scribble-arrow" style="margin-top:14px">still being argued about in 2026</span>
+      </div>
+    </div>
+
+    <div class="split mt-l">
+      <div class="card">
+        <span class="chip">Why you should care</span>
+        <h3 class="h-feature" style="margin:14px 0 12px;font-size:26px">The compute-control argument rests on this</h3>
+        <p class="body-s">If post-training only reveals what pretraining already built, then watching the big pretraining runs catches most of what matters. If it genuinely creates ability, a lot of capability is now being made in runs too small and too numerous to watch.</p>
+        <p class="body-s">This site leans towards the second reading, and flags where that lean is doing work. Mostly in <a class="link" href="04-policy.html#controls">chapter 04</a>.</p>
+      </div>
+      <div class="stack-m">
+        <div><span class="meta">The original claim</span><p class="body-s mt-s">LIMA and the superficial alignment hypothesis, <a class="link" href="https://arxiv.org/abs/2305.11206" target="_blank" rel="noopener">arXiv:2305.11206</a>.</p></div>
+        <div><span class="meta">The counter-evidence</span><p class="body-s mt-s">Reasoning gains under <b class="def" data-t="rlvr">RLVR</b>, in <a class="link" href="https://arxiv.org/abs/2501.12948" target="_blank" rel="noopener">DeepSeek-R1</a>.</p></div>
+        <div><span class="meta">Where it stands</span><p class="body-s mt-s">Contested. Treat anyone who says it's obvious with suspicion, in either direction.</p></div>
+      </div>
     </div>
   </div>
 </section>
 
 <section class="section ink">
-  <div class="container-narrow">
-    <span class="eyebrow">End of chapter 01</span>
-    <h2 class="h-section" style="margin:16px 0 20px;max-width:24ch">A fluent machine with no idea what it is for</h2>
-    <p class="lede" style="color:rgba(255,255,255,0.85)">Everything the model knows, it now knows. What it lacks is the habit of answering, the sense to stop, the judgement to refuse, and the discipline to work through a problem. Four teachers are about to supply those, one at a time, and each of them can be fooled in its own characteristic way.</p>
+  <div class="container">
+    <div class="split">
+      <div>
+        <span class="eyebrow">Chapter 01, in one line</span>
+        <h2 class="h-section" style="margin:16px 0 20px;max-width:20ch">You have a machine that <em>knows</em>. Now it has to be taught to <em>behave</em>.</h2>
+        <p class="lede" style="color:rgba(255,255,255,0.85);max-width:48ch">Four teachers do that job. They get cheaper as you go, and worse at their jobs.</p>
+      </div>
+      <div style="display:flex;align-items:flex-end">
+        <a class="btn btn-gold" href="02-post-training.html">On to the teachers &rarr;</a>
+      </div>
+    </div>
   </div>
 </section>
 
 <div class="pager">
   <a href="index.html"><span class="meta">&larr; Previous</span><span style="display:block;font-size:19px;margin-top:6px">The Map</span></a>
-  <a class="next" href="02-post-training.html"><span class="meta">Next &rarr;</span><span style="display:block;font-size:19px;margin-top:6px">Chapter 02 &middot; Post-Training</span></a>
+  <a class="next" href="02-post-training.html"><span class="meta">Next &rarr;</span><span style="display:block;font-size:19px;margin-top:6px">Chapter 02 &middot; Four Teachers</span></a>
 </div>
 
 <footer class="footer">
   <div class="footer-grid">
     <div class="footer-brand">
       <p class="footer-tag">Pretraining built the capability.<br>Post-training made it usable.<br>Inference decides who can afford it.</p>
-      <p class="footer-addr" style="margin-top:24px">Prepared for the High-Tech Geopolitics Programme,<br>Takshashila Institution, Bengaluru. A draft for discussion.</p>
+      <p class="footer-addr" style="margin-top:24px">High-Tech Geopolitics Programme,<br>Takshashila Institution, Bengaluru. A draft for discussion.</p>
     </div>
     <div>
       <h4>Chapters</h4>
       <ul>
         <li><a href="index.html">The Map</a></li>
-        <li><a href="01-what-pretraining-leaves.html">The Next-Token Machine</a></li>
         <li><a href="02-post-training.html">Post-Training</a></li>
         <li><a href="03-inference.html">Inference</a></li>
         <li><a href="04-policy.html">Why It Matters</a></li>
@@ -313,8 +273,8 @@
       <h4>Sources</h4>
       <ul>
         <li><a href="https://rlhfbook.com" rel="noopener">Lambert, RLHF Book <span class="arrow">&#8599;</span></a></li>
-        <li><a href="https://jax-ml.github.io/scaling-book" rel="noopener">Austin et al., Scaling Book <span class="arrow">&#8599;</span></a></li>
         <li><a href="https://arxiv.org/abs/1706.03762" rel="noopener">Attention Is All You Need <span class="arrow">&#8599;</span></a></li>
+        <li><a href="https://arxiv.org/abs/2305.11206" rel="noopener">LIMA <span class="arrow">&#8599;</span></a></li>
       </ul>
     </div>
   </div>
@@ -326,5 +286,6 @@
 
 <script src="assets/js/comic.js"></script>
 <script src="assets/js/widgets-train.js"></script>
+<script src="assets/js/guide.js"></script>
 </body>
 </html>

@@ -48,7 +48,16 @@ assets/css/takshashila.css      The whole design system
 assets/js/comic.js              Cast figures, navigation, scroll behaviour
 assets/js/widgets-train.js      Widgets for chapters 01 and 02, plus shared helpers
 assets/js/widgets-serve.js      Widgets for chapters 03 and 05
+assets/js/guide.js              Widget briefs and hover definitions
 ```
+
+## The two shared systems
+
+**Widget briefs.** Every `data-widget` gets a yellow explainer injected above it: what it is, what you're changing, what to watch for, and a link to the source. They all live in the `BRIEFS` table at the top of `guide.js`. Edit the text there, not in the widget.
+
+**Hover definitions.** Write `<b class="def" data-t="kv-cache">KV cache</b>` anywhere and it picks up a definition and a source link from the `DEFS` table in `guide.js`. Thirty-three terms so far. A term with no entry gets a grey underline instead of an orange one, so mistakes are visible rather than silent.
+
+`guide.js` must load last, after the widget scripts.
 
 ## How the widgets work
 

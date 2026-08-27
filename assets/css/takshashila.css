@@ -533,3 +533,198 @@ input[type="range"]:disabled::-webkit-slider-thumb { background: var(--ink-50); 
 .quiz-opts button.wrong { background: var(--deep); color: var(--ink-50); text-decoration: line-through; }
 .quiz-fb { margin-top: 14px; font-size: 14px; line-height: 1.6; color: var(--ink-70); border-left: 2px solid var(--wine); padding-left: 18px; display: none; }
 .quiz-fb.show { display: block; }
+
+/* =========================================================================
+   PLAYBOOK LAYER
+   Added after the base system. Two jobs: more air, and more comic.
+   Where this contradicts the base rules it wins, deliberately.
+   ========================================================================= */
+
+/* ---------- 1. air ------------------------------------------------------ */
+
+.section { padding-top: 88px; padding-bottom: 88px; }
+.section .container > .lede { margin-bottom: 40px; }
+.body-s { line-height: 1.62; }
+p + p { margin-top: 14px; }
+.gapless > * { padding: 26px 24px; }
+.mt-l { margin-top: 52px; }
+.card { padding: 28px 26px; }
+.aside { padding: 26px 24px; }
+.prose { max-width: 62ch; }
+.h-section + .lede { margin-top: 18px; }
+.table-wrap td, .table-wrap th { padding: 15px 16px; }
+.rowlist-item { padding: 18px 0; }
+
+/* a plain full-stop between sections: a small mark, lots of space */
+.beat { text-align: center; padding: 8px 0 0; }
+.beat span {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.4em;
+  color: var(--ink-50);
+}
+
+/* ---------- 2. widget briefs -------------------------------------------- */
+
+.brief {
+  border-bottom: var(--rule);
+  background: linear-gradient(180deg, var(--gold-soft) 0%, rgba(252,240,217,0) 100%);
+  padding: 22px 24px 24px;
+  display: grid; gap: 10px;
+}
+.br-row {
+  display: grid; grid-template-columns: 118px 1fr; gap: 16px;
+  align-items: baseline;
+}
+.br-k {
+  font-family: var(--mono); font-size: 10px; text-transform: uppercase;
+  letter-spacing: 0.12em; color: var(--wine); padding-top: 3px;
+}
+.br-row > span:last-child { font-size: 14.5px; line-height: 1.55; color: var(--ink); }
+@media (max-width: 620px) {
+  .br-row { grid-template-columns: 1fr; gap: 3px; }
+}
+
+/* ---------- 3. hover definitions ---------------------------------------- */
+
+.def {
+  font-weight: 500;
+  border-bottom: 2px dotted var(--marigold);
+  cursor: help;
+}
+.def:focus-visible { outline: 2px solid var(--wine); outline-offset: 2px; }
+.def-missing { border-bottom-color: var(--ink-20); }
+
+.tip {
+  position: absolute; z-index: 200;
+  background: var(--ink); color: #fff;
+  border: 2px solid var(--ink);
+  padding: 16px 18px;
+  display: none;
+  box-sizing: border-box;
+}
+.tip.on { display: block; }
+.tip-term {
+  display: block; font-family: var(--mono); font-size: 10px;
+  text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold);
+  margin-bottom: 8px;
+}
+.tip-body { display: block; font-size: 14px; line-height: 1.55; color: rgba(255,255,255,0.92); }
+.tip-src {
+  display: inline-block; margin-top: 12px;
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.06em;
+  color: var(--gold); text-decoration: none;
+  border-bottom: 1px solid rgba(241,162,34,0.5);
+}
+.tip-src:hover { border-bottom-color: var(--gold); }
+
+/* ---------- 4. louder panels -------------------------------------------- */
+
+.strip {
+  border: 2px solid var(--ink);
+  border-right-width: 0; border-bottom-width: 0;
+}
+.strip .panel {
+  border: 0;
+  border-right: 2px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
+  padding: 28px 26px 26px;
+}
+.panel-code {
+  font-family: var(--mono); font-weight: 500; font-size: 12px;
+  letter-spacing: 0.1em; color: var(--wine);
+}
+.panel.deep { background: var(--deep); }
+.panel.gold { background: var(--gold-soft); }
+.panel.winesoft { background: var(--wine-soft); }
+
+/* halftone, the cheapest way to say comic */
+.panel.dots {
+  background-image: radial-gradient(var(--ink-10) 1.4px, transparent 1.5px);
+  background-size: 9px 9px;
+}
+.panel.dots-gold {
+  background-color: var(--gold-soft);
+  background-image: radial-gradient(rgba(241,162,34,0.34) 1.6px, transparent 1.7px);
+  background-size: 10px 10px;
+}
+
+/* speech bubbles get a heavier outline to match */
+.bubble { border: 2px solid var(--ink); }
+.bubble::after { border-top-color: var(--ink); }
+.bubble-who { color: var(--wine); }
+
+/* ---------- 5. lettering ------------------------------------------------ */
+
+.sfx {
+  font-family: 'Bungee', var(--sans);
+  color: var(--wine);
+  letter-spacing: 0.02em;
+  transform: rotate(-3deg);
+  display: inline-block;
+}
+.sfx-s { font-size: 20px; }
+.sfx-l { font-size: 34px; line-height: 1; }
+.sfx-gold { color: var(--marigold); -webkit-text-stroke: 1px var(--ink); }
+
+/* the narrator's box, top-left of a panel, as in any comic */
+.caption-box {
+  background: var(--gold-soft);
+  border: 2px solid var(--ink);
+  padding: 11px 13px;
+  font-size: 13.5px; line-height: 1.45; font-weight: 500;
+  margin-bottom: 16px;
+}
+
+/* margin scribbles, in a hand */
+.scribble {
+  font-family: 'Caveat', cursive;
+  font-size: 21px; line-height: 1.25;
+  color: var(--wine);
+  transform: rotate(-1.2deg);
+  display: block;
+}
+.scribble.ink { color: var(--ink-70); }
+.scribble-arrow::before {
+  content: '\21B3'; font-family: var(--sans); font-size: 15px;
+  margin-right: 7px; color: var(--marigold);
+}
+
+/* a big number for the chapter openers */
+.chapter-no {
+  font-family: 'Bungee', var(--sans);
+  font-size: 76px; line-height: 0.85; color: var(--wine-soft);
+  -webkit-text-stroke: 2px var(--wine);
+  display: block; margin-bottom: 8px;
+}
+
+/* ---------- 6. cast stickers -------------------------------------------- */
+
+.sticker {
+  display: flex; gap: 14px; align-items: flex-start;
+  border: 2px solid var(--ink); background: var(--paper);
+  padding: 16px 18px;
+}
+.sticker .cast { flex: 0 0 auto; }
+.sticker-txt { font-size: 14.5px; line-height: 1.55; }
+.sticker-txt b { font-weight: 500; display: block; margin-bottom: 3px; color: var(--wine); }
+.sticker.gold { background: var(--gold-soft); }
+
+/* ---------- 7. lab shell, a touch louder --------------------------------- */
+
+.lab { border: 2px solid var(--ink); }
+.lab-head { border-bottom: 2px solid var(--ink); padding: 18px 24px; }
+.lab-tag {
+  background: var(--marigold); color: var(--ink);
+  border: 2px solid var(--ink);
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 5px 9px;
+}
+.lab-body { padding: 26px 24px; }
+.lab-foot { border-top: var(--rule); padding: 14px 24px; }
+
+@media (max-width: 620px) {
+  .section { padding-top: 56px; padding-bottom: 56px; }
+  .chapter-no { font-size: 54px; }
+  .sfx-l { font-size: 26px; }
+  .lab-body, .lab-head, .brief { padding-left: 18px; padding-right: 18px; }
+}

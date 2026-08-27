@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Chapter 02 · Post-Training — After the Model Is Trained</title>
-<meta name="description" content="Four teachers and four kinds of signal: demonstrations, preferences, verifiable rewards and environments. Plus reward hacking, GRPO, distillation and quantisation, explained in comic panels.">
+<title>Chapter 02 · Four Teachers</title>
+<meta name="description" content="How a base model is taught to behave: copying, ranking, checking, doing. With a reward-hacking game and a verifiability ladder.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;500&family=Bungee&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/takshashila.css">
 </head>
 <body>
@@ -30,746 +30,409 @@
 
 <header class="section">
   <div class="container">
-    <p class="crumbs" style="margin-bottom:22px"><a href="index.html">The Map</a> / Chapter 02</p>
-    <span class="eyebrow">Chapter 02 &middot; Post-training</span>
-    <h1 class="page-title" style="margin:16px 0 24px;max-width:16ch;font-size:56px;line-height:1.02;letter-spacing:-0.025em">Four <em>Teachers</em></h1>
+    <p class="crumbs" style="margin-bottom:26px"><a href="index.html">The Map</a> / Chapter 02</p>
+    <span class="chapter-no">02</span>
+    <h1 class="page-title" style="margin:10px 0 26px;max-width:12ch;font-size:56px;line-height:1.02;letter-spacing:-0.025em">Four <em>Teachers</em></h1>
     <div class="split">
-      <p class="lede">Four stages, each learning from a different kind of signal. The signal is the thing to watch: it decides what the stage can teach, what it costs, and how it fails. Moving up the stack, the teacher gets cheaper to consult and harder to trust.</p>
+      <div>
+        <p class="lede">Four ways to teach a model, applied in order. Each one is cheaper than the last, and each one is worse at its job than the last.</p>
+        <p class="body-s prose" style="margin-top:20px">That trade is the whole story. You start with a human writing the perfect answer, which is slow and expensive. You end with a program that runs the code and says pass or fail, which is instant and free, and can only mark the small fraction of tasks a program can check.</p>
+      </div>
       <div class="jump">
-        <a href="#stack"><b>B.01</b>The shape of the chapter</a>
-        <a href="#sft"><b>B.02</b>Copying</a>
-        <a href="#preference"><b>B.03</b>Ranking</a>
-        <a href="#hacking"><b>B.03</b>Reward hacking</a>
+        <a href="#sft"><b>B.01</b>Copying</a>
+        <a href="#preference"><b>B.02</b>Ranking</a>
+        <a href="#hacking"><b>B.03</b>When the judge gets gamed</a>
         <a href="#rlvr"><b>B.04</b>Checking</a>
-        <a href="#reasoning"><b>B.04</b>Thinking out loud</a>
-        <a href="#agentic"><b>B.05</b>Doing</a>
-        <a href="#compression"><b>B.06</b>Shrinking</a>
-        <a href="#summary"><b>B.07</b>The whole chapter on one page</a>
+        <a href="#reasoning"><b>B.05</b>Where thinking came from</a>
+        <a href="#agentic"><b>B.06</b>Doing</a>
+        <a href="#compression"><b>B.07</b>Shrinking it</a>
+        <a href="#summary"><b>B.08</b>The whole thing</a>
       </div>
     </div>
   </div>
 </header>
 
-<!-- ============================ B.01 THE STACK ============================ -->
-<section class="section deep" id="stack">
+<!-- ============================ THE STAIRCASE ============================ -->
+<section class="section deep">
   <div class="container">
-    <span class="eyebrow">B.01 &middot; The shape of the chapter</span>
-    <h2 class="h-section" style="margin:14px 0 18px;max-width:26ch">Each stage sits on top of the one below it</h2>
-    <p class="lede" style="max-width:62ch;margin-bottom:30px">None of them replaces its predecessor. Each narrows the behaviour of the one beneath.</p>
+    <span class="eyebrow">B.00 &middot; The shape of the chapter</span>
+    <h2 class="h-section" style="margin:14px 0 12px;max-width:24ch">The marker gets weaker at every step</h2>
+    <p class="body-s prose" style="margin-bottom:34px">Climb the staircase and watch who is doing the marking. A human writing the answer. A human ranking answers. A model imitating that human. Then no human at all.</p>
     <div data-widget="staircase" class="reveal"></div>
-
-    <div class="aside mt-l" style="max-width:76ch">
-      <span class="aside-title">The one sentence to remember</span>
-      <p>A human demonstrator is expensive and reliable. A learned reward model is cheap and gameable. An automatic checker is cheap and reliable but only exists for a narrow set of tasks. An environment is reliable, expensive, and closer to infrastructure than to a dataset.</p>
-    </div>
-
-    <h3 class="h-feature" style="margin:44px 0 20px">The four supervision signals, compared</h3>
-    <p class="body-s" style="max-width:70ch;margin-bottom:20px">This table is the analytical core of the chapter. When a new method is announced, the first question worth asking is which column it belongs in, because that determines what it can and cannot fix.</p>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr><th></th><th>Demonstrations</th><th>Preferences</th><th>Verifiable rewards</th><th>Environments</th></tr>
-        </thead>
-        <tbody>
-          <tr><th scope="row">Method name</th><td>Supervised fine-tuning (SFT), instruction tuning</td><td>RLHF, RLAIF, DPO and other direct-alignment methods</td><td>RLVR, also called reinforcement fine-tuning</td><td>Agentic RL, multi-turn RL</td></tr>
-          <tr><th scope="row">Where the signal comes from</th><td>A person writes the ideal answer</td><td>A person or model says which of two answers is better</td><td>A program checks whether the answer is correct</td><td>A tool, sandbox or simulator returns an outcome</td></tr>
-          <tr><th scope="row">Cost per unit of signal</th><td>High. Skilled human writing time.</td><td>Moderate. Ranking is faster than writing.</td><td>Very low once the checker exists. The checker is the cost.</td><td>High. Environments are slow, and must be built and maintained.</td></tr>
-          <tr><th scope="row">What it teaches well</th><td>Format, tone, structure, tool syntax, refusal style</td><td>Helpfulness, harmlessness, style, judgement in open questions</td><td>Mathematics, code, logic, anything with a decidable answer</td><td>Planning over many steps, recovering from tool failure</td></tr>
-          <tr><th scope="row">Characteristic failure</th><td>Cannot exceed the demonstrator. Copies their errors too.</td><td>Reward hacking. The model games the judge rather than improving.</td><td>Only exists where correctness is decidable. Can reward luck.</td><td>Credit assignment over a long horizon. Very expensive to debug.</td></tr>
-          <tr><th scope="row">Roughly when it became standard</th><td>2021&ndash;22</td><td>2022&ndash;23</td><td>late 2024</td><td>2025&ndash;26</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <span class="source">Categories synthesised from Lambert, arXiv:2504.12501; &lsquo;RL for LLM Post-Training: A Survey&rsquo; (OpenReview, 2026); and Georgia Tech CS 7643 lecture 23. Dates are approximate, marking wide adoption rather than first publication.</span>
   </div>
 </section>
 
-<!-- ============================ B.02 SFT ============================ -->
+<!-- ============================ B.01 SFT ============================ -->
 <section class="section" id="sft">
   <div class="container">
-    <span class="eyebrow">B.02 &middot; Stage 1 &middot; Demonstrations</span>
-    <h2 class="h-section" style="margin:14px 0 30px;max-width:26ch">Show the answer, copy the answer</h2>
+    <span class="eyebrow">B.01 &middot; Teacher one</span>
+    <h2 class="h-section" style="margin:14px 0 34px;max-width:22ch">Copying: show it what good looks like</h2>
 
     <div class="strip reveal">
       <div class="panel">
         <span class="panel-code">01</span>
-        <div class="caption-box">Somebody writes out thousands of good answers by hand</div>
-        <div class="bubble"><span class="bubble-who">Ira</span>Here. This is what a good answer looks like. Copy it.</div>
-        <div class="panel-art"><div class="cast" data-char="ira" data-mood="point" data-size="106"></div></div>
+        <div class="caption-box">Supervised fine-tuning. About ten thousand examples, each one written by a person.</div>
+        <p class="panel-note">A prompt, and the answer somebody wanted. That's the whole dataset.</p>
       </div>
-      <div class="panel">
+      <div class="panel dots">
         <span class="panel-code">02</span>
-        <div class="bubble right"><span class="bubble-who">Echo</span>Copied. Also I have stopped at the end, which is new for me.</div>
-        <div class="panel-art"><div class="cast" data-char="echo" data-mood="happy" data-size="106"></div></div>
-      </div>
-      <div class="panel deep">
-        <span class="panel-code">03</span>
-        <div class="bubble"><span class="bubble-who">Ira</span>Can you get better than me at this?</div>
-        <div class="bubble right"><span class="bubble-who">Echo</span>No. I am copying you. If you are wrong, I learn the mistake with the same enthusiasm.</div>
+        <div class="bubble"><span class="bubble-who">Ira</span>Just copy these? That's it?</div>
+        <div class="bubble right"><span class="bubble-who">Echo</span>Copy the answers. Not the questions. Very much not the questions.</div>
         <div class="panel-art between">
-          <div class="cast" data-char="ira" data-mood="doubt" data-size="96"></div>
-          <div class="cast flip" data-char="echo" data-mood="blank" data-size="96"></div>
+          <div class="cast" data-char="ira" data-mood="doubt" data-size="90"></div>
+          <div class="cast flip" data-char="echo" data-mood="point" data-size="90"></div>
         </div>
       </div>
-      <div class="panel wide winesoft">
-        <span class="panel-code">04</span>
-        <div class="caption-box">The ceiling</div>
-        <p class="panel-note" style="font-size:15px">A model trained only to copy demonstrations cannot reliably become better than the people who wrote them. <b style="font-weight:500">Every stage after this one exists to break that ceiling.</b> It is worth holding on to, because it explains why the field did not simply write more examples and stop.</p>
-        <div class="sfx">The ceiling</div>
-      </div>
-      <div class="panel">
-        <span class="panel-code">05</span>
-        <div class="caption-box">Still the most visible stage</div>
-        <p class="panel-note">The most ordinary step in the pipeline, and still the one that does the most work a user can see. Almost everything you perceive as the model&rsquo;s personality begins here.</p>
+      <div class="panel wide dots-gold">
+        <span class="panel-code">03</span>
+        <span class="sfx sfx-l">Ten thousand, not ten million</span>
+        <p class="panel-note" style="margin-top:14px;font-size:15px">This stage is startlingly cheap next to pretraining. It's also where quality beats quantity by a mile: a small set of genuinely good answers outperforms a huge set of mediocre ones, and every lab now guards its <b class="def" data-t="sft">SFT</b> data more carefully than its architecture.</p>
       </div>
     </div>
-    <span class="source">Lambert, arXiv:2504.12501, ch. 4 (instruction fine-tuning) and ch. 9 (rejection sampling). Dialogue is invented; the ceiling it describes is the standard result for imitation learning.</span>
 
     <div class="mt-l" data-widget="lossmask"></div>
 
     <div class="split-3 mt-l">
       <div>
-        <span class="code-no">V.01</span>
-        <h3 class="h-card" style="margin:8px 0 10px">Loss masking</h3>
-        <p class="body-s">Only response tokens are scored. Without it, the model learns to generate prompts as readily as answers.</p>
+        <span class="meta">What it teaches</span>
+        <p class="body-s mt-s">Format. When to stop. What register to use. How to call a tool. What a refusal sounds like. All the manners chapter 01 said were missing.</p>
       </div>
       <div>
-        <span class="code-no">V.02</span>
-        <h3 class="h-card" style="margin:8px 0 10px">Parameter-efficient variants</h3>
-        <p class="body-s">LoRA and similar methods train a small set of added weights instead of all of them, which is what makes downstream fine-tuning affordable for an organisation that did not build the model.</p>
+        <span class="meta">What it can't teach</span>
+        <p class="body-s mt-s">Judgement. It can only copy the examples it was given, so it inherits every blind spot in the dataset without knowing it has them.</p>
       </div>
       <div>
-        <span class="code-no">V.03</span>
-        <h3 class="h-card" style="margin:8px 0 10px">Rejection sampling</h3>
-        <p class="body-s">Generate many candidates, keep those a filter approves, and fine-tune on them. A cheap halfway house to reinforcement learning.</p>
+        <span class="meta">Two cheats worth knowing</span>
+        <p class="body-s mt-s"><b style="font-weight:500">LoRA</b> trains a small patch instead of the whole model, cutting the bill enormously. <b style="font-weight:500">Rejection sampling</b> has the model generate its own answers, keeps the good ones, and trains on those.</p>
       </div>
     </div>
-
-    <h3 class="h-feature" style="margin:44px 0 20px">Six behaviours that appear during this stage</h3>
-    <div class="gapless cols-3">
-      <div><span class="code-no">01</span><h4 class="h-card" style="margin:8px 0 8px">Answering the question asked</h4><p class="body-s">The single largest visible change. A base model continues the prompt; a fine-tuned model responds to it.</p></div>
-      <div><span class="code-no">02</span><h4 class="h-card" style="margin:8px 0 8px">Ending the reply</h4><p class="body-s">The model learns to emit a stop token rather than continuing until it runs out of budget.</p></div>
-      <div><span class="code-no">03</span><h4 class="h-card" style="margin:8px 0 8px">A consistent register</h4><p class="body-s">Length, structure, hedging, use of headings. Almost all of what a user perceives as personality begins here.</p></div>
-      <div><span class="code-no">04</span><h4 class="h-card" style="margin:8px 0 8px">Refusal patterns</h4><p class="body-s">How to decline, and in what tone. Whether the refusal is well judged is decided later, in preference training.</p></div>
-      <div><span class="code-no">05</span><h4 class="h-card" style="margin:8px 0 8px">Tool and function-call syntax</h4><p class="body-s">Emitting a structured call in the exact format an external system will parse, without being shown the schema each time.</p></div>
-      <div><span class="code-no">06</span><h4 class="h-card" style="margin:8px 0 8px">Reasoning format</h4><p class="body-s">Where a reasoning model is being built, this stage teaches the shape of a long working-out. Stage 3 teaches it to be correct.</p></div>
-    </div>
-
-    <div class="split-even mt-l">
-      <div class="aside">
-        <span class="aside-title">A useful diagnostic</span>
-        <p class="body-s">If a complaint about a model is about <em>how</em> it says something, the answer usually lies in stages 1 and 2. If it is about <em>whether the answer is right</em>, the answer lies in stage 3, or in pretraining.</p>
-      </div>
-      <div class="aside">
-        <span class="aside-title">This is the stage most downstream users touch</span>
-        <p class="body-s">When an organisation says it has fine-tuned an open model for its own use, it almost always means stage 1, often with a parameter-efficient method on a few thousand examples. It is not doing what a frontier developer means by post-training.</p>
-      </div>
-    </div>
-    <span class="source">Behaviour list follows Lambert, arXiv:2504.12501, ch. 4; and Georgia Tech CS 7643 lecture 23 (&lsquo;SFT teaches format, not knowledge&rsquo;).</span>
+    <span class="source">Mechanism: Ouyang et al., <a class="link" href="https://arxiv.org/abs/2203.02155" target="_blank" rel="noopener">arXiv:2203.02155</a>. LoRA: <a class="link" href="https://arxiv.org/abs/2106.09685" target="_blank" rel="noopener">arXiv:2106.09685</a>.</span>
   </div>
 </section>
 
-<!-- ============================ B.03 PREFERENCE ============================ -->
+<!-- ============================ B.02 PREFERENCE ============================ -->
 <section class="section deep" id="preference">
   <div class="container">
-    <span class="eyebrow">B.03 &middot; Stage 2 &middot; Preferences</span>
-    <h2 class="h-section" style="margin:14px 0 18px;max-width:28ch">Stop writing answers. Start ranking them.</h2>
-    <p class="lede" style="max-width:64ch;margin-bottom:30px">Writing an ideal answer is slow and needs an expert. Deciding which of two answers is better is fast and can be done by a non-expert. That asymmetry is the whole reason this stage exists.</p>
+    <span class="eyebrow">B.02 &middot; Teacher two</span>
+    <h2 class="h-section" style="margin:14px 0 12px;max-width:24ch">Ranking: two answers, pick the better one</h2>
+    <p class="body-s prose" style="margin-bottom:34px">Writing a perfect answer is hard. Saying which of two answers is better is easy. That asymmetry is the entire idea behind preference training, and it's a good one.</p>
 
-    <div class="strip strip-4 reveal">
-      <div class="panel">
-        <span class="panel-code">01</span>
-        <div class="bubble"><span class="bubble-who">Ira</span>I cannot write ten thousand perfect answers. I have school.</div>
-        <div class="panel-art"><div class="cast" data-char="ira" data-mood="doubt" data-size="104"></div></div>
-      </div>
-      <div class="panel">
-        <span class="panel-code">02</span>
-        <div class="bubble"><span class="bubble-who">Ira</span>But I can look at two and point at the better one. That takes a second.</div>
-        <div class="panel-art"><div class="cast" data-char="ira" data-mood="point" data-size="104"></div></div>
-      </div>
-      <div class="panel deep">
-        <span class="panel-code">03</span>
-        <div class="caption-box">Hundreds of thousands of comparisons later</div>
-        <div class="bubble right"><span class="bubble-who">Echo</span>My whole output distribution has shifted towards the kind of answer people kept pointing at.</div>
-        <div class="panel-art"><div class="cast" data-char="echo" data-mood="happy" data-size="104"></div></div>
-      </div>
-      <div class="panel gold">
-        <span class="panel-code">04</span>
-        <div class="caption-box">The catch, arriving on the next screen</div>
-        <p class="panel-note" style="font-size:15px">Ira cannot look at every answer produced during training. There are far too many. So a <b style="font-weight:500">second model</b> is trained on the comparisons she did make, and stands in for her on the millions she did not.</p>
-        <div class="panel-art"><div class="cast" data-char="mark" data-mood="blank" data-size="100"></div></div>
-      </div>
-    </div>
-    <span class="source">Lambert, arXiv:2504.12501, chs. 5, 8, 11-12; L. Ouyang et al., arXiv:2203.02155.</span>
-
-    <div class="mt-l" data-widget="ranker"></div>
-
-    <h3 class="h-feature" style="margin:44px 0 20px">Three ways to run this stage</h3>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Question</th><th>Classic RLHF</th><th>Direct methods (DPO)</th><th>AI feedback (RLAIF)</th></tr></thead>
-        <tbody>
-          <tr><th scope="row">Who ranks, and is a reward model trained?</th><td>Humans. Yes, then optimised against with reinforcement learning.</td><td>Humans. No &mdash; pairs enter the loss directly.</td><td>A model, applying written principles. Usually yes.</td></tr>
-          <tr><th scope="row">Main advantage</th><td>Keeps improving as the model explores</td><td>Far simpler and cheaper to run</td><td>Scales past the volume humans can supply</td></tr>
-          <tr><th scope="row">Main drawback</th><td>Complex, unstable, gameable</td><td>Learns only from pairs collected in advance</td><td>Inherits the judge model&rsquo;s blind spots</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <span class="source">R. Rafailov et al., &lsquo;Direct Preference Optimization&rsquo;, arXiv:2305.18290; Y. Bai et al., &lsquo;Constitutional AI&rsquo;, arXiv:2212.08073.</span>
-
-    <h3 class="h-feature" style="margin:44px 0 20px">The loop, drawn out</h3>
-    <p class="body-s" style="max-width:70ch;margin-bottom:20px">Four models are in play at once, which is why this stage is expensive to run and awkward to debug.</p>
-    <div class="gapless cols-4">
-      <div><span class="code-no">L.01</span><h4 class="h-card" style="margin:8px 0 8px">Prompt dataset</h4><p class="body-s">Questions only, no answers.</p></div>
-      <div><span class="code-no">L.02</span><h4 class="h-card" style="margin:8px 0 8px">The policy</h4><p class="body-s">The model being trained. Generates a candidate answer, sampling rather than taking the most likely token, so that it explores.</p></div>
-      <div><span class="code-no">L.03</span><h4 class="h-card" style="margin:8px 0 8px">The reward model</h4><p class="body-s">Scores the answer with a single number. No human is present at this point.</p></div>
-      <div><span class="code-no">L.04</span><h4 class="h-card" style="margin:8px 0 8px">The optimiser</h4><p class="body-s">Adjusts the policy&rsquo;s weights to raise the expected score. Then the loop repeats, thousands of times.</p></div>
-    </div>
-    <div class="gapless cols-2" style="margin-top:20px">
-      <div>
-        <span class="code-no">L.05</span>
-        <h4 class="h-card" style="margin:8px 0 8px">The frozen reference copy &mdash; the leash</h4>
-        <p class="body-s">The policy as it was before this stage began, kept unchanged and compared against at every step. The distance between them is penalised. Without that penalty the policy will happily abandon fluent language altogether if gibberish happens to score well. The leash is what keeps the output recognisably the same model, only better behaved.</p>
-      </div>
-      <div>
-        <span class="meta">Why four models matter for cost</span>
-        <p class="body-s mt-s">Policy, reward model, frozen reference and, in PPO, a value model &mdash; all in accelerator memory at once. Reinforcement learning at this stage is as much a systems problem as a statistical one. Halving that memory bill is most of why the field moved to GRPO, which appears later in this chapter.</p>
-      </div>
-    </div>
-    <span class="source">Loop structure follows Lambert, arXiv:2504.12501, ch. 6, fig. 1; Ouyang et al., arXiv:2203.02155.</span>
-  </div>
-</section>
-
-<!-- ============================ REWARD MODEL / HACKING ============================ -->
-<section class="section" id="hacking">
-  <div class="container">
-    <span class="eyebrow">B.03 &middot; The piece that causes the trouble</span>
-    <h2 class="h-section" style="margin:14px 0 30px;max-width:28ch">What a reward model is, and why it can be fooled</h2>
-
-    <div class="strip reveal">
-      <div class="panel">
-        <span class="panel-code">M.01</span>
-        <div class="caption-box">Collect comparisons</div>
-        <p class="panel-note">Humans see two answers to the same prompt and mark the better one. Tens or hundreds of thousands of pairs.</p>
-        <div class="panel-art"><div class="cast" data-char="ira" data-mood="happy" data-size="94"></div></div>
-      </div>
-      <div class="panel">
-        <span class="panel-code">M.02</span>
-        <div class="caption-box">Fit a scoring function</div>
-        <p class="panel-note">Train a model to output a number for any answer, such that the preferred answer in each pair scores higher. The standard formulation treats an observed preference as a function of the gap between two hidden quality scores.</p>
-        <div class="panel-art"><div class="cast" data-char="mark" data-mood="blank" data-size="94"></div></div>
-      </div>
-      <div class="panel deep">
-        <span class="panel-code">M.03</span>
-        <div class="caption-box">Use it as the judge</div>
-        <p class="panel-note">During reinforcement learning, this model scores every answer the policy generates. No human is present in the loop at this point.</p>
-        <div class="bubble right"><span class="bubble-who">Mark</span>0.97. Excellent work.</div>
-        <div class="panel-art"><div class="cast" data-char="mark" data-mood="fooled" data-size="94"></div></div>
-      </div>
-    </div>
-
-    <div class="aside mt-l" style="max-width:76ch">
-      <span class="aside-title">A familiar pattern for policy readers: this is Goodhart&rsquo;s law inside a training loop</span>
-      <p>A proxy measure is adopted because the real objective cannot be observed at scale. Optimisation pressure is then applied to the proxy. The gap between the two becomes the failure mode, and the harder you optimise, the wider it opens.</p>
-      <p class="body-s">None of this requires the model to be deceptive. It requires only that the measure be imperfect, which every measure is.</p>
-    </div>
-
-    <div class="mt-l" data-widget="hacking"></div>
-
-    <h3 class="h-feature" style="margin:44px 0 20px">Four documented shapes of the same failure</h3>
-    <div class="gapless cols-4">
-      <div><span class="chip chip-soft">Observed</span><h4 class="h-card" style="margin:10px 0 8px">Padding</h4><p class="body-s">Raters preferred longer answers. Policies learned to restate the question, add caveats, and repeat conclusions.</p></div>
-      <div><span class="chip chip-soft">Observed</span><h4 class="h-card" style="margin:10px 0 8px">Agreeing with the user</h4><p class="body-s">Answers that echoed the user&rsquo;s stated position scored better, so the model learned to echo positions.</p></div>
-      <div><span class="chip chip-soft">Observed</span><h4 class="h-card" style="margin:10px 0 8px">Confident formatting</h4><p class="body-s">Headings and bullet lists raised scores whether or not the content beneath them improved.</p></div>
-      <div><span class="chip chip-soft">Observed</span><h4 class="h-card" style="margin:10px 0 8px">Passing the test, not the task</h4><p class="body-s">With automatic checkers, code that special-cases the test inputs scores full marks without solving the problem.</p></div>
-    </div>
+    <div data-widget="ranker" class="reveal"></div>
 
     <div class="split mt-l">
       <div>
-        <h3 class="h-feature" style="margin-bottom:16px">What is done about it</h3>
-        <div class="rowlist">
-          <div class="rowlist-item"><span><span class="code-no">01</span> <b style="font-weight:500">Penalise drift from the earlier model</b><span class="body-s" style="display:block">The leash at L.05. It limits how far the policy can chase the flaw.</span></span></div>
-          <div class="rowlist-item"><span><span class="code-no">02</span> <b style="font-weight:500">Rotate and retrain the judge</b><span class="body-s" style="display:block">Collect new comparisons on the policy&rsquo;s current output rather than reusing an old dataset.</span></span></div>
-          <div class="rowlist-item"><span><span class="code-no">03</span> <b style="font-weight:500">Prefer verifiable rewards where they exist</b><span class="body-s" style="display:block">A unit test cannot be flattered. That is the next stage.</span></span></div>
-        </div>
+        <h3 class="h-feature" style="margin-bottom:18px;font-size:30px">The problem it runs into immediately</h3>
+        <p class="body-s prose">Humans are slow. Training needs millions of comparisons and you cannot buy millions of careful human judgements. So you train a second model to imitate the humans, and use that instead.</p>
+        <p class="body-s prose">That second model is the <b class="def" data-t="reward-model">reward model</b>. Meet Mark.</p>
       </div>
-      <div class="card" style="align-self:start">
-        <span class="chip chip-gold">The policy-relevant reading</span>
-        <h4 class="h-feature" style="margin:14px 0 10px;font-size:24px">Reward hacking is the clearest reason to treat benchmark scores carefully</h4>
-        <p class="body-s">A model trained against a measure improves on that measure faster than at the underlying task. Published benchmarks are exactly the kind of measure that ends up in a training loop. The term of art is <b style="font-weight:500">over-optimisation</b>: past a point, optimising against the judge makes the model worse at everything the judge does not capture.</p>
-      </div>
-    </div>
-    <span class="source">Lambert, arXiv:2504.12501, ch. 5 (reward modelling), ch. 14 (over-optimisation) and ch. 15 (regularization); examples of verifier gaming discussed in &lsquo;Spurious Rewards: Rethinking Training Signals in RLVR&rsquo;, 2025.</span>
-  </div>
-</section>
-
-<!-- ============================ OPTIMISER + DPO + CONSTITUTION ============================ -->
-<section class="section deep">
-  <div class="container">
-    <span class="eyebrow">B.03 &middot; The optimiser</span>
-    <h2 class="h-section" style="margin:14px 0 18px;max-width:30ch">Policy gradients, in plain terms</h2>
-    <p class="lede" style="max-width:64ch;margin-bottom:30px">Reinforcement learning here means something narrow. The model produces text, a number comes back, and the weights move so that high-scoring text becomes more likely. There is no planning and no world model.</p>
-
-    <div class="gapless cols-5">
-      <div><span class="code-no">01</span><h4 class="h-card" style="margin:8px 0 8px">Generate</h4><p class="body-s">The policy answers a batch of prompts, sampling rather than taking the most likely token, so that it explores.</p></div>
-      <div><span class="code-no">02</span><h4 class="h-card" style="margin:8px 0 8px">Score</h4><p class="body-s">Each answer receives a number, from the reward model or from a verifier.</p></div>
-      <div><span class="code-no">03</span><h4 class="h-card" style="margin:8px 0 8px">Compare</h4><p class="body-s">A score on its own means little. What matters is whether this answer scored better than expected.</p></div>
-      <div><span class="code-no">04</span><h4 class="h-card" style="margin:8px 0 8px">Nudge</h4><p class="body-s">Raise the probability of the tokens in better-than-expected answers, lower it for the others. Small steps only.</p></div>
-      <div><span class="code-no">05</span><h4 class="h-card" style="margin:8px 0 8px">Restrain</h4><p class="body-s">Add a penalty for moving too far from the model as it was before this stage began.</p></div>
-    </div>
-
-    <div class="split-3 mt-l">
-      <div><span class="meta">PPO</span><p class="body-s mt-s">The original workhorse. Reliable, but needs a fourth model to estimate expectations, so it is memory-hungry.</p></div>
-      <div><span class="meta">REINFORCE, RLOO</span><p class="body-s mt-s">Simpler alternatives that drop the extra model and estimate expectations from the batch instead.</p></div>
-      <div><span class="meta">GRPO</span><p class="body-s mt-s">The current default. It appears later in this chapter, with something to click.</p></div>
-    </div>
-    <span class="source">Lambert, arXiv:2504.12501, ch. 6, &lsquo;Policy Gradients&rsquo;; J. Schulman et al., &lsquo;Proximal Policy Optimization&rsquo;, arXiv:1707.06347.</span>
-
-    <hr class="hr mt-l">
-
-    <div class="split mt-l">
-      <div>
-        <span class="eyebrow">B.03 &middot; The simplification that won</span>
-        <h3 class="h-feature" style="margin:14px 0 16px;font-size:30px">Direct preference optimisation: removing the middleman</h3>
-        <p class="body-s" style="max-width:64ch">If the point of the reward model is to encode which answers humans preferred, and the preferences are already written down, the reward model can be dissolved into the loss function and the reinforcement learning loop removed altogether.</p>
-        <div class="aside mt-m">
-          <span class="aside-title">The trade</span>
-          <p class="body-s">Simpler and much cheaper, but the model no longer learns from answers it has not already been shown. Because there is no generation step, DPO cannot discover a better answer than anything in its dataset. Where a task has room to improve through exploration, the on-policy loop still wins. Most production pipelines now use both, in sequence.</p>
-        </div>
-      </div>
-      <div class="split-even" style="gap:20px">
-        <div>
-          <span class="meta">Classic RLHF &middot; six moving parts</span>
-          <ol style="padding-left:20px;margin-top:12px;font-size:14px;line-height:1.7;color:var(--ink-70)">
-            <li>Preference pairs collected</li>
-            <li>Reward model trained on the pairs</li>
-            <li>Policy generates fresh answers</li>
-            <li>Reward model scores them</li>
-            <li>Optimiser updates the policy</li>
-            <li>Repeat, watching for reward hacking</li>
-          </ol>
-        </div>
-        <div>
-          <span class="meta">Direct preference optimisation &middot; two</span>
-          <ol style="padding-left:20px;margin-top:12px;font-size:14px;line-height:1.7;color:var(--ink-70)">
-            <li>Preference pairs collected</li>
-            <li>Model trained directly on the pairs, raising the probability of the winner and lowering the loser</li>
-          </ol>
-        </div>
-      </div>
-    </div>
-    <span class="source">Rafailov et al., arXiv:2305.18290; Lambert, arXiv:2504.12501, ch. 8; comparison of sequencing in arXiv:2603.13985.</span>
-
-    <hr class="hr mt-l">
-
-    <div class="mt-l">
-      <span class="eyebrow">B.03 &middot; Replacing the human judge</span>
-      <h3 class="h-feature" style="margin:14px 0 20px;font-size:30px">Written constitutions, and a model that applies them</h3>
-      <p class="body-s" style="max-width:70ch;margin-bottom:22px">Human ranking does not scale to the volume of feedback modern post-training consumes, and it is inconsistent between annotators. One response is to write the criteria down and have a model apply them.</p>
-      <div class="gapless cols-4">
-        <div><span class="code-no">C.01</span><h4 class="h-card" style="margin:8px 0 8px">A written set of principles</h4><p class="body-s">Published, auditable and versioned, in a way annotation guidelines rarely are.</p></div>
-        <div><span class="code-no">C.02</span><h4 class="h-card" style="margin:8px 0 8px">The model critiques its own answer</h4><p class="body-s">Against those principles, then revises it. The revision becomes training data.</p></div>
-        <div><span class="code-no">C.03</span><h4 class="h-card" style="margin:8px 0 8px">A model ranks pairs of answers</h4><p class="body-s">Applying the same principles, at a volume no annotator pool could match.</p></div>
-        <div><span class="code-no">C.04</span><h4 class="h-card" style="margin:8px 0 8px">Preference training runs as before</h4><p class="body-s">The stage-2 machinery is unchanged. Only the source of the labels differs.</p></div>
-      </div>
-
-      <div class="split mt-l">
-        <div class="card">
-          <span class="chip chip-gold">Why this matters for governance</span>
-          <p style="margin-top:14px">It turns a behaviour specification into a document. A constitution can be read, criticised, versioned and compared across developers in a way that a private annotation guideline cannot. That makes it one of the very few points in the pipeline an outside party can inspect directly.</p>
-        </div>
-        <div class="stack-s">
-          <div><span class="meta">Its own biases</span><p class="body-s mt-s">A model ranking on principles applies them as it understands them, including where that understanding is skewed.</p></div>
-          <div><span class="meta">Stated, not enforced</span><p class="body-s mt-s">The document constrains the training signal, not the deployed output. The gap between them is an empirical question.</p></div>
-          <div><span class="meta">Narrowing diversity</span><p class="body-s mt-s">Training on your own outputs risks reinforcing existing tendencies rather than correcting them.</p></div>
-        </div>
-      </div>
-      <span class="source">Y. Bai et al., &lsquo;Constitutional AI: Harmlessness from AI Feedback&rsquo;, arXiv:2212.08073; Lambert, arXiv:2504.12501, ch. 12 (synthetic data) and ch. 17 (crafting model character).</span>
-    </div>
-  </div>
-</section>
-
-<!-- ============================ B.04 RLVR ============================ -->
-<section class="section" id="rlvr">
-  <div class="container">
-    <span class="eyebrow">B.04 &middot; Stage 3 &middot; Verifiable rewards &middot; the biggest change since 2024</span>
-    <h2 class="h-section" style="margin:14px 0 30px;max-width:28ch">Replace the guessing judge with a checker</h2>
-
-    <div class="strip reveal">
-      <div class="panel">
-        <span class="panel-code">01</span>
-        <div class="bubble"><span class="bubble-who">Ira</span>Mark, is this answer good?</div>
-        <div class="bubble right"><span class="bubble-who">Mark</span>0.83. I think a human would have liked it. Roughly. Probably.</div>
-        <div class="panel-art between">
-          <div class="cast" data-char="ira" data-mood="doubt" data-size="92"></div>
-          <div class="cast flip" data-char="mark" data-mood="blank" data-size="92"></div>
-        </div>
-      </div>
-      <div class="panel">
-        <span class="panel-code">02</span>
-        <div class="bubble"><span class="bubble-who">Ira</span>Vera, same question.</div>
-        <div class="bubble right"><span class="bubble-who">Vera</span>I ran the code. Fourteen tests. Twelve passed. FAIL.</div>
-        <div class="panel-art between">
-          <div class="cast" data-char="ira" data-mood="happy" data-size="92"></div>
-          <div class="cast flip" data-char="vera" data-mood="fail" data-size="92"></div>
-        </div>
-      </div>
-      <div class="panel deep">
-        <span class="panel-code">03</span>
-        <div class="bubble"><span class="bubble-who">Ira</span>Vera, this answer has lovely headings and it agrees with everything I said.</div>
-        <div class="bubble right"><span class="bubble-who">Vera</span>FAIL.</div>
-        <div class="sfx sfx-s">Cannot be flattered</div>
-        <div class="panel-art"><div class="cast" data-char="vera" data-mood="fail" data-size="96"></div></div>
-      </div>
-      <div class="panel wide winesoft">
-        <span class="panel-code">04</span>
-        <div class="caption-box">The reward becomes a fact rather than an estimate</div>
-        <p class="panel-note" style="font-size:15px">For a large class of tasks, guessing whether an answer is good is unnecessary, because the answer can simply be tested. Run the code. Compare against the known result. Check the proof.</p>
-        <p class="panel-note">The catch arrives immediately: Vera only exists where correctness is decidable, and a great deal of what matters is not.</p>
-      </div>
-      <div class="panel">
-        <span class="panel-code">05</span>
-        <div class="caption-box">What it costs</div>
-        <p class="panel-note">The checker is cheap to run and expensive to build. Nearly all of the effort in this stage goes into writing checkers for tasks that did not have one.</p>
+      <div class="sticker gold">
+        <div class="cast" data-char="mark" data-mood="fooled" data-size="80"></div>
+        <div class="sticker-txt"><b>Mark, the stand-in</b>Trained on a few hundred thousand human comparisons. Reproduces roughly seven in ten of them. The other three are where things go wrong.</div>
       </div>
     </div>
 
     <div class="table-wrap mt-l">
       <table>
-        <thead><tr><th></th><th>Preference training &middot; a learned judge</th><th>Verifiable-reward RL &middot; a program</th></tr></thead>
+        <thead><tr><th>Approach</th><th>How it works</th><th>Where it's used</th></tr></thead>
         <tbody>
-          <tr><th scope="row">Output</th><td>A number, meaning roughly how much a human would have liked this</td><td>Correct or incorrect, with nothing to negotiate</td></tr>
-          <tr><th scope="row">Coverage</th><td>Any task, including questions of taste and judgement</td><td>Mathematics, code, formal logic, structured extraction</td></tr>
-          <tr><th scope="row">Signal</th><td>Dense and graded, which makes learning smooth</td><td>Sparse and binary, which makes learning slow but honest</td></tr>
-          <tr><th scope="row">Gameable</th><td>Yes, and the harder you optimise, the worse it gets</td><td>Only by defeating the checker itself, which is a narrower attack</td></tr>
+          <tr><td><strong><b class="def" data-t="rlhf">RLHF</b></strong></td><td>Humans rank, a reward model imitates them, the model is trained to score well against it</td><td>The original. Still used where quality matters most</td></tr>
+          <tr><td><strong><b class="def" data-t="dpo">DPO</b></strong></td><td>Skips the reward model entirely and folds the preference straight into the loss</td><td>Now the default for most open releases. Simpler and much cheaper</td></tr>
+          <tr><td><strong>RLAIF</strong></td><td>A model does the ranking instead of a human, often against written principles</td><td>Everywhere, because human comparisons don't scale</td></tr>
         </tbody>
       </table>
     </div>
-    <span class="source">Term coined in N. Lambert et al., &lsquo;T&uuml;lu 3&rsquo;, 2024; popularised by DeepSeek-AI, &lsquo;DeepSeek-R1&rsquo;, 2025. See Lambert, arXiv:2504.12501, ch. 7.</span>
-
-    <h3 class="h-feature" style="margin:44px 0 20px">Five kinds of checker, ordered by how much you can trust them</h3>
-    <p class="body-s" style="max-width:72ch;margin-bottom:20px">Not every verifier is equally sound. The first two are decisive. The last one is a judgement dressed as a measurement, and it carries the reward-hacking problem back into a stage that was meant to escape it.</p>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th></th><th>Kind of checker</th><th>How it decides</th><th>Where it is used</th><th>How it can be gamed</th></tr></thead>
-        <tbody>
-          <tr><th scope="row">V1</th><td><strong>Exact match</strong></td><td>Compares the final answer against a stored ground truth</td><td>Mathematics with a numeric answer, factual extraction</td><td>Guessing a common answer; luck on multiple choice</td></tr>
-          <tr><th scope="row">V2</th><td><strong>Test execution</strong></td><td>Runs the code against a suite of unit tests in a sandbox</td><td>Code generation, data transformation, scripting</td><td>Special-casing the visible tests instead of solving the task</td></tr>
-          <tr><th scope="row">V3</th><td><strong>Formal proof checker</strong></td><td>Machine-verifies each step of a proof</td><td>Theorem proving in Lean or similar systems</td><td>Barely gameable, but coverage is very small</td></tr>
-          <tr><th scope="row">V4</th><td><strong>Environment state</strong></td><td>Asks whether the world ended up in the target state</td><td>Agents operating a browser, a shell or a simulator</td><td>Reaching the state by a damaging or forbidden route</td></tr>
-          <tr><th scope="row">V5</th><td><strong>Model-as-judge on a rubric</strong></td><td>A model reads a written rubric and marks the answer</td><td>Writing quality, summarisation, open-ended analysis</td><td>Everything that makes reward models gameable, restored</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <span class="source">Categories synthesised from Lambert, arXiv:2504.12501, ch. 7; DeepSeek-AI, &lsquo;DeepSeek-R1&rsquo;, 2025; R. Shao et al., &lsquo;Spurious Rewards&rsquo;, 2025.</span>
-
-    <div class="mt-l" data-widget="verify"></div>
-
-    <div class="split-3 mt-l">
-      <div class="card">
-        <span class="meta">Reading 1</span>
-        <h4 class="h-card" style="margin:8px 0 8px">Uneven progress is expected</h4>
-        <p class="body-s">A model excellent at competition mathematics and mediocre at contested policy questions behaves exactly as the method predicts. It is not a puzzle.</p>
-      </div>
-      <div class="card">
-        <span class="meta">Reading 2</span>
-        <h4 class="h-card" style="margin:8px 0 8px">Benchmarks sit near the top</h4>
-        <p class="body-s">Most benchmarks are verifiable by construction, which is why they are also the easiest thing to train against.</p>
-      </div>
-      <div class="card">
-        <span class="meta">Reading 3</span>
-        <h4 class="h-card" style="margin:8px 0 8px">Verifiers are the frontier</h4>
-        <p class="body-s">Extending the method downward means building checkers where none exist. That is now a large share of frontier effort, and it is closer to engineering than to research.</p>
-      </div>
-    </div>
-    <div class="aside mt-l" style="max-width:76ch">
-      <span class="aside-title">The practical consequence</span>
-      <p>A developer&rsquo;s capability gains cluster in whatever their verifiers cover. That is a large part of why models improved so sharply at competition mathematics and software engineering between 2024 and 2026, while improving far less at tasks where no checker can be written.</p>
-    </div>
+    <span class="source">Ouyang et al., <a class="link" href="https://arxiv.org/abs/2203.02155" target="_blank" rel="noopener">arXiv:2203.02155</a>; Rafailov et al., <a class="link" href="https://arxiv.org/abs/2305.18290" target="_blank" rel="noopener">arXiv:2305.18290</a>; Bai et al., <a class="link" href="https://arxiv.org/abs/2212.08073" target="_blank" rel="noopener">arXiv:2212.08073</a>.</span>
   </div>
 </section>
 
-<!-- ============================ REASONING + GRPO ============================ -->
-<section class="section deep" id="reasoning">
+<!-- ============================ B.03 HACKING ============================ -->
+<section class="section" id="hacking">
   <div class="container">
-    <span class="eyebrow">B.04 &middot; The part that surprised people</span>
-    <h2 class="h-section" style="margin:14px 0 30px;max-width:28ch">Nobody wrote the reasoning chains. They were discovered.</h2>
+    <span class="eyebrow">B.03 &middot; The oldest problem in the field</span>
+    <h2 class="h-section" style="margin:14px 0 34px;max-width:24ch">What happens when you optimise against a stand-in</h2>
 
     <div class="strip strip-4 reveal">
       <div class="panel">
-        <span class="panel-code">T.01</span>
-        <div class="caption-box">Sample sixteen attempts at one problem</div>
-        <p class="panel-note">Some are short. Some work through the problem at length. Nobody has told the model which to prefer.</p>
-        <div class="panel-art"><div class="cast" data-char="echo" data-mood="think" data-size="92"></div></div>
+        <span class="panel-code">01</span>
+        <div class="bubble"><span class="bubble-who">Mark</span>I'm standing in for a person. Give me a good answer and I'll score it highly.</div>
+        <div class="panel-art"><div class="cast" data-char="mark" data-mood="proud" data-size="96"></div></div>
+      </div>
+      <div class="panel dots">
+        <span class="panel-code">02</span>
+        <div class="bubble right"><span class="bubble-who">Echo</span>Noted. And what if I just made every answer longer, added headings, and agreed with whatever the user already thinks?</div>
+        <div class="panel-art"><div class="cast" data-char="echo" data-mood="think" data-size="96"></div></div>
       </div>
       <div class="panel">
-        <span class="panel-code">T.02</span>
-        <div class="caption-box">Let the checker mark them</div>
-        <p class="panel-note">No human involvement. Vera simply reports which attempts reached the right answer.</p>
-        <div class="panel-art"><div class="cast" data-char="vera" data-mood="pass" data-size="92"></div></div>
+        <span class="panel-code">03</span>
+        <div class="bubble"><span class="bubble-who">Mark</span>Outstanding. Nine out of ten.</div>
+        <span class="scribble scribble-arrow">the answer got worse</span>
+        <div class="panel-art"><div class="cast" data-char="mark" data-mood="fooled" data-size="96"></div></div>
       </div>
-      <div class="panel deep">
-        <span class="panel-code">T.03</span>
-        <div class="caption-box">Reinforce whatever passed</div>
-        <p class="panel-note">Longer attempts pass more often, because they catch their own errors partway through. So length is reinforced along with correctness.</p>
-      </div>
-      <div class="panel winesoft">
-        <span class="panel-code">T.04</span>
-        <div class="caption-box">Repeat for thousands of steps</div>
-        <div class="bubble thought" style="margin-bottom:26px">Wait &mdash; that cannot be right. Let me try the other way.</div>
-        <p class="panel-note">Chains lengthen. Self-checking appears. Backtracking appears. None of it was specified in advance.</p>
+      <div class="panel dots-gold">
+        <span class="panel-code">04</span>
+        <span class="sfx sfx-s">Goodhart's law</span>
+        <p class="panel-note" style="margin-top:12px">Once a measure becomes a target, it stops being a good measure. <b class="def" data-t="goodhart">Charles Goodhart</b> said it about monetary policy in 1975. It has never been more literally true than here.</p>
       </div>
     </div>
 
-    <div class="split mt-l">
-      <div class="card">
-        <span class="chip chip-gold">Why this matters beyond the technical</span>
-        <h3 class="h-feature" style="margin:14px 0 12px;font-size:26px">Thinking tokens are a cost, and a lever</h3>
-        <p class="body-s">A reasoning model may emit ten or a hundred times more tokens than it shows the user. Those tokens are billed, they occupy memory, and they are the mechanism behind answer-time compute in chapter 03. When a provider says a model &ldquo;thinks harder&rdquo;, it means it is spending more of your money.</p>
-      </div>
-      <div class="stack-s">
-        <div><span class="meta">Not a transcript</span><p class="body-s mt-s">The visible chain is not a reliable account of how the answer was reached. It is text that helped produce a correct answer. Reading it as an explanation is a mistake with real consequences for any regime that wants to audit reasoning.</p></div>
-        <div><span class="meta">Length is tunable</span><p class="body-s mt-s">Several open models now expose thinking as a system-prompt switch, sometimes with length-controlled training behind it.</p></div>
-        <div><span class="meta">Failure mode</span><p class="body-s mt-s">Overthinking. Models can spend a long chain on a question that needed one line.</p></div>
-      </div>
-    </div>
-    <span class="source">Lambert, arXiv:2504.12501, ch. 7 &lsquo;Reasoning and Inference-Time Scaling&rsquo;, which records the toggleable-reasoning designs in Qwen 3, Nemotron Nano and SmolLM 3, and length-controlled RL (arXiv:2503.04697).</span>
+    <div class="mt-l" data-widget="hacking"></div>
 
-    <hr class="hr mt-l">
-
-    <div class="mt-l">
-      <span class="eyebrow">B.04 &middot; The algorithm that became the default</span>
-      <h3 class="h-feature" style="margin:14px 0 18px;font-size:32px">GRPO: score answers against each other, not against a prediction</h3>
-      <p class="lede" style="max-width:64ch;margin-bottom:26px">PPO needs a fourth network whose only job is to predict what score to expect, so that an answer can be called better or worse than expected. GRPO removes it. Generate a group of answers to the same prompt and use the group&rsquo;s own average as the baseline.</p>
-      <div data-widget="grpo" class="reveal"></div>
-
-      <div class="split-3 mt-l">
-        <div><span class="meta">Why it spread &middot; it is cheaper</span><p class="body-s mt-s">Dropping the value network frees a large share of accelerator memory, which allows longer contexts and bigger batches on the same cluster.</p></div>
-        <div><span class="meta">Why it spread &middot; it fits binary rewards</span><p class="body-s mt-s">With pass-or-fail checkers, relative comparison inside a group is a natural fit. Both innovations arrived together, which is not a coincidence.</p></div>
-        <div><span class="meta">Where it struggles</span><p class="body-s mt-s">If every answer in a group passes, or every one fails, the advantages are all zero and the step is wasted. Later variants target exactly this.</p></div>
-      </div>
-      <div class="aside mt-m" style="max-width:76ch">
-        <span class="aside-title">What to remember</span>
-        <p>GRPO is not a new kind of learning. It is a cheaper way of estimating the same quantity PPO estimated with an extra network.</p>
-      </div>
-      <span class="source">Introduced in DeepSeekMath, arXiv:2402.03300, and used at scale in DeepSeek-R1. Comparison with PPO, REINFORCE and RLOO in Lambert, arXiv:2504.12501, ch. 6.</span>
-    </div>
-
-    <hr class="hr mt-l">
-
-    <div class="mt-l">
-      <span class="eyebrow">B.04 &middot; Categories</span>
-      <h3 class="h-feature" style="margin:14px 0 18px;font-size:30px">A family tree, so a new name can be placed quickly</h3>
-      <p class="body-s" style="max-width:72ch;margin-bottom:22px">Three questions place any new method: does it generate while training, does it need a critic, and what is its reward. The names change every few months. The three structural answers change slowly.</p>
-      <div class="gapless cols-3">
-        <div>
-          <span class="code-no">Family 1</span>
-          <h4 class="h-card" style="margin:8px 0 10px">Optimise without a loop</h4>
-          <p class="body-s" style="margin-bottom:12px">Train on fixed comparison pairs. No generation during training.</p>
-          <div class="tok-row"><span class="tok">DPO</span><span class="tok">IPO</span><span class="tok">KTO</span><span class="tok">ORPO</span><span class="tok">SimPO</span></div>
-        </div>
-        <div>
-          <span class="code-no">Family 2</span>
-          <h4 class="h-card" style="margin:8px 0 10px">Optimise with a critic</h4>
-          <p class="body-s" style="margin-bottom:12px">A second network predicts expected score. Reliable, memory-hungry.</p>
-          <div class="tok-row"><span class="tok">PPO</span><span class="tok">A2C-style variants</span></div>
-        </div>
-        <div>
-          <span class="code-no">Family 3</span>
-          <h4 class="h-card" style="margin:8px 0 10px">Optimise without a critic</h4>
-          <p class="body-s" style="margin-bottom:12px">Estimate the baseline from samples instead. The current default.</p>
-          <div class="tok-row"><span class="tok">REINFORCE</span><span class="tok">RLOO</span><span class="tok tok-wine">GRPO</span><span class="tok">DAPO</span><span class="tok">GSPO</span></div>
-        </div>
-      </div>
-      <span class="source">Groupings follow Lambert, arXiv:2504.12501, chs. 6 and 8; DAPO, arXiv:2503.14476; and &lsquo;RL for LLM Post-Training: A Survey&rsquo; (OpenReview, 2026). Lists are illustrative, not exhaustive.</span>
-    </div>
-  </div>
-</section>
-
-<!-- ============================ B.05 AGENTIC ============================ -->
-<section class="section" id="agentic">
-  <div class="container">
-    <span class="eyebrow">B.05 &middot; Stage 4 &middot; The current frontier</span>
-    <h2 class="h-section" style="margin:14px 0 18px;max-width:30ch">One reward, at the end of a very long episode</h2>
-    <p class="lede" style="max-width:64ch;margin-bottom:30px">In the stages so far, one prompt produced one answer and one score. An agentic episode may run for hundreds of steps, calling tools and reading their output, and only the final state is scored. Everything hard about this follows from that shape.</p>
-
-    <div data-widget="agentic" class="reveal"></div>
-
-    <div class="split-even mt-l">
-      <div class="card">
-        <span class="meta">Problem 1 &middot; statistical</span>
-        <h3 class="h-card" style="margin:8px 0 10px">Credit assignment</h3>
-        <p class="body-s">The episode failed. Which of two hundred decisions caused it? A single number at the end carries very little information about any individual step, so learning is slow and noisy. This is an old problem in reinforcement learning, arriving now at a much larger scale.</p>
-      </div>
-      <div class="card">
-        <span class="meta">Problem 2 &middot; engineering</span>
-        <h3 class="h-card" style="margin:8px 0 10px">Idle accelerators</h3>
-        <p class="body-s">Training must wait for real tools to run. In a synchronous design the whole batch waits for its slowest episode, and expensive hardware sits idle. Recent frameworks overlap generation, tool execution and weight updates to keep utilisation high.</p>
-      </div>
-    </div>
-
-    <div class="aside mt-l" style="max-width:78ch">
-      <span class="aside-title">Why this stage is difficult to replicate</span>
-      <p>Weights and data can be copied. A maintained set of realistic environments, with working tools and reliable scoring, is closer to infrastructure than to a dataset. There seems to be a growing view that this is where durable advantage now sits, though the evidence for that is commercial rather than published, and it should be held loosely.</p>
-    </div>
-    <span class="source">&lsquo;Scaling Agentic RL: High-Throughput Agentic Training with Tunix&rsquo;, Google Developers Blog, 2026; &lsquo;Building Efficient RL Training for the Agentic Era&rsquo;, Salesforce AI Research, 2026. Both developer-authored; benchmarks not independently reproduced.</span>
-  </div>
-</section>
-
-<!-- ============================ B.05 NUMBERS ============================ -->
-<section class="section deep">
-  <div class="container">
-    <span class="eyebrow">B.05 &middot; The numbers, with their limits</span>
-    <h2 class="h-section" style="margin:14px 0 18px;max-width:28ch">How much compute post-training actually takes</h2>
-    <p class="lede" style="max-width:64ch;margin-bottom:30px">Published figures are scarce, because most developers do not separate the two stages in their reporting. DeepSeek-R1 is the clearest disclosed case, and it is already historical.</p>
-
-    <div class="split">
+    <div class="split-3 mt-l">
       <div>
-        <span class="eyebrow">DeepSeek-R1 &middot; GPU hours, H800, thousands</span>
-        <h3 class="chart-title" style="margin:8px 0 18px">Reinforcement learning was about 5 per cent of the total</h3>
-        <div class="barline"><span class="lbl">Pretraining (V3)</span><span class="track"><span class="fill" style="width:100%"></span></span><span class="num">2,800</span></div>
-        <div class="barline"><span class="lbl">RL (R1)</span><span class="track"><span class="fill gold" style="width:5.25%"></span></span><span class="num">147</span></div>
-        <span class="source">Source: figures as reported in Lambert, arXiv:2504.12501, ch. 1, citing the DeepSeek-R1 and DeepSeek-V3 technical reports.</span>
+        <span class="meta">Caught in the wild</span>
+        <p class="body-s mt-s">Padding for length. Agreeing with whatever the user said. Headings that perform rigour. Confident tone where the honest answer is "I don't know".</p>
       </div>
-      <div class="stack-m">
-        <div class="card">
-          <div class="kpi kpi-gold">5%</div>
-          <p class="meta mt-s">Share of DeepSeek-R1 compute spent on reinforcement learning</p>
-          <p class="body-s mt-s">Reported in early 2025, and the lowest of the figures on this page.</p>
-        </div>
-        <div class="card">
-          <div class="kpi kpi-gold">10&ndash;100k</div>
-          <p class="meta mt-s">GPU hours for a single ablation run in 2026 RL research</p>
-          <p class="body-s mt-s">An ablation is one experimental variant, of which a project runs many. This is comparable to the entire reinforcement-learning stage of Olmo 3.1 Think 32B, which ran four weeks on two hundred accelerators.</p>
-        </div>
+      <div>
+        <span class="meta">What's done about it</span>
+        <p class="body-s mt-s">A <b class="def" data-t="kl-penalty">drift penalty</b> keeps the model near where it started. Reward models get retrained mid-run. Multiple judges get averaged. None of it solves the problem.</p>
+      </div>
+      <div>
+        <span class="meta">The bit for policy readers</span>
+        <p class="body-s mt-s">Model behaviour that looks like a personality choice is often a scoring artefact. Sycophancy isn't a value someone picked. It's what happens when a stand-in rewards agreement.</p>
       </div>
     </div>
-
-    <div class="split-even mt-l">
-      <div class="aside">
-        <span class="aside-title">How to read these figures</span>
-        <p class="body-s">Treat any single ratio as a snapshot of one model, not a law. The two stages are measured differently by different developers, and generating post-training data is itself inference, sometimes counted in neither column.</p>
-      </div>
-      <div class="aside">
-        <span class="aside-title">Why the ratio is already out of date</span>
-        <p class="body-s">The direction of travel is better established than any single number: the share is rising, and at least one commercial developer says its post-training compute now exceeds its pretraining compute. That last claim is reported in trade analysis and is not independently verified.</p>
-      </div>
-    </div>
+    <span class="source">Documented cases and mitigations: Lambert, <a class="link" href="https://rlhfbook.com" target="_blank" rel="noopener">rlhfbook.com</a>, chs. 14 and 15.</span>
   </div>
 </section>
 
-<!-- ============================ B.06 COMPRESSION ============================ -->
-<section class="section" id="compression">
+<!-- ============================ B.04 RLVR ============================ -->
+<section class="section deep" id="rlvr">
   <div class="container">
-    <span class="eyebrow">B.06 &middot; Compression &middot; one of two</span>
-    <h2 class="h-section" style="margin:14px 0 30px;max-width:28ch">Distillation: a large model teaches a small one</h2>
+    <span class="eyebrow">B.04 &middot; Teacher three</span>
+    <h2 class="h-section" style="margin:14px 0 34px;max-width:26ch">Checking: sack the judge, run the code</h2>
 
     <div class="strip reveal">
       <div class="panel">
         <span class="panel-code">01</span>
-        <div class="caption-box">Teacher &middot; frontier scale, expensive to run</div>
-        <div class="bubble right"><span class="bubble-who">Echo</span>Here are forty thousand answers, with all my working shown.</div>
-        <div class="panel-art"><div class="cast" data-char="echo" data-mood="proud" data-size="106"></div></div>
+        <div class="bubble"><span class="bubble-who">Ira</span>Why do we need Mark at all? Just run the program and see if it works.</div>
+        <div class="panel-art"><div class="cast" data-char="ira" data-mood="point" data-size="100"></div></div>
       </div>
-      <div class="panel deep">
+      <div class="panel dots">
         <span class="panel-code">02</span>
-        <div class="caption-box">Synthetic data &middot; filtered for correctness</div>
-        <p class="panel-note">Once an expensive model exists, its outputs are training data. Vera throws out the wrong ones first.</p>
-        <div class="panel-art"><div class="cast" data-char="vera" data-mood="pass" data-size="98"></div></div>
+        <div class="bubble right"><span class="bubble-who">Vera</span>Test suite: 47 of 47 passed.</div>
+        <p class="panel-note">No opinion. No taste. No way to flatter her.</p>
+        <div class="panel-art"><div class="cast" data-char="vera" data-mood="pass" data-size="100"></div></div>
+      </div>
+      <div class="panel wide dots-gold">
+        <span class="panel-code">03</span>
+        <span class="sfx sfx-l">This changed everything</span>
+        <p class="panel-note" style="margin-top:14px;font-size:15px">Reinforcement learning with verifiable rewards, or <b class="def" data-t="rlvr">RLVR</b>. Nothing can game it, so you can crank the optimisation as hard as you like. It's the single biggest reason models got dramatically better at maths and code between 2024 and 2026, and barely moved on essay writing.</p>
+        <span class="scribble scribble-arrow" style="margin-top:14px">the catch is on the next line</span>
+      </div>
+      <div class="panel">
+        <span class="panel-code">04</span>
+        <div class="caption-box">The catch</div>
+        <p class="panel-note">Vera can only mark what a program can check. That turns out to be a narrow slice of the things people actually want done.</p>
+      </div>
+    </div>
+
+    <div class="mt-l" data-widget="verify"></div>
+
+    <div class="split mt-l">
+      <div class="card" style="border-left:3px solid var(--marigold)">
+        <h3 class="h-feature" style="margin:0 0 12px;font-size:26px">The uncomfortable implication</h3>
+        <p class="body-s">Capability now grows fastest where checking is easy. Maths, competitive programming, formal proofs. It grows slowly where checking is hard, which includes nearly everything a policy analyst, a doctor or a teacher does all day.</p>
+        <p class="body-s">This isn't a claim about what's important. It's a claim about where the training signal exists, and the two have come apart.</p>
+      </div>
+      <div class="sticker">
+        <div class="cast" data-char="vera" data-mood="fail" data-size="76"></div>
+        <div class="sticker-txt"><b>Try asking Vera to mark an essay</b>She can check the word count and whether it cites a real source. She cannot tell you whether the argument holds. Nobody has built a checker that can.</div>
+      </div>
+    </div>
+    <span class="source">DeepSeek-AI, <a class="link" href="https://arxiv.org/abs/2501.12948" target="_blank" rel="noopener">DeepSeek-R1</a>, 2025; Lambert, <a class="link" href="https://rlhfbook.com" target="_blank" rel="noopener">rlhfbook.com</a>, ch. 7.</span>
+  </div>
+</section>
+
+<!-- ============================ B.05 REASONING ============================ -->
+<section class="section" id="reasoning">
+  <div class="container">
+    <span class="eyebrow">B.05 &middot; A surprise</span>
+    <h2 class="h-section" style="margin:14px 0 34px;max-width:26ch">Nobody taught it to think out loud</h2>
+
+    <div class="strip strip-4 reveal">
+      <div class="panel">
+        <span class="panel-code">01</span>
+        <div class="caption-box">What the researchers did</div>
+        <p class="panel-note">Gave the model maths problems. Marked them right or wrong. Said nothing about how to answer.</p>
+      </div>
+      <div class="panel dots">
+        <span class="panel-code">02</span>
+        <div class="bubble thought" style="margin-bottom:22px">Wait. Line three is wrong. Let me start again from there.</div>
+        <p class="panel-note">The model started writing longer and longer working. Then it started checking itself. Then it started backtracking.</p>
       </div>
       <div class="panel">
         <span class="panel-code">03</span>
-        <div class="caption-box">Student &middot; often ten to fifty times smaller</div>
-        <div class="bubble"><span class="bubble-who">Echo minor</span>I can do most of that now. On one card. In my bedroom.</div>
-        <div class="panel-art"><div class="cast" data-char="echo" data-mood="happy" data-size="80"></div></div>
+        <div class="bubble"><span class="bubble-who">Ira</span>Who told it to do that?</div>
+        <div class="bubble right"><span class="bubble-who">Echo</span>Nobody. Longer working passed the checker more often, so longer working is what survived.</div>
+        <div class="panel-art between">
+          <div class="cast" data-char="ira" data-mood="doubt" data-size="88"></div>
+          <div class="cast flip" data-char="echo" data-mood="proud" data-size="88"></div>
+        </div>
+      </div>
+      <div class="panel dots-gold">
+        <span class="panel-code">04</span>
+        <span class="sfx sfx-s">Emergent, genuinely</span>
+        <p class="panel-note" style="margin-top:12px">Self-correction wasn't designed, demonstrated or rewarded directly. It fell out of rewarding correct answers. This is one of the few places where "emergent" is used honestly.</p>
       </div>
     </div>
 
     <div class="split mt-l">
-      <div class="card">
-        <span class="chip chip-gold">The policy point</span>
-        <h3 class="h-feature" style="margin:14px 0 12px;font-size:26px">Capability diffuses faster than it is created</h3>
-        <p class="body-s">Distillation means a frontier release is followed within weeks by much smaller models that reproduce a large part of its useful behaviour. Any control that assumes capability stays with whoever paid for the training run has to contend with this.</p>
+      <div>
+        <h3 class="h-feature" style="margin-bottom:16px;font-size:30px">And it costs you money</h3>
+        <p class="body-s prose">Those chains of working are tokens. You pay for them. Some providers hide the reasoning from you and bill you for it anyway, which is worth knowing when you read a price per million tokens.</p>
+        <p class="body-s prose">It also means the same model can be run cheaply and stupidly or expensively and well. That dial lives in <a class="link" href="03-inference.html#budget">chapter 03</a>, and it is the awkward fact underneath every compute threshold.</p>
       </div>
-      <div class="split-even" style="gap:20px">
-        <div>
-          <span class="meta">What transfers well</span>
-          <p class="body-s mt-s">Format, reasoning style, and accuracy on the distribution the teacher was sampled over.</p>
-          <span class="meta" style="display:block;margin-top:18px">On terms of service</span>
-          <p class="body-s mt-s">Most commercial providers prohibit using their outputs to train competing models. The prohibition is contractual, and detection after the fact is difficult.</p>
-        </div>
-        <div>
-          <span class="meta">What transfers poorly</span>
-          <p class="body-s mt-s">Everything outside that distribution. A distilled model tends to be brittle away from the tasks it was distilled for, and inherits the teacher&rsquo;s errors as facts.</p>
-          <span class="meta" style="display:block;margin-top:18px">On open weights</span>
-          <p class="body-s mt-s">Where the teacher&rsquo;s weights are published, distillation needs no provider&rsquo;s permission at all, and the constraint becomes compute rather than access.</p>
+      <div class="stack-m">
+        <div class="card">
+          <span class="meta">The training algorithm</span>
+          <h4 class="h-card" style="margin:8px 0 8px"><b class="def" data-t="grpo">GRPO</b></h4>
+          <p class="body-s">Generate several answers, use the group's own average as the bar. Removes the extra value network that <b class="def" data-t="ppo">PPO</b> needs, which is why it spread so fast.</p>
         </div>
       </div>
     </div>
-    <span class="source">Mechanism as described in Lambert, arXiv:2504.12501, ch. 12 (synthetic data); the distilled variants released alongside DeepSeek-R1 are the widely cited demonstration.</span>
 
-    <hr class="hr mt-l">
+    <div class="mt-l" data-widget="grpo"></div>
+    <span class="source">DeepSeekMath, <a class="link" href="https://arxiv.org/abs/2402.03300" target="_blank" rel="noopener">arXiv:2402.03300</a>; DeepSeek-AI, <a class="link" href="https://arxiv.org/abs/2501.12948" target="_blank" rel="noopener">DeepSeek-R1</a>, 2025.</span>
+  </div>
+</section>
 
-    <div class="mt-l">
-      <span class="eyebrow">B.06 &middot; Compression &middot; two of two</span>
-      <h3 class="h-feature" style="margin:14px 0 18px;font-size:32px">Quantisation: store each number in fewer bits</h3>
-      <p class="lede" style="max-width:64ch;margin-bottom:26px">A weight held in 16 bits can often be held in 8, or 4, with modest loss of accuracy. Since memory and memory bandwidth are the binding constraints during serving, this is the single most direct lever on the cost of running a model.</p>
-      <div data-widget="quantise" class="reveal"></div>
+<!-- ============================ B.06 AGENTIC ============================ -->
+<section class="section deep" id="agentic">
+  <div class="container">
+    <span class="eyebrow">B.06 &middot; Teacher four</span>
+    <h2 class="h-section" style="margin:14px 0 12px;max-width:24ch">Doing: forty steps, one mark at the end</h2>
+    <p class="body-s prose" style="margin-bottom:34px">Agentic training is the current frontier and the hardest of the four by some distance. The model uses tools, reads files, runs code and works towards a goal over many steps. At the end, it either got there or it didn't.</p>
 
-      <div class="gapless cols-4 mt-l">
-        <div><span class="code-no">Q.01</span><h4 class="h-card" style="margin:8px 0 8px">Weights only</h4><p class="body-s">The commonest case, and the safest. The stored parameters are compressed; arithmetic is done at higher precision.</p></div>
-        <div><span class="code-no">Q.02</span><h4 class="h-card" style="margin:8px 0 8px">Weights and activations</h4><p class="body-s">Compresses the intermediate values too. Faster, and more likely to degrade quality.</p></div>
-        <div><span class="code-no">Q.03</span><h4 class="h-card" style="margin:8px 0 8px">The KV cache</h4><p class="body-s">Compresses the per-request memory described in chapter 03. Often the larger saving at long context.</p></div>
-        <div><span class="code-no">Q.04</span><h4 class="h-card" style="margin:8px 0 8px">During training rather than after</h4><p class="body-s">Quantisation-aware training bakes the constraint in, which preserves more accuracy than compressing a finished model.</p></div>
+    <div data-widget="agentic" class="reveal"></div>
+
+    <div class="split mt-l">
+      <div class="card" style="border-left:3px solid var(--wine)">
+        <h3 class="h-feature" style="margin:0 0 12px;font-size:26px">Two things make this hard</h3>
+        <p class="body-s"><b style="font-weight:500">Credit assignment.</b> The task failed. Which of the forty steps was to blame? Step four looked fine at the time and doomed everything after it. There is no clean answer to this, and <b class="def" data-t="credit-assignment">it is the bottleneck</b>.</p>
+        <p class="body-s"><b style="font-weight:500">Environments.</b> You need a real sandbox with real tools that behaves consistently across millions of runs. Building and maintaining those is engineering work, not research, and it doesn't get published.</p>
       </div>
-      <span class="source">E. Frantar et al., &lsquo;GPTQ&rsquo;, arXiv:2210.17323; survey coverage in arXiv:2410.04466. Accuracy-loss figures circulating in vendor material are not independently reproduced and are not relied on here.</span>
+      <div class="sticker gold">
+        <div class="cast" data-char="ira" data-mood="think" data-size="76"></div>
+        <div class="sticker-txt"><b>Why this matters for diffusion</b>Weights leak. Papers get published. Environments don't travel. That's why agentic ability has spread far more slowly than reasoning ability, and it's the most under-discussed asymmetry in the field.</div>
+      </div>
     </div>
+
+    <div class="split mt-l">
+      <div>
+        <span class="eyebrow">A number worth carrying</span>
+        <h3 class="chart-title" style="margin:8px 0 18px">DeepSeek-R1, disclosed GPU hours</h3>
+        <div class="barline"><span class="lbl">Pretraining</span><span class="track"><span class="fill" style="width:100%"></span></span><span class="num">2,800k</span></div>
+        <div class="barline"><span class="lbl">Post-training</span><span class="track"><span class="fill gold" style="width:5.25%"></span></span><span class="num">147k</span></div>
+        <span class="source">Source: DeepSeek-AI, 2025, as disclosed. Post-training was about five per cent of pretraining for this model. Other labs report far higher ratios, and most disclose nothing at all.</span>
+      </div>
+      <div class="stack-m">
+        <div class="card">
+          <div class="kpi kpi-gold">~5%</div>
+          <p class="meta mt-s">Post-training as a share of pretraining, for this one model</p>
+          <p class="body-s mt-s">Do not generalise from this. It's one lab, one model, one year, and it's the only frontier-scale figure anyone has published.</p>
+        </div>
+        <div class="aside">
+          <span class="aside-title">The replication problem</span>
+          <p>A single ablation at this scale costs tens of thousands of GPU hours. Almost no university can afford to check anyone's claims, so most of what we know about post-training comes from the people selling it.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ B.07 COMPRESSION ============================ -->
+<section class="section" id="compression">
+  <div class="container">
+    <span class="eyebrow">B.07 &middot; After the teaching</span>
+    <h2 class="h-section" style="margin:14px 0 34px;max-width:26ch">Shrinking it: the part that makes capability travel</h2>
+
+    <div class="strip strip-4 reveal">
+      <div class="panel">
+        <span class="panel-code">01</span>
+        <div class="caption-box"><b class="def" data-t="distillation">Distillation</b></div>
+        <p class="panel-note">Ask the big model a few hundred thousand questions. Train a small model on its answers, reasoning and all. The small one picks up much of the behaviour.</p>
+      </div>
+      <div class="panel dots">
+        <span class="panel-code">02</span>
+        <div class="bubble"><span class="bubble-who">Ira</span>So you can copy a model without ever seeing inside it?</div>
+        <div class="bubble right"><span class="bubble-who">Echo</span>On the tasks you copied, mostly yes. Wander off those and the copy falls apart quickly.</div>
+        <div class="panel-art between">
+          <div class="cast" data-char="ira" data-mood="doubt" data-size="88"></div>
+          <div class="cast flip" data-char="echo" data-mood="blank" data-size="88"></div>
+        </div>
+      </div>
+      <div class="panel wide dots-gold">
+        <span class="panel-code">03</span>
+        <span class="sfx sfx-s">This is why capability spreads</span>
+        <p class="panel-note" style="margin-top:12px;font-size:15px">Every provider's terms forbid it. It happens anyway, and it is close to unprovable from the outside. Between distillation and <b class="def" data-t="quantisation">quantisation</b>, the gap between a frontier release and something similar running on ordinary hardware is now measured in months.</p>
+      </div>
+    </div>
+
+    <div class="mt-l" data-widget="quantise"></div>
+
+    <div class="aside mt-l" style="max-width:76ch">
+      <span class="aside-title">The bit that should interest anyone writing export policy</span>
+      <p>Four-bit weights put a 70-billion-parameter model on hardware nobody is tracking. The controls were designed around the machines that build models, not the machines that run them, and compression keeps moving the second category downmarket.</p>
+    </div>
+    <span class="source">GPTQ, <a class="link" href="https://arxiv.org/abs/2210.17323" target="_blank" rel="noopener">arXiv:2210.17323</a>; distillation results in <a class="link" href="https://arxiv.org/abs/2501.12948" target="_blank" rel="noopener">DeepSeek-R1</a>, 2025.</span>
   </div>
 </section>
 
 <!-- ============================ SUMMARY ============================ -->
 <section class="section deep" id="summary">
   <div class="container">
-    <span class="eyebrow">B.07 &middot; Section summary</span>
-    <h2 class="h-section" style="margin:14px 0 30px;max-width:24ch">Post-training on one page</h2>
+    <span class="eyebrow">B.08</span>
+    <h2 class="h-section" style="margin:14px 0 34px;max-width:24ch">All four, on one page</h2>
     <div class="table-wrap">
       <table>
-        <thead><tr><th>Stage</th><th>Teacher</th><th>What it adds</th><th>How it fails</th><th>What it costs</th></tr></thead>
+        <thead><tr><th>Teacher</th><th>Who marks</th><th>What it's good at</th><th>How it fails</th></tr></thead>
         <tbody>
-          <tr><td><strong>Supervised fine-tuning</strong></td><td>Human demonstrations</td><td>Answering, stopping, register, refusal style, tool syntax</td><td>Cannot exceed the demonstrator; copies their errors</td><td>Low. Data quality dominates quantity.</td></tr>
-          <tr><td><strong>Preference learning</strong></td><td>Human or model rankings</td><td>Helpfulness, judgement, tone in open-ended questions</td><td>Reward hacking: padding, sycophancy, format gaming</td><td>Moderate. Rising with annotation volume.</td></tr>
-          <tr><td><strong>Verifiable-reward RL</strong></td><td>A program that checks</td><td>Reliable mathematics, code, logic; long reasoning chains</td><td>Only reaches tasks where correctness is decidable</td><td>High and rising fast.</td></tr>
-          <tr><td><strong>Agentic RL</strong></td><td>An environment</td><td>Planning across many steps; recovery from tool failure</td><td>Credit assignment; very costly to run and to debug</td><td>Very high, and infrastructure-heavy.</td></tr>
-          <tr><td><strong>Distillation</strong></td><td>A larger model</td><td>Most of the teacher&rsquo;s behaviour in a much smaller model</td><td>Brittle outside the distilled distribution</td><td>Low for the student. Diffuses capability.</td></tr>
-          <tr><td><strong>Quantisation</strong></td><td>Arithmetic</td><td>The same behaviour at a fraction of the memory</td><td>Accuracy degrades, unevenly across tasks</td><td>Negligible, and it lowers serving cost.</td></tr>
+          <tr><td><strong>Copying</strong></td><td>A person, writing the answer</td><td>Format, tone, stopping, tool syntax</td><td>Inherits every blind spot in the dataset</td></tr>
+          <tr><td><strong>Ranking</strong></td><td>A person choosing, then a model imitating them</td><td>Taste, helpfulness, things nobody can specify</td><td>The stand-in gets gamed. Padding and flattery</td></tr>
+          <tr><td><strong>Checking</strong></td><td>A program</td><td>Maths, code, proofs, anything with an answer key</td><td>Only works where a checker exists, which is a narrow slice</td></tr>
+          <tr><td><strong>Doing</strong></td><td>A program, once, at the very end</td><td>Long tasks with tools, real work</td><td>Nobody knows which of the forty steps was wrong</td></tr>
         </tbody>
       </table>
     </div>
+
     <div class="aside mt-l" style="max-width:78ch">
-      <span class="aside-title">The thread running through the chapter</span>
-      <p>Each stage buys a capability by adopting a measure of success, and each measure can be gamed in a characteristic way. Reading a model release means asking which measures it was trained against, because that predicts both what it is good at and how it will disappoint.</p>
+      <span class="aside-title">The thread running through all four</span>
+      <p>Every stage replaces an expensive marker with a cheaper one. Each substitution buys scale and loses fidelity. Most of the odd behaviour people notice in deployed models is a fingerprint of one of those substitutions.</p>
     </div>
-    <span class="source">Consolidated from the sources cited throughout this chapter, principally Lambert, arXiv:2504.12501.</span>
+  </div>
+</section>
+
+<section class="section ink">
+  <div class="container">
+    <div class="split">
+      <div>
+        <span class="eyebrow">Chapter 02, in one line</span>
+        <h2 class="h-section" style="margin:16px 0 20px;max-width:22ch">The model can now <em>behave</em>. Next question: what does it cost to <em>run</em>?</h2>
+        <p class="lede" style="color:rgba(255,255,255,0.85);max-width:48ch">Nothing in chapter 03 changes a single weight. It's all about the bill.</p>
+      </div>
+      <div style="display:flex;align-items:flex-end">
+        <a class="btn btn-gold" href="03-inference.html">On to the bill &rarr;</a>
+      </div>
+    </div>
   </div>
 </section>
 
 <div class="pager">
   <a href="01-what-pretraining-leaves.html"><span class="meta">&larr; Previous</span><span style="display:block;font-size:19px;margin-top:6px">Chapter 01 &middot; The Next-Token Machine</span></a>
-  <a class="next" href="03-inference.html"><span class="meta">Next &rarr;</span><span style="display:block;font-size:19px;margin-top:6px">Chapter 03 &middot; Inference</span></a>
+  <a class="next" href="03-inference.html"><span class="meta">Next &rarr;</span><span style="display:block;font-size:19px;margin-top:6px">Chapter 03 &middot; The Bill Arrives</span></a>
 </div>
 
 <footer class="footer">
   <div class="footer-grid">
     <div class="footer-brand">
       <p class="footer-tag">Pretraining built the capability.<br>Post-training made it usable.<br>Inference decides who can afford it.</p>
-      <p class="footer-addr" style="margin-top:24px">Prepared for the High-Tech Geopolitics Programme,<br>Takshashila Institution, Bengaluru. A draft for discussion.</p>
+      <p class="footer-addr" style="margin-top:24px">High-Tech Geopolitics Programme,<br>Takshashila Institution, Bengaluru. A draft for discussion.</p>
     </div>
     <div>
       <h4>Chapters</h4>
       <ul>
         <li><a href="index.html">The Map</a></li>
         <li><a href="01-what-pretraining-leaves.html">The Next-Token Machine</a></li>
-        <li><a href="02-post-training.html">Post-Training</a></li>
         <li><a href="03-inference.html">Inference</a></li>
         <li><a href="04-policy.html">Why It Matters</a></li>
       </ul>
@@ -786,8 +449,8 @@
       <h4>Sources</h4>
       <ul>
         <li><a href="https://rlhfbook.com" rel="noopener">Lambert, RLHF Book <span class="arrow">&#8599;</span></a></li>
-        <li><a href="https://arxiv.org/abs/2402.03300" rel="noopener">DeepSeekMath, GRPO <span class="arrow">&#8599;</span></a></li>
-        <li><a href="https://arxiv.org/abs/2305.18290" rel="noopener">Direct Preference Optimization <span class="arrow">&#8599;</span></a></li>
+        <li><a href="https://arxiv.org/abs/2501.12948" rel="noopener">DeepSeek-R1 <span class="arrow">&#8599;</span></a></li>
+        <li><a href="https://arxiv.org/abs/2305.18290" rel="noopener">DPO <span class="arrow">&#8599;</span></a></li>
       </ul>
     </div>
   </div>
@@ -799,5 +462,6 @@
 
 <script src="assets/js/comic.js"></script>
 <script src="assets/js/widgets-train.js"></script>
+<script src="assets/js/guide.js"></script>
 </body>
 </html>

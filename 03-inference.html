@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Chapter 03 · Inference — After the Model Is Trained</title>
-<meta name="description" content="What happens when finished weights meet a live request: prefill and decode, the KV cache, paged attention, continuous batching, prefix caching, speculative decoding, mixture of experts, and answer-time compute.">
+<title>Chapter 03 · The Bill Arrives</title>
+<meta name="description" content="Why output tokens cost more than input tokens, why long context is priced like a hotel room, and what a serving engineer actually argues about.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;500&family=Bungee&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/takshashila.css">
 </head>
 <body>
@@ -30,60 +30,64 @@
 
 <header class="section">
   <div class="container">
-    <p class="crumbs" style="margin-bottom:22px"><a href="index.html">The Map</a> / Chapter 03</p>
-    <span class="eyebrow">Chapter 03 &middot; Inference</span>
-    <h1 class="page-title" style="margin:16px 0 24px;max-width:16ch;font-size:56px;line-height:1.02;letter-spacing:-0.025em">The <em>Bill</em> Arrives</h1>
+    <p class="crumbs" style="margin-bottom:26px"><a href="index.html">The Map</a> / Chapter 03</p>
+    <span class="chapter-no">03</span>
+    <h1 class="page-title" style="margin:10px 0 26px;max-width:14ch;font-size:56px;line-height:1.02;letter-spacing:-0.025em">The <em>Bill</em> Arrives</h1>
     <div class="split">
-      <p class="lede">No weights change in this chapter. The model is fixed, and the only question is how cheaply and quickly it can be run against a live request. Nearly every technique here exists because generating one token at a time is limited by memory rather than by arithmetic &mdash; a sentence that sounds technical and turns out to explain most of an API price list.</p>
+      <div>
+        <p class="lede">Nothing in this chapter changes the model. It's finished. The only question left is what it costs to run, and the answer explains most of an API price list.</p>
+        <p class="body-s prose" style="margin-top:20px">One sentence does most of the work here: generating a word is limited by how fast memory moves, not by how fast the chip calculates. That sounds like an engineering detail. It's the reason output tokens cost more than input tokens, the reason long context is expensive, and the reason half the tricks below exist.</p>
+      </div>
       <div class="jump">
-        <a href="#phases"><b>C.01</b>Two phases</a>
-        <a href="#numbers"><b>C.01</b>Five numbers</a>
-        <a href="#cache"><b>C.02</b>The KV cache</a>
-        <a href="#attention"><b>C.02</b>Four attention designs</a>
-        <a href="#serving"><b>C.03</b>Serving the cache</a>
-        <a href="#less"><b>C.04</b>Spending less</a>
-        <a href="#budget"><b>C.05</b>Spending more</a>
-        <a href="#stack"><b>C.06</b>Who does what</a>
+        <a href="#phases"><b>C.01</b>Two halves, opposite problems</a>
+        <a href="#numbers"><b>C.02</b>Five numbers people argue about</a>
+        <a href="#cache"><b>C.03</b>The memory that never shrinks</a>
+        <a href="#attention"><b>C.04</b>Four ways to build attention</a>
+        <a href="#serving"><b>C.05</b>Tricks borrowed from Unix</a>
+        <a href="#less"><b>C.06</b>Guessing ahead</a>
+        <a href="#budget"><b>C.07</b>Paying more, deliberately</a>
+        <a href="#stack"><b>C.08</b>Who does what</a>
       </div>
     </div>
   </div>
 </header>
 
-<!-- ============================ C.01 PHASES ============================ -->
+<!-- ============================ C.01 ============================ -->
 <section class="section deep" id="phases">
   <div class="container">
-    <span class="eyebrow">C.01 &middot; The shape of a request</span>
-    <h2 class="h-section" style="margin:14px 0 30px;max-width:28ch">Every request has two halves with opposite bottlenecks</h2>
+    <span class="eyebrow">C.01</span>
+    <h2 class="h-section" style="margin:14px 0 34px;max-width:24ch">Reading and writing are opposite jobs</h2>
 
     <div class="strip reveal">
       <div class="panel">
         <span class="panel-code">01</span>
-        <div class="bubble"><span class="bubble-who">Ira</span>Reading my question and writing your answer &mdash; those are the same job, surely.</div>
-        <div class="panel-art"><div class="cast" data-char="ira" data-mood="doubt" data-size="106"></div></div>
+        <div class="bubble"><span class="bubble-who">Ira</span>Reading my question and writing your answer. Same job, surely.</div>
+        <div class="panel-art"><div class="cast" data-char="ira" data-mood="doubt" data-size="104"></div></div>
+      </div>
+      <div class="panel dots">
+        <span class="panel-code">02</span>
+        <div class="bubble right"><span class="bubble-who">Echo</span>Opposite jobs. I read your nine words in one go. I write mine one at a time, and each one costs a complete sweep over every weight I have.</div>
+        <div class="panel-art"><div class="cast" data-char="echo" data-mood="think" data-size="104"></div></div>
       </div>
       <div class="panel">
-        <span class="panel-code">02</span>
-        <div class="bubble right"><span class="bubble-who">Echo</span>They are opposite jobs. I read your nine words in one go. I have to write mine one at a time, and each one costs a complete pass over every weight I have.</div>
-        <div class="panel-art"><div class="cast" data-char="echo" data-mood="think" data-size="106"></div></div>
-      </div>
-      <div class="panel deep">
         <span class="panel-code">03</span>
         <div class="bubble"><span class="bubble-who">Ira</span>Every weight? For one word?</div>
-        <div class="bubble right"><span class="bubble-who">Echo</span>All hundred and forty gigabytes of them. Mostly I am waiting for memory, not calculating. That is why output tokens cost you several times more than input tokens.</div>
+        <div class="bubble right"><span class="bubble-who">Echo</span>All hundred and forty gigabytes. And I spend most of that time waiting for memory rather than calculating anything.</div>
         <div class="panel-art between">
-          <div class="cast" data-char="ira" data-mood="doubt" data-size="94"></div>
-          <div class="cast flip" data-char="echo" data-mood="sad" data-size="94"></div>
+          <div class="cast" data-char="ira" data-mood="confused" data-size="90"></div>
+          <div class="cast flip" data-char="echo" data-mood="sad" data-size="90"></div>
         </div>
       </div>
-      <div class="panel wide gold">
+      <div class="panel wide dots-gold">
         <span class="panel-code">04</span>
-        <div class="caption-box">Almost every line on an API price list follows from this split</div>
-        <p class="panel-note" style="font-size:15px"><b style="font-weight:500">Prefill</b> processes the whole prompt in parallel, in one pass. There is plenty of arithmetic to do, so arithmetic is what limits it. <b style="font-weight:500">Decode</b> produces one token per pass over the entire model, with very little arithmetic each time, so the speed of moving weights out of memory is what limits it.</p>
+        <span class="sfx sfx-l">That's the whole price list</span>
+        <p class="panel-note" style="margin-top:14px;font-size:15px"><b class="def" data-t="prefill">Prefill</b> takes your whole prompt in one pass. Lots of arithmetic, so arithmetic is the limit. <b class="def" data-t="decode">Decode</b> produces one token per full sweep of the model, with almost no arithmetic each time, so memory speed is the limit.</p>
+        <span class="scribble scribble-arrow" style="margin-top:14px">this is why big providers now run the two halves on different machines</span>
       </div>
       <div class="panel">
         <span class="panel-code">05</span>
-        <div class="caption-box">A consequence worth keeping</div>
-        <p class="panel-note">Different hardware suits each phase, which is why large providers now split prefill and decode across different machines.</p>
+        <div class="caption-box">In one line</div>
+        <p class="panel-note">Your question is cheap. The answer is not.</p>
       </div>
     </div>
 
@@ -91,328 +95,311 @@
 
     <div class="table-wrap mt-l">
       <table>
-        <thead><tr><th></th><th>Prefill</th><th>Decode</th><th>Why it matters commercially</th></tr></thead>
+        <thead><tr><th></th><th>Prefill</th><th>Decode</th><th>What it means for you</th></tr></thead>
         <tbody>
-          <tr><th scope="row">Limited by</th><td>Arithmetic throughput</td><td>Memory bandwidth</td><td>Different hardware suits each, so serving is split across machines</td></tr>
-          <tr><th scope="row">Work per token</th><td>Shared across the whole prompt</td><td>A full pass over every weight</td><td>Output tokens cost several times more than input tokens</td></tr>
-          <tr><th scope="row">Benefits from batching</th><td>Already saturated; batching adds little</td><td>Greatly: the same weights serve many requests at once</td><td>Throughput and latency pull against each other</td></tr>
+          <tr><th scope="row">Limited by</th><td>Arithmetic speed</td><td>Memory speed</td><td>Different chips suit each, so serving gets split across machines</td></tr>
+          <tr><th scope="row">Work per token</th><td>Shared across the whole prompt</td><td>A full sweep of every weight</td><td>Output tokens cost several times more than input tokens</td></tr>
+          <tr><th scope="row">Helped by batching</th><td>Barely. Already saturated</td><td>Enormously. Same weights serve many users at once</td><td>Speed and cost pull against each other</td></tr>
         </tbody>
       </table>
     </div>
-    <span class="source">J. Austin et al., <i>How To Scale Your Model</i>, ch. 7, &lsquo;All About Transformer Inference&rsquo;; R. Pope et al., &lsquo;Efficiently Scaling Transformer Inference&rsquo;, arXiv:2211.05102.</span>
+    <span class="source">Austin et al., <a class="link" href="https://jax-ml.github.io/scaling-book" target="_blank" rel="noopener">How To Scale Your Model</a>, ch. 7; Pope et al., <a class="link" href="https://arxiv.org/abs/2211.05102" target="_blank" rel="noopener">arXiv:2211.05102</a>.</span>
   </div>
 </section>
 
-<!-- ============================ C.01 FIVE NUMBERS ============================ -->
+<!-- ============================ C.02 ============================ -->
 <section class="section" id="numbers">
   <div class="container">
-    <span class="eyebrow">C.01 &middot; Vocabulary for reading benchmarks</span>
-    <h2 class="h-section" style="margin:14px 0 18px;max-width:28ch">The five numbers a serving engineer argues about</h2>
-    <p class="lede" style="max-width:64ch;margin-bottom:30px">These terms appear throughout vendor material and rarely get defined. Two of them trade directly against each other, which is why a single headline figure for inference performance is usually not meaningful.</p>
+    <span class="eyebrow">C.02</span>
+    <h2 class="h-section" style="margin:14px 0 12px;max-width:26ch">Five numbers, and two of them fight each other</h2>
+    <p class="body-s prose" style="margin-bottom:34px">These turn up constantly in vendor material and are almost never defined. Learn them and most performance claims become readable.</p>
 
     <div class="gapless cols-5">
-      <div><span class="meta">Time to first token</span><p class="body-s mt-s">How long the user waits before anything appears. Set by prefill, so it grows with prompt length.</p></div>
-      <div><span class="meta">Time per output token</span><p class="body-s mt-s">The gap between one token and the next once generation starts. Set by decode, and what makes a reply feel fast or laboured.</p></div>
-      <div><span class="meta">Throughput</span><p class="body-s mt-s">Total tokens the whole system produces per second across all users. The operator&rsquo;s measure, not yours.</p></div>
-      <div><span class="meta">Batch size</span><p class="body-s mt-s">How many requests are being served together. Raising it raises throughput and worsens the wait for each individual user.</p></div>
-      <div><span class="meta">Goodput</span><p class="body-s mt-s">Throughput counting only requests that met their latency target. The honest version of throughput.</p></div>
+      <div><span class="meta">Time to first token</span><p class="body-s mt-s">How long you stare at nothing. Set by prefill, so it grows with your prompt.</p></div>
+      <div><span class="meta">Time per output token</span><p class="body-s mt-s">The gap between one word appearing and the next. This is what makes a reply feel quick or laboured.</p></div>
+      <div><span class="meta">Throughput</span><p class="body-s mt-s">Tokens per second across everybody on the machine. The operator's number, not yours.</p></div>
+      <div><span class="meta">Batch size</span><p class="body-s mt-s">How many people share the accelerator. Raise it and cost falls while everyone waits longer.</p></div>
+      <div><span class="meta"><b class="def" data-t="goodput">Goodput</b></span><p class="body-s mt-s">Throughput counting only the requests that actually hit their latency target. The honest one.</p></div>
     </div>
 
     <div class="split-even mt-l">
-      <div class="card">
-        <span class="chip chip-gold">The central trade-off</span>
-        <h3 class="h-feature" style="margin:14px 0 12px;font-size:26px">Throughput and latency are bought from each other</h3>
-        <p class="body-s">Packing more requests onto an accelerator uses it more fully and lowers cost per token, while making every individual user wait longer. Where a provider sets that dial is a commercial decision, and it is rarely disclosed.</p>
+      <div class="card" style="border-left:3px solid var(--marigold)">
+        <h3 class="h-feature" style="margin:0 0 12px;font-size:26px">Speed and cost are bought from each other</h3>
+        <p class="body-s">Pack more requests onto a chip and the cost per token drops while every individual user waits longer. Where a provider sets that dial is a commercial decision, and they never tell you where.</p>
       </div>
-      <div class="aside">
-        <span class="aside-title">When reading a performance claim</span>
-        <p>Ask at which batch size and which context length it was measured. A figure quoted without both is not comparable to anything, and a surprising number of published figures are quoted without both.</p>
+      <div class="sticker gold">
+        <div class="cast" data-char="ira" data-mood="point" data-size="76"></div>
+        <div class="sticker-txt"><b>The question to ask</b>At what batch size, and at what context length? A throughput figure without both is not comparable to anything. A surprising number of published figures come without both.</div>
       </div>
     </div>
-    <span class="source">Definitions follow Austin et al., <i>How To Scale Your Model</i>, ch. 7; and &lsquo;Large Language Model Inference Acceleration: A Comprehensive Hardware Perspective&rsquo;, arXiv:2410.04466.</span>
+    <span class="source">Definitions follow Austin et al., <a class="link" href="https://jax-ml.github.io/scaling-book" target="_blank" rel="noopener">ch. 7</a>, and <a class="link" href="https://arxiv.org/abs/2410.04466" target="_blank" rel="noopener">arXiv:2410.04466</a>.</span>
   </div>
 </section>
 
-<!-- ============================ C.02 KV CACHE ============================ -->
+<!-- ============================ C.03 KV CACHE ============================ -->
 <section class="section deep" id="cache">
   <div class="container">
-    <span class="eyebrow">C.02 &middot; The most important object in serving</span>
-    <h2 class="h-section" style="margin:14px 0 30px;max-width:28ch">The KV cache: paying memory to avoid repeating work</h2>
+    <span class="eyebrow">C.03 &middot; The most important object in serving</span>
+    <h2 class="h-section" style="margin:14px 0 34px;max-width:26ch">A memory that only ever grows</h2>
 
     <div class="strip strip-4 reveal">
       <div class="panel">
         <span class="panel-code">01</span>
         <div class="caption-box">Token 1</div>
         <div class="tok-row"><span class="tok tok-gold">new</span></div>
-        <p class="panel-note">To produce a token, the model must attend to every token before it. Recomputing them all each time would be enormously wasteful, so the intermediate values are kept.</p>
-        <span class="meta">2 entries held</span>
+        <p class="panel-note">To write a word, the model has to look at every word before it. Redoing that from scratch each time would be absurd, so the workings get kept.</p>
       </div>
       <div class="panel">
         <span class="panel-code">02</span>
         <div class="caption-box">Token 2</div>
         <div class="tok-row"><span class="tok tok-wine">held</span><span class="tok tok-gold">new</span></div>
-        <p class="panel-note">Wine is already in the cache. Marigold is computed now and added to it.</p>
-        <span class="meta">3 entries held</span>
+        <p class="panel-note">Wine is already stored. Marigold is worked out now and added to the pile.</p>
       </div>
-      <div class="panel">
+      <div class="panel dots">
         <span class="panel-code">03</span>
         <div class="caption-box">Token 3</div>
         <div class="tok-row"><span class="tok tok-wine">held</span><span class="tok tok-wine">held</span><span class="tok tok-gold">new</span></div>
-        <p class="panel-note">It only ever grows. Nothing is released until the request ends.</p>
-        <span class="meta">4 entries held</span>
+        <p class="panel-note">Nothing is ever released until the conversation ends.</p>
+        <span class="scribble scribble-arrow">it only goes one way</span>
       </div>
-      <div class="panel winesoft">
+      <div class="panel dots-gold">
         <span class="panel-code">04</span>
-        <div class="caption-box">The one-line version</div>
-        <p class="panel-note" style="font-size:15px">The cache converts a <b style="font-weight:500">computation problem</b> into a <b style="font-weight:500">memory problem</b>. Without it, generation would be far too slow to be usable. With it, the binding constraint on how many users a machine can serve becomes how much memory their conversations occupy.</p>
+        <span class="sfx sfx-s">The trade</span>
+        <p class="panel-note" style="margin-top:12px;font-size:15px">The <b class="def" data-t="kv-cache">KV cache</b> turns a computation problem into a memory problem. Without it, generation would be far too slow to sell. With it, the thing limiting how many people a machine can serve is how much room their conversations take up.</p>
       </div>
-    </div>
-
-    <div class="split-3 mt-l">
-      <div><span class="meta">What is stored</span><p class="body-s mt-s">Two vectors per token, per layer, per attention head. Nothing about the words themselves; only intermediate arithmetic.</p></div>
-      <div><span class="meta">Who pays for it</span><p class="body-s mt-s">Each concurrent request holds its own cache. Ten users with long documents need ten caches in accelerator memory at once.</p></div>
-      <div><span class="meta">Why policy readers should care</span><p class="body-s mt-s">Context length is sold as a headline feature, and it is priced as one. It is a memory commitment rather than a software setting.</p></div>
     </div>
 
     <div class="mt-l" data-widget="kvcache"></div>
 
     <div class="split mt-l">
       <div>
-        <span class="eyebrow">Worked arithmetic &middot; the default settings above</span>
-        <h3 class="chart-title" style="margin:8px 0 18px">KV cache against context length, with the weights for comparison</h3>
+        <span class="eyebrow">The same sum, at six context lengths</span>
+        <h3 class="chart-title" style="margin:8px 0 18px">One conversation, against the whole model for comparison</h3>
         <div class="barline"><span class="lbl">8k tokens</span><span class="track"><span class="fill gold" style="width:0.8%"></span></span><span class="num">2.7 GB</span></div>
         <div class="barline"><span class="lbl">32k</span><span class="track"><span class="fill gold" style="width:3.1%"></span></span><span class="num">10.7 GB</span></div>
         <div class="barline"><span class="lbl">128k</span><span class="track"><span class="fill gold" style="width:12.8%"></span></span><span class="num">43 GB</span></div>
         <div class="barline"><span class="lbl">512k</span><span class="track"><span class="fill gold" style="width:51.2%"></span></span><span class="num">168 GB</span></div>
         <div class="barline"><span class="lbl">1m</span><span class="track"><span class="fill gold" style="width:100%"></span></span><span class="num">328 GB</span></div>
-        <div class="barline"><span class="lbl">The weights</span><span class="track"><span class="fill" style="width:42.7%"></span></span><span class="num">140 GB</span></div>
-        <span class="source">Source: own calculation. 2 &times; layers &times; key-value heads &times; head dimension &times; 2 bytes, per token, for a 70-billion-parameter model with 80 layers, 8 key-value heads and head dimension 128, at 16-bit precision, one request.</span>
+        <div class="barline"><span class="lbl">The model</span><span class="track"><span class="fill" style="width:42.7%"></span></span><span class="num">140 GB</span></div>
+        <span class="source">Own calculation. Two vectors per token per layer per key-value head, at two bytes each, for a 70-billion-parameter model with 80 layers, 8 key-value heads and head dimension 128. Decimal gigabytes. One conversation.</span>
       </div>
       <div class="stack-m">
         <div class="card">
           <div class="kpi kpi-gold">~430k</div>
-          <p class="meta mt-s">Context length at which one request&rsquo;s cache equals the whole model</p>
-          <p class="body-s mt-s">Beyond this point, memory is dominated by the conversation rather than by the model.</p>
+          <p class="meta mt-s">Where one conversation outweighs the entire model</p>
+          <p class="body-s mt-s">Past this point the machine is mostly holding somebody's chat history, not the thing they're chatting to.</p>
         </div>
-        <div class="card">
-          <div class="kpi kpi-gold">0.33 MB</div>
-          <p class="meta mt-s">Memory added by every single token, on these assumptions</p>
-          <p class="body-s mt-s">Multiply by concurrent users to see why batch size is capped.</p>
+        <div class="sticker">
+          <div class="cast" data-char="echo" data-mood="sad" data-size="72"></div>
+          <div class="sticker-txt"><b>Every single token: 0.33 MB</b>Multiply by the number of people sharing the machine. That's why batch size has a ceiling, and why long-context requests get served at lower concurrency.</div>
         </div>
       </div>
     </div>
-    <div class="aside mt-l" style="max-width:78ch">
-      <span class="aside-title">What this explains</span>
-      <p>Long-context pricing, the existence of cache-compression research, and why providers serve long-context requests at lower concurrency. Published estimates differ because they assume other architectures; the shape of the curve is the point, not any single figure.</p>
-    </div>
-    <span class="source">Austin et al., <i>How To Scale Your Model</i>, chs. 4 and 7; W. Kwon et al., &lsquo;Efficient Memory Management for Large Language Model Serving with PagedAttention&rsquo;, arXiv:2309.06180. Cross-check on the general finding that cache memory can exceed weight memory at long context: industry engineering analyses, 2026, which are not independently reproducible.</span>
+    <span class="source">Austin et al., <a class="link" href="https://jax-ml.github.io/scaling-book" target="_blank" rel="noopener">chs. 4 and 7</a>; Kwon et al., <a class="link" href="https://arxiv.org/abs/2309.06180" target="_blank" rel="noopener">arXiv:2309.06180</a>. Published estimates differ because they assume different architectures. The shape of the curve is the point, not any one figure.</span>
   </div>
 </section>
 
-<!-- ============================ C.02 ATTENTION ============================ -->
+<!-- ============================ C.04 ATTENTION ============================ -->
 <section class="section" id="attention">
   <div class="container">
-    <span class="eyebrow">C.02 &middot; Categories</span>
-    <h2 class="h-section" style="margin:14px 0 18px;max-width:30ch">Four attention designs, and how much cache each one needs</h2>
-    <p class="lede" style="max-width:64ch;margin-bottom:30px">This is an architecture choice made before training, which fixes the serving cost for the model&rsquo;s whole life. Attention needs many different questions asked of the text, but far fewer distinct representations of the text itself. Sharing keys and values exploits that asymmetry, at some cost in quality.</p>
+    <span class="eyebrow">C.04</span>
+    <h2 class="h-section" style="margin:14px 0 12px;max-width:28ch">Four ways to build attention, chosen once and locked in forever</h2>
+    <p class="body-s prose" style="margin-bottom:34px">Attention needs a lot of different questions asked of the text, but far fewer copies of the text itself. Sharing keys and values exploits that gap. It's decided before training and fixes the serving cost for the model's entire life.</p>
     <div data-widget="attention" class="reveal"></div>
   </div>
 </section>
 
-<!-- ============================ C.03 SERVING ============================ -->
+<!-- ============================ C.05 SERVING ============================ -->
 <section class="section deep" id="serving">
   <div class="container">
-    <span class="eyebrow">C.03 &middot; Serving the cache efficiently</span>
-    <h2 class="h-section" style="margin:14px 0 30px;max-width:30ch">Three ideas, two of them borrowed from operating systems</h2>
+    <span class="eyebrow">C.05</span>
+    <h2 class="h-section" style="margin:14px 0 34px;max-width:26ch">Three tricks, two of them stolen from operating systems</h2>
 
     <div class="strip reveal">
       <div class="panel">
         <span class="panel-code">01</span>
-        <div class="bubble"><span class="bubble-who">Ira</span>Why not just give each conversation the memory it needs?</div>
-        <div class="panel-art"><div class="cast" data-char="ira" data-mood="point" data-size="104"></div></div>
+        <div class="bubble"><span class="bubble-who">Ira</span>Just give each conversation the memory it needs.</div>
+        <div class="panel-art"><div class="cast" data-char="ira" data-mood="point" data-size="100"></div></div>
       </div>
-      <div class="panel">
+      <div class="panel dots">
         <span class="panel-code">02</span>
-        <div class="bubble right"><span class="bubble-who">Echo</span>Nobody knows how long a reply will be until it is finished. Early systems reserved room for the longest reply that might happen. Most replies are much shorter, so most of that expensive memory sat empty.</div>
-        <div class="panel-art"><div class="cast" data-char="echo" data-mood="sad" data-size="104"></div></div>
+        <div class="bubble right"><span class="bubble-who">Echo</span>Nobody knows how long a reply will be until it's over. Early systems booked room for the longest reply that might happen. Most replies are short, so most of that very expensive memory sat empty.</div>
+        <div class="panel-art"><div class="cast" data-char="echo" data-mood="sad" data-size="100"></div></div>
       </div>
-      <div class="panel deep">
+      <div class="panel dots-gold">
         <span class="panel-code">03</span>
-        <div class="caption-box">The fix was thirty years old and came from somewhere else</div>
-        <p class="panel-note">Operating systems solved this in the 1960s. Stop demanding that memory sit in one piece. Cut it into fixed-size blocks, scatter them anywhere, and keep a lookup table.</p>
-        <div class="sfx sfx-s">Paged attention</div>
+        <span class="sfx sfx-s">Solved in 1962</span>
+        <p class="panel-note" style="margin-top:12px">Operating systems hit this decades ago. Stop demanding memory in one lump. Cut it into fixed pages, scatter them anywhere, keep a lookup table. Somebody finally applied it to <b class="def" data-t="paged-attention">attention</b> in 2023 and got two to four times the throughput.</p>
       </div>
     </div>
 
     <div class="mt-l" data-widget="paged"></div>
-
-    <div class="split-3 mt-l">
-      <div><span class="meta">The mechanism</span><p class="body-s mt-s">A lookup table maps each request&rsquo;s sequence to scattered physical blocks, as virtual memory maps a program&rsquo;s addresses to pages.</p></div>
-      <div><span class="meta">The reported gain</span><p class="body-s mt-s">The original paper reported two to four times the throughput of the systems it replaced, at the same latency. That is the authors&rsquo; own measurement.</p></div>
-      <div><span class="meta">The status in 2026</span><p class="body-s mt-s">Standard rather than optional. Every serious engine implements it, so it is a floor rather than an advantage.</p></div>
-    </div>
-    <span class="source">W. Kwon et al., SOSP 2023, arXiv:2309.06180.</span>
+    <span class="source">Kwon et al., SOSP 2023, <a class="link" href="https://arxiv.org/abs/2309.06180" target="_blank" rel="noopener">arXiv:2309.06180</a>. The two-to-four-fold figure is the authors' own measurement. It is now standard in every serious engine, so it's a floor rather than an advantage.</span>
 
     <div class="mt-l" data-widget="batching"></div>
-    <span class="source">Timelines are schematic. Mechanism: G.-I. Yu et al., &lsquo;Orca&rsquo;, OSDI 2022; Kwon et al., arXiv:2309.06180; A. Agrawal et al., &lsquo;Sarathi-Serve&rsquo;, OSDI 2024.</span>
+    <span class="source">Timelines are schematic. Mechanism: Yu et al., <a class="link" href="https://www.usenix.org/conference/osdi22/presentation/yu" target="_blank" rel="noopener">Orca</a>, OSDI 2022; Agrawal et al., Sarathi-Serve, OSDI 2024.</span>
 
     <div class="mt-l">
-      <span class="eyebrow">C.03 &middot; The one that appears on your bill</span>
-      <h3 class="h-feature" style="margin:14px 0 18px;font-size:32px">Prefix caching: charging less for text the system has already read</h3>
-      <p class="lede" style="max-width:64ch;margin-bottom:26px">Many requests share a long opening: a system prompt, a policy document, a codebase, the earlier turns of a conversation. Prefill for that shared portion produces identical cache entries every time, so it can be computed once and reused.</p>
+      <h3 class="h-feature" style="margin-bottom:14px;font-size:32px">The one that shows up on your invoice</h3>
+      <p class="body-s prose" style="margin-bottom:26px">Loads of requests start the same way. A system prompt, a policy document, a codebase, the earlier turns of a chat. Reading that shared opening produces identical results every time, so it gets read once and reused. That's <b class="def" data-t="prefix-caching">prefix caching</b>, and it's why the cached portion is billed at a fraction of the rate.</p>
       <div data-widget="prefix" class="reveal"></div>
 
-      <div class="card mt-l" style="max-width:82ch">
-        <span class="chip chip-gold">Why this matters for agents</span>
-        <h4 class="h-feature" style="margin:14px 0 10px;font-size:26px">Agentic workloads are almost all shared prefix</h4>
-        <p class="body-s">An agent replays a growing transcript on every step. Without prefix caching the same history would be re-read dozens of times in a single task, and long agent runs would be commercially impossible. This one optimisation is a precondition for the entire category of product.</p>
+      <div class="split mt-l">
+        <div class="card" style="border-left:3px solid var(--marigold)">
+          <h4 class="h-feature" style="margin:0 0 12px;font-size:26px">Agents would be impossible without this</h4>
+          <p class="body-s">An agent replays a growing transcript on every single step. Without prefix caching the same history gets re-read dozens of times in one task, and a long agent run costs a fortune. This single optimisation is what makes the entire product category commercially viable.</p>
+        </div>
+        <div class="aside">
+          <span class="aside-title">One thing to be careful about</span>
+          <p>Shared caches mean two requests can point at the same blocks. That's fine when they're yours. It raises real isolation questions when they belong to different customers, and providers vary in how they handle it.</p>
+        </div>
       </div>
-      <span class="source">Mechanism builds on PagedAttention block sharing, arXiv:2309.06180. Commercial pricing structures vary by provider and should be read from current provider documentation rather than assumed.</span>
+      <span class="source">Built on the block sharing in <a class="link" href="https://arxiv.org/abs/2309.06180" target="_blank" rel="noopener">arXiv:2309.06180</a>. Pricing structures vary by provider. Check current documentation rather than assuming.</span>
     </div>
   </div>
 </section>
 
-<!-- ============================ C.04 SPENDING LESS ============================ -->
+<!-- ============================ C.06 ============================ -->
 <section class="section" id="less">
   <div class="container">
-    <span class="eyebrow">C.04 &middot; Spending less</span>
-    <h2 class="h-section" style="margin:14px 0 30px;max-width:30ch">Guess ahead, and only wake the part of the model you need</h2>
+    <span class="eyebrow">C.06</span>
+    <h2 class="h-section" style="margin:14px 0 34px;max-width:26ch">Guess ahead, and wake only what you need</h2>
 
     <div class="strip strip-4 reveal">
       <div class="panel">
         <span class="panel-code">01</span>
         <div class="caption-box">The problem</div>
-        <p class="panel-note">Decoding is slow because each token needs a full pass over a very large model, and that pass is mostly spent waiting for memory rather than calculating.</p>
-        <div class="panel-art"><div class="cast" data-char="echo" data-mood="sad" data-size="96"></div></div>
+        <p class="panel-note">Each token needs a full sweep of a very large model, and that sweep is mostly spent waiting for memory rather than doing sums.</p>
+        <div class="panel-art"><div class="cast" data-char="echo" data-mood="sad" data-size="94"></div></div>
+      </div>
+      <div class="panel dots">
+        <span class="panel-code">02</span>
+        <div class="bubble"><span class="bubble-who">Ira</span>What if something small and quick guessed the next few words and you just checked them?</div>
+        <div class="panel-art"><div class="cast" data-char="ira" data-mood="point" data-size="94"></div></div>
       </div>
       <div class="panel">
-        <span class="panel-code">02</span>
-        <div class="bubble"><span class="bubble-who">Ira</span>What if something small and fast guessed the next few words, and you just checked them?</div>
-        <div class="panel-art"><div class="cast" data-char="ira" data-mood="point" data-size="96"></div></div>
-      </div>
-      <div class="panel deep">
         <span class="panel-code">03</span>
-        <div class="bubble right"><span class="bubble-who">Echo</span>I can check four guesses in a single pass I was going to make anyway. Three were right. I regenerate the fourth.</div>
-        <div class="panel-art"><div class="cast" data-char="echo" data-mood="happy" data-size="96"></div></div>
+        <div class="bubble right"><span class="bubble-who">Echo</span>I can check four guesses inside a sweep I was making anyway. Three were right. I'll redo the fourth.</div>
+        <div class="panel-art"><div class="cast" data-char="echo" data-mood="happy" data-size="94"></div></div>
       </div>
-      <div class="panel gold">
+      <div class="panel dots-gold">
         <span class="panel-code">04</span>
-        <div class="caption-box">The important part</div>
-        <p class="panel-note" style="font-size:15px">Verification preserves the output distribution exactly. You get the same answer the large model would have produced alone, sooner. This is a pure engineering optimisation, not a quality trade.</p>
+        <span class="sfx sfx-s">Free speed</span>
+        <p class="panel-note" style="margin-top:12px"><b class="def" data-t="speculative-decoding">Speculative decoding</b> provably gives you the exact answer the big model would have written on its own, just sooner. No quality is traded away. There's a proof.</p>
       </div>
     </div>
 
     <div class="mt-l" data-widget="spec"></div>
 
     <div class="split-3 mt-l">
-      <div><span class="meta">It is a latency tool</span><p class="body-s mt-s">It helps most when the accelerator is underused: small batches and interactive single-user workloads.</p></div>
-      <div><span class="meta">It is not a throughput tool</span><p class="body-s mt-s">At large batch sizes the accelerator is already saturated, so speculation adds work without speed. Commonly disabled above a batch size in the low tens.</p></div>
-      <div><span class="meta">It changes nothing semantically</span><p class="body-s mt-s">The rejected token is simply regenerated. Nobody, including the model, can tell the difference in the output.</p></div>
+      <div><span class="meta">Helps when</span><p class="body-s mt-s">The chip is underused. Small batches, one person at a time, interactive use.</p></div>
+      <div><span class="meta">Hurts when</span><p class="body-s mt-s">The chip is already flat out. At large batch sizes it adds work without adding speed, so it usually gets switched off above a batch size in the low tens.</p></div>
+      <div><span class="meta">Changes nothing else</span><p class="body-s mt-s">A rejected guess is simply redone. Nobody, including the model, could tell from the output that it happened.</p></div>
     </div>
-    <span class="source">Mechanism: Y. Leviathan et al., &lsquo;Fast Inference from Transformers via Speculative Decoding&rsquo;, arXiv:2211.17192. The batch-size guidance is drawn from vendor engineering guides, 2026, and is not independently reproduced.</span>
+    <span class="source">Leviathan et al., <a class="link" href="https://arxiv.org/abs/2211.17192" target="_blank" rel="noopener">arXiv:2211.17192</a>. The batch-size guidance comes from vendor engineering guides and has not been independently reproduced.</span>
 
     <hr class="hr mt-l">
 
     <div class="mt-l">
-      <span class="eyebrow">C.04 &middot; How to read a parameter count</span>
-      <h3 class="h-feature" style="margin:14px 0 18px;font-size:32px">Mixture of experts: most of the model sits out most of the time</h3>
-      <p class="lede" style="max-width:64ch;margin-bottom:26px">In a mixture-of-experts model the feed-forward layers are split into many separate blocks, and a small router sends each token to only a few of them. Total parameters and active parameters therefore come apart &mdash; and almost every published headline figure quotes the former.</p>
+      <h3 class="h-feature" style="margin-bottom:14px;font-size:32px">How to read a parameter count</h3>
+      <p class="body-s prose" style="margin-bottom:26px">In a <b class="def" data-t="moe">mixture-of-experts</b> model the bulk of the network is split into many blocks, and a small router sends each token to just a couple of them. So total parameters and active parameters come apart, and every headline quotes the first.</p>
       <div data-widget="moe" class="reveal"></div>
 
-      <div class="aside mt-l" style="max-width:80ch">
-        <span class="aside-title">The practical consequence for compute assessments</span>
-        <p>Comparing a mixture-of-experts model against a dense model on total parameters alone will overstate the former&rsquo;s compute requirement per token, and understate its memory requirement relative to its speed. Assessments of what hardware a model needs should state which quantity they use. A model can be cheap to run and still need a very large machine to hold it.</p>
+      <div class="sticker gold mt-l" style="max-width:80ch">
+        <div class="cast" data-char="ira" data-mood="think" data-size="76"></div>
+        <div class="sticker-txt"><b>Why this matters for compute assessments</b>Compare a mixture-of-experts model to a dense one on total parameters and you'll overstate its compute per token and understate the machine it needs. A model can be cheap to run and still require a very large box to hold it. Any assessment should say which number it's using.</div>
       </div>
-      <span class="source">Mechanism and the batch-size arithmetic for serving: Austin et al., <i>How To Scale Your Model</i>, ch. 4, question 8, and ch. 7.</span>
+      <span class="source">Austin et al., <a class="link" href="https://jax-ml.github.io/scaling-book" target="_blank" rel="noopener">ch. 4, question 8</a>, and ch. 7.</span>
     </div>
   </div>
 </section>
 
-<!-- ============================ C.05 BUDGET ============================ -->
+<!-- ============================ C.07 BUDGET ============================ -->
 <section class="section deep" id="budget">
   <div class="container">
-    <span class="eyebrow">C.05 &middot; Spending more, deliberately</span>
-    <h2 class="h-section" style="margin:14px 0 30px;max-width:30ch">Three ways to buy a better answer at the moment of asking</h2>
+    <span class="eyebrow">C.07</span>
+    <h2 class="h-section" style="margin:14px 0 34px;max-width:26ch">Or you can pay more on purpose</h2>
 
     <div class="strip reveal">
       <div class="panel">
         <span class="panel-code">Mode 1</span>
-        <div class="caption-box">Sequential &middot; think for longer</div>
-        <div class="bubble thought" style="margin-bottom:26px">Let me check that. No, wrong. Try again from the third line.</div>
-        <p class="panel-note">The model writes a longer chain of working before answering, checking and correcting itself as it goes. This is the behaviour that emerged from verifiable-reward training in chapter 02.</p>
-        <span class="meta">Cost scales with the length of the chain, and the chain is billed even where it is hidden from you</span>
+        <div class="caption-box">Think for longer</div>
+        <div class="bubble thought" style="margin-bottom:22px">Let me check that. No, wrong. Back to line three.</div>
+        <p class="panel-note">The model writes out its working before answering, correcting itself as it goes. This is the behaviour that appeared on its own in <a class="link" href="02-post-training.html#reasoning">chapter 02</a>.</p>
+        <span class="meta">You pay for the working, even when it's hidden from you</span>
       </div>
-      <div class="panel">
+      <div class="panel dots">
         <span class="panel-code">Mode 2</span>
-        <div class="caption-box">Parallel &middot; answer several times</div>
-        <div class="tok-row" style="margin-bottom:8px"><span class="tok">try 1</span><span class="tok">try 2</span><span class="tok tok-wine">try 3</span><span class="tok">try 4</span></div>
-        <p class="panel-note">Sample many independent attempts and select among them, by majority vote, by a scoring model, or by running a verifier over each.</p>
-        <span class="meta">Cost scales with the number of attempts; latency need not, because they run at the same time</span>
+        <div class="caption-box">Answer several times</div>
+        <div class="tok-row" style="margin-bottom:10px"><span class="tok">try 1</span><span class="tok">try 2</span><span class="tok tok-wine">try 3</span><span class="tok">try 4</span></div>
+        <p class="panel-note">Take several independent shots and pick between them, by vote, by a scoring model, or by running a checker over each.</p>
+        <span class="meta">Costs multiply. Waiting time doesn't, because they run at once</span>
       </div>
-      <div class="panel deep">
+      <div class="panel dots-gold">
         <span class="panel-code">Mode 3</span>
-        <div class="caption-box">Iterative &middot; use tools and revise</div>
-        <p class="panel-note">Search, run code, read a file, then revise the answer in the light of what came back. The loop may run many times.</p>
-        <span class="meta">Cost is unpredictable in advance, which is what makes agentic products hard to price</span>
-        <div class="panel-art"><div class="cast" data-char="vera" data-mood="idle" data-size="92"></div></div>
+        <div class="caption-box">Use tools and try again</div>
+        <p class="panel-note">Search, run some code, read a file, revise. The loop can go round many times.</p>
+        <span class="meta">Cost is unknowable in advance, which is exactly why agent products are hard to price</span>
+        <div class="panel-art"><div class="cast" data-char="vera" data-mood="idle" data-size="90"></div></div>
       </div>
     </div>
 
     <div class="mt-l" data-widget="budget"></div>
 
     <div class="split mt-l">
-      <div class="card">
-        <span class="chip chip-gold">The common thread</span>
-        <h3 class="h-feature" style="margin:14px 0 12px;font-size:26px">Capability is no longer a fixed property of the released weights</h3>
-        <p class="body-s">It is a function of the weights and the compute budget allowed at answer time. The same weights can be run at low budget or at very high budget, with materially different capability, and the budget is set by whoever deploys the model rather than by whoever trained it.</p>
+      <div class="card" style="border-left:3px solid var(--wine)">
+        <h3 class="h-feature" style="margin:0 0 12px;font-size:26px">Capability isn't a property of the weights any more</h3>
+        <p class="body-s">It's a property of the weights <em>and</em> the budget you allow at the moment of asking. Same file, very different behaviour. And the budget is set by whoever deploys the model, not whoever trained it.</p>
+        <p class="body-s"><b class="def" data-t="answer-time-compute">Answer-time compute</b> does buy real accuracy, with diminishing returns, and unevenly across kinds of task.</p>
       </div>
-      <div class="aside">
-        <span class="aside-title">Why this complicates governance</span>
-        <p>Evaluating a model no longer means evaluating a fixed artefact. Any threshold, evaluation or disclosure regime defined over the model alone leaves the compute budget unspecified. Chapter 04 works through what that does to the instruments currently in use.</p>
-        <p class="body-s">Reported accuracy does improve with answer-time compute, though with diminishing returns and unevenly across task types.</p>
+      <div class="sticker">
+        <div class="cast" data-char="ira" data-mood="doubt" data-size="76"></div>
+        <div class="sticker-txt"><b>So what does a benchmark score mean?</b>Less than you'd hope. It's a score for a model at one budget setting, and the setting is almost never published. Chapter 04 takes this apart.</div>
       </div>
     </div>
-    <span class="source">Lambert, arXiv:2504.12501, ch. 7, &lsquo;Reasoning and Inference-Time Scaling&rsquo;; scaling curves for train-time and answer-time compute as published with OpenAI&rsquo;s o1, and discussed in arXiv:2410.04466, sec. 5.2.</span>
+    <span class="source">Lambert, <a class="link" href="https://rlhfbook.com" target="_blank" rel="noopener">rlhfbook.com</a>, ch. 7; scaling curves as published with OpenAI's o1 and discussed in <a class="link" href="https://arxiv.org/abs/2410.04466" target="_blank" rel="noopener">arXiv:2410.04466</a>, sec. 5.2.</span>
   </div>
 </section>
 
-<!-- ============================ C.06 STACK ============================ -->
+<!-- ============================ C.08 STACK ============================ -->
 <section class="section" id="stack">
   <div class="container">
-    <span class="eyebrow">C.06 &middot; Who actually does what</span>
-    <h2 class="h-section" style="margin:14px 0 18px;max-width:28ch">The serving stack, layer by layer</h2>
-    <p class="lede" style="max-width:64ch;margin-bottom:30px">Useful when asking where a given policy instrument would bite, and who would have to comply with it. The techniques in this chapter live at layer 4, where they change how much capability a given quantity of layer-2 hardware delivers &mdash; and they are rarely the subject of any instrument.</p>
+    <span class="eyebrow">C.08</span>
+    <h2 class="h-section" style="margin:14px 0 12px;max-width:24ch">Six layers between a chip and your answer</h2>
+    <p class="body-s prose" style="margin-bottom:34px">Useful for working out where a given rule would actually bite, and who'd have to comply with it. Almost everything in this chapter lives at layer 4, where it changes how much capability a fixed pile of layer-2 hardware delivers. Almost no instrument touches layer 4.</p>
     <div data-widget="stack" class="reveal"></div>
-    <span class="source">Layer structure assembled for the source deck from Austin et al., <i>How To Scale Your Model</i>, chs. 7-9; and engine documentation for vLLM, SGLang and TensorRT-LLM.</span>
-  </div>
-</section>
+    <span class="source">Assembled for the source deck from Austin et al., <a class="link" href="https://jax-ml.github.io/scaling-book" target="_blank" rel="noopener">chs. 7-9</a>, and the documentation for vLLM, SGLang and TensorRT-LLM.</span>
 
-<!-- ============================ SUMMARY ============================ -->
-<section class="section deep">
-  <div class="container">
-    <span class="eyebrow">C.07 &middot; Section summary</span>
-    <h2 class="h-section" style="margin:14px 0 30px;max-width:28ch">Inference optimisation in three layers</h2>
-    <p class="body-s" style="max-width:72ch;margin-bottom:22px">A useful way to hold the whole chapter: techniques act on the model, on the system that serves it, or on the request itself. Stacking across all three is what has driven the fall in cost per token.</p>
-    <div class="table-wrap">
+    <div class="table-wrap mt-l">
       <table>
-        <thead><tr><th>Layer</th><th>Techniques</th><th>What it buys</th><th>What it costs or risks</th></tr></thead>
+        <thead><tr><th>Where the trick lives</th><th>What it is</th><th>What you get</th><th>What it costs</th></tr></thead>
         <tbody>
-          <tr><td><strong>The model</strong></td><td>Quantisation, distillation, grouped-query and latent attention, mixture-of-experts routing</td><td>Less memory per weight and per token, and fewer weights touched per token</td><td>Some accuracy, unevenly across tasks. Architecture choices are fixed before training.</td></tr>
-          <tr><td><strong>The system</strong></td><td>Paged attention, continuous batching, chunked prefill, speculative decoding, splitting prefill from decode across machines</td><td>Much higher utilisation of the same hardware, and a better latency-throughput frontier</td><td>Engineering complexity. Several techniques help at small batch sizes and hurt at large ones.</td></tr>
-          <tr><td><strong>The request</strong></td><td>Prefix and prompt caching, shorter contexts, controlling how long the model thinks</td><td>Avoided work, and direct control over what each request costs</td><td>Requires discipline in how prompts are built. Shared caches raise questions about isolation.</td></tr>
+          <tr><td><strong>The model</strong></td><td>Quantisation, distillation, grouped-query attention, expert routing</td><td>Less memory per weight, fewer weights touched per token</td><td>Some accuracy, unevenly. Architecture is fixed before training</td></tr>
+          <tr><td><strong>The system</strong></td><td>Paged attention, continuous batching, chunked prefill, speculation, split serving</td><td>Far better use of the same hardware</td><td>Complexity. Several tricks help at small batches and hurt at large ones</td></tr>
+          <tr><td><strong>The request</strong></td><td>Prefix caching, shorter prompts, controlling how long it thinks</td><td>Work avoided, and direct control over your own bill</td><td>Discipline in how prompts are built. Shared caches raise isolation questions</td></tr>
         </tbody>
       </table>
     </div>
-    <div class="aside mt-l" style="max-width:80ch">
-      <span class="aside-title">The one fact to carry into chapter 04</span>
-      <p>None of this changes what the model knows. It changes how much capability a given quantity of hardware can deliver, and how cheaply. That is precisely the quantity that compute-based policy instruments assume is stable.</p>
+  </div>
+</section>
+
+<section class="section ink">
+  <div class="container">
+    <div class="split">
+      <div>
+        <span class="eyebrow">Chapter 03, in one line</span>
+        <h2 class="h-section" style="margin:16px 0 20px;max-width:24ch">None of this changed what the model <em>knows</em>. All of it changed what a chip can <em>deliver</em>.</h2>
+        <p class="lede" style="color:rgba(255,255,255,0.85);max-width:50ch">Which is awkward, because that's exactly the quantity compute-based policy assumes is stable.</p>
+      </div>
+      <div style="display:flex;align-items:flex-end">
+        <a class="btn btn-gold" href="04-policy.html">So what? &rarr;</a>
+      </div>
     </div>
-    <span class="source">Three-layer framing follows the structure used in industry engineering guides, 2026, and in arXiv:2410.04466. Individual techniques are cited above.</span>
   </div>
 </section>
 
 <div class="pager">
-  <a href="02-post-training.html"><span class="meta">&larr; Previous</span><span style="display:block;font-size:19px;margin-top:6px">Chapter 02 &middot; Post-Training</span></a>
+  <a href="02-post-training.html"><span class="meta">&larr; Previous</span><span style="display:block;font-size:19px;margin-top:6px">Chapter 02 &middot; Four Teachers</span></a>
   <a class="next" href="04-policy.html"><span class="meta">Next &rarr;</span><span style="display:block;font-size:19px;margin-top:6px">Chapter 04 &middot; Why It Matters</span></a>
 </div>
 
@@ -420,7 +407,7 @@
   <div class="footer-grid">
     <div class="footer-brand">
       <p class="footer-tag">Pretraining built the capability.<br>Post-training made it usable.<br>Inference decides who can afford it.</p>
-      <p class="footer-addr" style="margin-top:24px">Prepared for the High-Tech Geopolitics Programme,<br>Takshashila Institution, Bengaluru. A draft for discussion.</p>
+      <p class="footer-addr" style="margin-top:24px">High-Tech Geopolitics Programme,<br>Takshashila Institution, Bengaluru. A draft for discussion.</p>
     </div>
     <div>
       <h4>Chapters</h4>
@@ -428,7 +415,6 @@
         <li><a href="index.html">The Map</a></li>
         <li><a href="01-what-pretraining-leaves.html">The Next-Token Machine</a></li>
         <li><a href="02-post-training.html">Post-Training</a></li>
-        <li><a href="03-inference.html">Inference</a></li>
         <li><a href="04-policy.html">Why It Matters</a></li>
       </ul>
     </div>
@@ -443,7 +429,7 @@
     <div>
       <h4>Sources</h4>
       <ul>
-        <li><a href="https://jax-ml.github.io/scaling-book" rel="noopener">Austin et al., Scaling Book <span class="arrow">&#8599;</span></a></li>
+        <li><a href="https://jax-ml.github.io/scaling-book" rel="noopener">Austin et al. <span class="arrow">&#8599;</span></a></li>
         <li><a href="https://arxiv.org/abs/2309.06180" rel="noopener">PagedAttention <span class="arrow">&#8599;</span></a></li>
         <li><a href="https://arxiv.org/abs/2211.17192" rel="noopener">Speculative Decoding <span class="arrow">&#8599;</span></a></li>
       </ul>
@@ -458,5 +444,6 @@
 <script src="assets/js/comic.js"></script>
 <script src="assets/js/widgets-train.js"></script>
 <script src="assets/js/widgets-serve.js"></script>
+<script src="assets/js/guide.js"></script>
 </body>
 </html>
