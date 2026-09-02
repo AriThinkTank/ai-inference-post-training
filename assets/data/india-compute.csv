@@ -1,0 +1,17 @@
+year,metric,value,unit,source,grade
+2020,datacentre_it_load,520,MW,"JM Financial / CBRE, cited in Systemiq white paper Feb 2026",B
+2024,datacentre_it_load,1200,MW,"CBRE / JLL estimates for 2024",B
+2025,datacentre_it_load,1500,MW,"JM Financial 2025; CBRE 2025 (colocation IT load)",B
+2026,datacentre_it_load,1600,MW,"JLL, June 2026, reported 2 Sep 2026",B
+2029,datacentre_it_load_projected,6000,MW,"JLL projection, Sep 2026, requires ~$110bn capex",C
+2024,indiaai_gpus_empanelled,10000,GPUs,"IndiaAI Mission initial target, MeitY RFE Aug 2024",A
+2025,indiaai_gpus_empanelled,34333,GPUs,"MeitY / IndiaAI, rounds 1 and 2, May 2025",A
+2025,indiaai_gpus_installed,17300,GPUs,"Reported installed vs empanelled, mid-2025",C
+2026,indiaai_gpus_empanelled,38000,GPUs,"MeitY / IndiaAI, Dec 2025, confirmed Feb 2026",A
+2026,indiaai_gpus_target,100000,GPUs,"Stated government target for end-2026",B
+2025,electronics_imports,98650,USD_million,"Ministry of Commerce and Industry, FY2024-25",A
+2026,electronics_imports,116170,USD_million,"Ministry of Commerce and Industry, FY2025-26",A
+2026,integrated_circuit_imports,30000,USD_million,"Ministry of Commerce and Industry, FY2025-26",A
+2025,semiconductor_import_dependence,92.5,percent,"NITI Aayog roadmap 2026, stated range 90-95%",A
+2025,domestic_value_addition_electronics,19,percent,"MeitY industry estimate, stated range 18-20%",B
+2025,share_global_wafer_capacity,0.1,percent,"Industry estimate; India has no operating leading-edge fab",C

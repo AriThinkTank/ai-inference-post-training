@@ -44,12 +44,15 @@ index.html                      The map, the cast, the vocabulary
 02-post-training.html           Chapter 02 — four teachers
 03-inference.html               Chapter 03 — inference
 04-policy.html                  Chapter 04 — why it matters
+06-india.html                   Chapter 06 — the Indian position, with datasets
 05-reference.html               Chapter 05 — reading, glossary, quiz
 assets/css/takshashila.css      The whole design system
 assets/js/comic.js              Cast figures, navigation, scroll behaviour
 assets/js/widgets-train.js      Widgets for chapters 01 and 02, plus shared helpers
 assets/js/widgets-serve.js      Widgets for chapters 03 and 05
 assets/js/widgets-extra.js      Sampler, attention, transformer, RLHF recipe
+assets/js/widgets-india.js      Chokepoint map, fleet calculator, scenario engine
+assets/js/data/*.csv            Source datasets, downloadable from the page
 assets/js/guide.js              Widget briefs and hover definitions
 ```
 
@@ -68,6 +71,20 @@ assets/js/guide.js              Widget briefs and hover definitions
 Every interactive element is a `<div data-widget="name">`. On load, the scripts find each one and build it. To add a widget, register it with `T.widget('name', function (node) { ... })` and drop the matching div into a page.
 
 `widgets-train.js` defines the shared helpers, so where both files are used it must be loaded first.
+
+## The datasets
+
+Chapter 06 runs off four CSVs in `assets/data/`. They are plain text, hand-built from named
+sources, and every row carries its source and a grade from A (primary) to D (widely repeated,
+untraceable). Edit them and the page arithmetic follows, except for the figures embedded in
+`widgets-india.js`, which mirror `chokepoints.csv` and must be kept in step by hand.
+
+Two methodological notes that matter if you extend this:
+
+- **Every HHI is a lower bound.** Only genuinely single-firm shares are squared; unnamed
+  residual share is modelled as maximally fragmented and contributes nothing.
+- **Control leverage is our own 1–5 scale**, not a standard measure. The basis for each score
+  is in the CSV so it can be rescored.
 
 ## Editorial conventions
 

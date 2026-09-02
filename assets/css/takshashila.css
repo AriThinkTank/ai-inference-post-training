@@ -852,3 +852,45 @@ svg .d-dash { stroke: var(--ink-20); stroke-width: 2; stroke-dasharray: 5 4; fil
   .sm-dot:last-child, .tf-step:last-child { border-bottom: 0; }
   .sm-t2 .sm-bar { display: none; }
 }
+
+/* =========================================================================
+   INDIA CHAPTER
+   ========================================================================= */
+
+.ck-svg { width: 100%; height: auto; background: var(--paper); border: 2px solid var(--ink); }
+.ck-dot { cursor: pointer; }
+.ck-dot:focus-visible { outline: 2px solid var(--wine); outline-offset: 2px; }
+.ck-dot circle { transition: r 0.15s ease; }
+.ck-quad { font: 500 10px var(--mono); fill: var(--wine); letter-spacing: 0.1em; }
+.ck-key { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; margin-top: 12px; }
+.ck-key span { font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-70); }
+.ck-key i { display: inline-block; width: 11px; height: 11px; border: 1px solid var(--ink); margin-right: 6px; vertical-align: -1px; }
+
+.hh-bar { display: flex; height: 44px; border: 2px solid var(--ink); overflow: hidden; }
+.hh-seg { display: grid; place-items: center; font: 500 12px var(--mono); color: #fff; }
+.hh-seg.s0 { background: var(--wine); }
+.hh-seg.s1 { background: #b8809f; color: var(--ink); }
+.hh-seg.s2 { background: var(--marigold); color: var(--ink); }
+.hh-seg.r { background: var(--deep); color: var(--ink-50); }
+.hh-num { display: flex; gap: 18px; align-items: baseline; margin-top: 16px; flex-wrap: wrap; }
+
+.fc-n { font-family: var(--mono); font-size: 15px; color: var(--wine); font-weight: 500; white-space: nowrap; }
+.fc-kpi { display: flex; gap: 18px; align-items: baseline; margin-top: 20px; padding-top: 16px; border-top: var(--rule); flex-wrap: wrap; }
+
+.ex-row { display: grid; grid-template-columns: 130px 1fr 52px 78px; gap: 14px; align-items: center; margin-bottom: 14px; }
+.ex-lbl { font: 500 15px var(--sans); }
+.ex-track { display: block; height: 26px; background: var(--ink-10); border: 1px solid var(--ink-20); }
+.ex-fill { display: block; height: 100%; background: #b8809f; transition: width 0.3s ease; }
+.ex-fill.hot { background: var(--wine); }
+.ex-num { font: 500 20px var(--mono); color: var(--wine); text-align: right; }
+.ex-n { text-align: right; }
+
+.rk-grid > div, .sc-grid2 > div { padding: 20px 18px; }
+.sc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 32px; }
+
+@media (max-width: 720px) {
+  .ex-row { grid-template-columns: 100px 1fr 44px; }
+  .ex-n { display: none; }
+  .sc-grid { grid-template-columns: 1fr; }
+}
+.ck-tag { font: 500 11px var(--sans); fill: var(--ink); paint-order: stroke; stroke: var(--paper); stroke-width: 4px; }

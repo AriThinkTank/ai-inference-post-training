@@ -60,6 +60,42 @@ window.T = window.T || {};
       w: 'Instruction tuning corrects one token at a time against one right answer. RLHF judges whole responses against each other, which is the only way negative feedback gets in.',
       r: ['Lambert, ch. 3', 'https://rlhfbook.com']
     },
+    chokepoints: {
+      is: 'Every input the AI stack needs, plotted on two axes: how few suppliers there are, and how easily a government can switch it off.',
+      k: 'Switch stages, then tap any dot.',
+      w: 'That the two axes come apart. PyTorch is as concentrated as CUDA and almost harmless, because it is forkable. EDA is only moderately concentrated and is the most controllable thing on the board. Concentration is not the same as control.',
+      r: ['Our dataset (CSV)', 'assets/data/chokepoints.csv']
+    },
+    hhi: {
+      is: 'The concentration measure competition regulators actually use, built by hand.',
+      k: 'Drag the shares, or load a real market.',
+      w: 'How violently the number moves. Squaring means a single 90% firm scores more than eleven equal firms combined. That is why one dominant supplier is a different problem from three big ones.',
+      r: ['DOJ/FTC merger guidelines', 'https://www.justice.gov/atr/merger-guidelines']
+    },
+    fleetcalc: {
+      is: 'India\u2019s 38,000 empanelled GPUs, converted into work you can actually name.',
+      k: 'Set the fleet size, the utilisation and the share you could realistically get, then switch workload.',
+      w: 'The post-training tab. DeepSeek-R1\u2019s entire reinforcement learning stage was under four hours of the national fleet. Compute is not India\u2019s binding constraint at that stage, and almost everything written about Indian AI policy assumes it is.',
+      r: ['DeepSeek-R1 report', 'https://arxiv.org/abs/2501.12948']
+    },
+    exposure: {
+      is: 'One number per stage for how exposed India is to somebody else\u2019s decisions.',
+      k: 'Set the weights yourself. The index is only as good as its weighting, so we let you break it.',
+      w: 'That inference stays the least exposed stage under almost every weighting. That ordering is the strategic argument on this page.',
+      r: ['Our dataset (CSV)', 'assets/data/chokepoints.csv']
+    },
+    racks: {
+      is: 'Why 1,600 megawatts of Indian data centre capacity is not the number you think it is.',
+      k: 'Set a GPU target and a hall design density.',
+      w: 'Leave density at 10 kW and look at the rack count. India is not short of megawatts. It is short of halls that can take 40 to 130 kilowatts in a single rack with liquid cooling.',
+      r: ['Our dataset (CSV)', 'assets/data/india-compute.csv']
+    },
+    scenario: {
+      is: 'Four things that could plausibly move, and what they do to India\u2019s position by 2028.',
+      k: 'Move any dial. The arithmetic prints underneath so you can argue with it.',
+      w: 'Which dial changes the headline number and which changes the verdict. They are not the same dial, and that is the finding.',
+      r: ['Method, below', '#method']
+    },
     map: {
       is: 'The whole pipeline on one strip, from a blank model to a live answer.',
       k: 'Tap any stage to open it.',

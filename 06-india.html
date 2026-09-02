@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chapter 06 · Where India Actually Stands</title>
+<meta name="description" content="Hardware, software, supply chains, export controls and options for India across pretraining, post-training and inference. With the arithmetic shown and the datasets downloadable.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;500&family=Bungee&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/takshashila.css">
+</head>
+<body>
+<div class="progress" aria-hidden="true"></div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-mark" href="index.html">After the Model Is Trained <span>Takshashila</span></a>
+    <button class="nav-toggle" type="button" aria-expanded="false">Menu</button>
+    <div class="nav-links">
+      <a class="nav-link" href="index.html">The Map</a>
+      <a class="nav-link" href="01-what-pretraining-leaves.html">Next-Token</a>
+      <a class="nav-link" href="01b-inside.html">Inside</a>
+      <a class="nav-link" href="02-post-training.html">Post-Train</a>
+      <a class="nav-link" href="03-inference.html">Inference</a>
+      <a class="nav-link" href="04-policy.html">Policy</a>
+      <a class="nav-link" href="06-india.html" aria-current="page">India</a>
+      <a class="nav-link" href="05-reference.html">Reading</a>
+    </div>
+  </div>
+</nav>
+
+<header class="section">
+  <div class="container">
+    <p class="crumbs" style="margin-bottom:26px"><a href="index.html">The Map</a> / Chapter 06</p>
+    <span class="chapter-no">06</span>
+    <h1 class="page-title" style="margin:10px 0 26px;max-width:18ch;font-size:56px;line-height:1.02;letter-spacing:-0.025em">Where India <em>Actually</em> Stands</h1>
+    <div class="split">
+      <div>
+        <p class="lede">Three findings, and each one cuts against something the Indian AI conversation currently assumes.</p>
+        <p class="body-s prose" style="margin-top:20px">First: India's compute problem is not a shortage. Second: the data centre constraint is not megawatts. Third: the thing India is missing most has no export control on it, because nobody sells it. Everything below is worked out from named sources with the arithmetic printed, and every dataset is downloadable.</p>
+      </div>
+      <div class="jump">
+        <a href="#stack"><b>N.01</b>What each stage needs</a>
+        <a href="#choke"><b>N.02</b>The map that matters</a>
+        <a href="#fleet"><b>N.03</b>What 38,000 GPUs can do</a>
+        <a href="#density"><b>N.04</b>The megawatt illusion</a>
+        <a href="#position"><b>N.05</b>Where India stands, honestly</a>
+        <a href="#controls"><b>N.06</b>Which controls bite where</a>
+        <a href="#scenarios"><b>N.07</b>Four dials</a>
+        <a href="#geo"><b>N.08</b>Geopolitical options</a>
+        <a href="#policy"><b>N.09</b>Policy options</a>
+        <a href="#method"><b>N.10</b>Method and data</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============================ THE THREE FINDINGS ============================ -->
+<section class="section deep">
+  <div class="container">
+    <span class="eyebrow">The short version</span>
+    <h2 class="h-section" style="margin:14px 0 34px;max-width:24ch">Three numbers, before you read anything else</h2>
+
+    <div class="strip reveal">
+      <div class="panel dots-gold">
+        <span class="panel-code">01</span>
+        <span class="sfx sfx-l">3.9 hours</span>
+        <p class="panel-note" style="margin-top:14px;font-size:15px">DeepSeek-R1's entire reinforcement learning stage was 147,000 GPU-hours. India's national fleet delivers 912,000 GPU-hours a day. The run that made reasoning models famous would take India's fleet <b>under four hours</b>.</p>
+        <span class="scribble scribble-arrow" style="margin-top:12px">compute is not the bottleneck</span>
+      </div>
+      <div class="panel dots">
+        <span class="panel-code">02</span>
+        <span class="sfx sfx-l">1.7%</span>
+        <p class="panel-note" style="margin-top:14px;font-size:15px">All 38,000 GPUs draw about 27 MW of IT load. India has roughly 1,600 MW of colocation capacity. The fleet uses <b>under two per cent</b> of it. The constraint was never megawatts.</p>
+        <span class="scribble scribble-arrow" style="margin-top:12px">it's kilowatts per rack</span>
+      </div>
+      <div class="panel">
+        <span class="panel-code">03</span>
+        <span class="sfx sfx-l">Zero</span>
+        <p class="panel-note" style="margin-top:14px;font-size:15px">Maintained verifiable-reward environments published by an Indian institution. This is the input chapter 02 showed matters most for the stage India is best placed to win, and it has <b>no export control on it at all</b>, because nobody sells it.</p>
+        <div class="panel-art"><div class="cast" data-char="vera" data-mood="fail" data-size="88"></div></div>
+      </div>
+    </div>
+
+    <div class="sticker gold mt-l" style="max-width:84ch">
+      <div class="cast" data-char="ira" data-mood="doubt" data-size="76"></div>
+      <div class="sticker-txt"><b>So what has everyone been arguing about?</b>GPU counts. Which is the input India has most of, the one that is easiest to announce, and the one that turns out to bind least. The rest of this chapter is the arithmetic behind that claim, and what it implies you should do instead.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ N.01 STACK ============================ -->
+<section class="section" id="stack">
+  <div class="container">
+    <span class="eyebrow">N.01</span>
+    <h2 class="h-section" style="margin:14px 0 12px;max-width:28ch">What each stage actually needs, in hardware and software</h2>
+    <p class="body-s prose" style="margin-bottom:34px">The three stages look similar from outside and have almost nothing in common as procurement problems. Pretraining needs a single tightly coupled machine. Inference needs many loosely coupled ones. Post-training sits in between and needs something neither of them does: data and environments.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>What it needs</th><th>Pretraining</th><th>Post-training</th><th>Inference</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Accelerators</th><td>Thousands, contiguous, identical</td><td>Hundreds, for weeks at a time</td><td>Many small groups, mixed generations fine</td></tr>
+          <tr><th scope="row">Interconnect</th><td>The hard part. High-bandwidth fabric across the whole cluster</td><td>Matters within a node, less across</td><td>Barely matters. Ordinary Ethernet will do</td></tr>
+          <tr><th scope="row">Memory</th><td>HBM, as much as money can buy</td><td>HBM, plus host memory for rollouts</td><td>HBM for the weights, and then more for every conversation</td></tr>
+          <tr><th scope="row">Storage and data</th><td>Petabytes of text, cleaned</td><td>Tens of thousands of curated examples. Quality over quantity</td><td>Almost none</td></tr>
+          <tr><th scope="row">Power profile</th><td>Sustained months at full draw</td><td>Bursty, weeks at a time</td><td>Continuous, follows daily user demand</td></tr>
+          <tr><th scope="row">Software that binds</th><td>EDA upstream, CUDA, distributed training frameworks</td><td>RL frameworks, reward models, <b>environments</b></td><td>Serving engines, mostly open source</td></tr>
+          <tr><th scope="row">Scarcest input</th><td>The cluster, as one machine</td><td>People who have done it before</td><td>High-density hall space</td></tr>
+          <tr><th scope="row">Tolerates failure?</th><td>Poorly. One dead node can stall a run</td><td>Reasonably</td><td>Very well. Requests are independent</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <span class="source">Compiled from the technical material in chapters 02 and 03. Interconnect and failure characteristics follow Austin et al., <a class="link" href="https://jax-ml.github.io/scaling-book" target="_blank" rel="noopener">How To Scale Your Model</a>, chs. 7-9.</span>
+
+    <div class="sticker mt-l" style="max-width:84ch">
+      <div class="cast" data-char="echo" data-mood="point" data-size="76"></div>
+      <div class="sticker-txt"><b>The row that decides everything</b>Look at "tolerates failure". Pretraining needs one enormous reliable machine, which is a hard engineering and procurement problem. Inference needs lots of small unreliable ones, which is a problem India already solves at scale every day. That single difference is why the strategy in this chapter points where it does.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ N.02 CHOKEPOINTS ============================ -->
+<section class="section deep" id="choke">
+  <div class="container">
+    <span class="eyebrow">N.02 &middot; The original analysis</span>
+    <h2 class="h-section" style="margin:14px 0 12px;max-width:26ch">Concentration and control are two different things</h2>
+    <p class="body-s prose" style="margin-bottom:30px">Almost every supply chain analysis stops at "this market has few suppliers". That is only half the question. A market can be extremely concentrated and pose no strategic risk at all, and a market can be only moderately concentrated and be shut off in a fortnight. So we scored every input twice.</p>
+
+    <div class="split-even" style="margin-bottom:34px">
+      <div class="card" style="border-left:3px solid var(--wine)">
+        <span class="chip">Axis one</span>
+        <h3 class="h-feature" style="margin:14px 0 10px;font-size:26px">How few suppliers</h3>
+        <p class="body-s">Measured with the Herfindahl-Hirschman Index, the same tool competition regulators use for merger review. Sum the squared market shares. A monopoly scores 10,000.</p>
+      </div>
+      <div class="card" style="border-left:3px solid var(--marigold)">
+        <span class="chip chip-gold">Axis two</span>
+        <h3 class="h-feature" style="margin:14px 0 10px;font-size:26px">How switchable-off</h3>
+        <p class="body-s">Our own 1 to 5 scale. Does a control instrument already exist? Is the product licensed rather than sold? Can it be forked? Is delivery metered, so revocation is instant?</p>
+      </div>
+    </div>
+
+    <div data-widget="chokepoints" class="reveal"></div>
+
+    <div class="split mt-l">
+      <div class="card" style="border-left:3px solid var(--wine)">
+        <h3 class="h-feature" style="margin:0 0 12px;font-size:26px">Two results worth the whole exercise</h3>
+        <p class="body-s"><b style="font-weight:500">PyTorch and CUDA are equally concentrated and not remotely equally dangerous.</b> PyTorch scores 4,113 on HHI, CUDA 8,136. Both are dominant. But PyTorch is permissively licensed and forkable, so its control leverage is 1. CUDA is proprietary and revocable, so its leverage is 4. Any analysis that ranks risk by market share alone gets this backwards.</p>
+        <p class="body-s"><b style="font-weight:500">EDA is the least concentrated of the serious chokepoints and the most controllable.</b> HHI of 2,093, which is only moderate. But the tools are cloud-delivered and licence-metered, so an entity listing takes effect within one billing cycle. Low concentration, maximum leverage.</p>
+      </div>
+      <div class="stack-m">
+        <div class="aside">
+          <span class="aside-title">The quiet one</span>
+          <p>Verifiable-reward environments score 6,400 and sit at leverage 3. There is no export control on them and there never will be, because they are not sold. They are built in house and kept there. You cannot be denied something nobody offers, which sounds like good news and is the opposite.</p>
+        </div>
+        <div>
+          <span class="meta">Download</span>
+          <p class="body-s mt-s"><a class="link" href="assets/data/chokepoints.csv" download>chokepoints.csv</a> &middot; 17 inputs, shares, HHI, leverage scores, source and grade for each.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-l">
+      <h3 class="h-feature" style="margin-bottom:18px;font-size:32px">Try the index yourself</h3>
+      <div data-widget="hhi" class="reveal"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ N.03 FLEET ============================ -->
+<section class="section" id="fleet">
+  <div class="container">
+    <span class="eyebrow">N.03 &middot; The finding</span>
+    <h2 class="h-section" style="margin:14px 0 12px;max-width:26ch">What 38,000 GPUs can actually do</h2>
+    <p class="body-s prose" style="margin-bottom:30px">India has 38,000 accelerators empanelled under the IndiaAI Mission as of December 2025, with a stated target of 100,000 by the end of 2026. Nobody seems to have converted that into work. So we did, using the disclosed GPU-hours from DeepSeek's own technical reports as the yardstick.</p>
+
+    <div data-widget="fleetcalc" class="reveal"></div>
+
+    <div class="strip strip-4 mt-l reveal">
+      <div class="panel">
+        <span class="panel-code">01</span>
+        <div class="bubble"><span class="bubble-who">Ira</span>So India could just build a frontier model?</div>
+        <div class="panel-art"><div class="cast" data-char="ira" data-mood="happy" data-size="94"></div></div>
+      </div>
+      <div class="panel dots">
+        <span class="panel-code">02</span>
+        <div class="bubble right"><span class="bubble-who">Echo</span>On arithmetic, the fleet is big enough. In practice it is 14 separate providers, shared by hundreds of users, with no disclosed contiguous cluster above a few thousand cards.</div>
+        <div class="panel-art"><div class="cast" data-char="echo" data-mood="doubt" data-size="94"></div></div>
+      </div>
+      <div class="panel">
+        <span class="panel-code">03</span>
+        <div class="caption-box">A cluster is not a number</div>
+        <p class="panel-note">Pretraining needs one machine, not thirty-eight thousand cards in fourteen buildings. The interconnect between them is the product. Nobody has published India's.</p>
+      </div>
+      <div class="panel dots-gold">
+        <span class="panel-code">04</span>
+        <span class="sfx sfx-s">Fragmentation, not scarcity</span>
+        <p class="panel-note" style="margin-top:12px">Which is a much better problem to have, because it is fixable with scheduling policy and one anchor cluster rather than with another twenty thousand imported accelerators.</p>
+      </div>
+    </div>
+    <span class="source">Fleet figures: MeitY / IndiaAI, December 2025, confirmed February 2026. GPU-hours for DeepSeek-V3 pretraining (2,788,000) and DeepSeek-R1 reinforcement learning (147,000) are as disclosed in the respective technical reports. Throughput assumptions are stated in the calculator and in <a class="link" href="#method">the method section</a>.</span>
+  </div>
+</section>
+
+<!-- ============================ N.04 DENSITY ============================ -->
+<section class="section deep" id="density">
+  <div class="container">
+    <span class="eyebrow">N.04 &middot; The second finding</span>
+    <h2 class="h-section" style="margin:14px 0 12px;max-width:28ch">India is not short of megawatts. It is short of kilowatts per rack.</h2>
+    <p class="body-s prose" style="margin-bottom:30px">Every report on Indian AI infrastructure quotes total data centre capacity in gigawatts. It is the wrong unit. An accelerator rack draws between 40 and 130 kilowatts. A typical Indian colocation hall was designed for 5 to 10. The megawatts are there. The halls that can absorb them in one rack are not.</p>
+
+    <div data-widget="racks" class="reveal"></div>
+
+    <div class="split mt-l">
+      <div>
+        <span class="eyebrow">Growth, and the gap in the target</span>
+        <h3 class="chart-title" style="margin:8px 0 18px">India's colocation IT load, and what the 2029 projection requires</h3>
+        <div class="barline"><span class="lbl">2020</span><span class="track"><span class="fill" style="width:8.7%"></span></span><span class="num">520 MW</span></div>
+        <div class="barline"><span class="lbl">2024</span><span class="track"><span class="fill" style="width:20%"></span></span><span class="num">1,200 MW</span></div>
+        <div class="barline"><span class="lbl">2025</span><span class="track"><span class="fill" style="width:25%"></span></span><span class="num">1,500 MW</span></div>
+        <div class="barline"><span class="lbl">Jun 2026</span><span class="track"><span class="fill" style="width:26.7%"></span></span><span class="num">1,600 MW</span></div>
+        <div class="barline"><span class="lbl">2029 target</span><span class="track"><span class="fill gold" style="width:100%"></span></span><span class="num">6,000 MW</span></div>
+        <span class="source">Sources: 520 MW for 2020 and 1,500 MW for 2025 per JM Financial and CBRE as compiled by Systemiq, February 2026; 1,600 MW as of June 2026 and the 6,000 MW figure from JLL, reported 2 September 2026. Own calculation of implied growth rates below.</span>
+      </div>
+      <div class="stack-m">
+        <div class="card">
+          <span class="meta">Achieved</span>
+          <div class="kpi kpi-gold" style="margin:10px 0 4px">20.6%</div>
+          <p class="body-s">Compound annual growth in colocation IT load, 2020 to 2026. Over 2020 to 2025 alone it was 23.6%.</p>
+        </div>
+        <div class="card">
+          <span class="meta">Required</span>
+          <div class="kpi kpi-gold" style="margin:10px 0 4px">55.4%</div>
+          <p class="body-s">Compound annual growth needed from June 2026 to hit 6 GW by 2029. That is <b>2.7 times</b> the rate India has actually managed for six years, sustained for three more.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="aside mt-l" style="max-width:82ch">
+      <span class="aside-title">How to read that gap</span>
+      <p>It does not mean the projection is wrong. Capital commitments have genuinely stepped up, and 2025 added a record 440 MW. It does mean the projection assumes a discontinuity, not a trend, and anyone planning against it should say which discontinuity they are relying on. With four observations we can fit a growth rate; we cannot do inference, and we have not pretended to.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ N.05 POSITION ============================ -->
+<section class="section" id="position">
+  <div class="container">
+    <span class="eyebrow">N.05</span>
+    <h2 class="h-section" style="margin:14px 0 12px;max-width:26ch">Where India stands, stage by stage</h2>
+    <p class="body-s prose" style="margin-bottom:30px">Scored 1 to 5, with the evidence and its grade attached. Grade D means we could not trace the claim to a primary source, and we have said so rather than quietly dropping it.</p>
+
+    <div data-widget="exposure" class="reveal"></div>
+
+    <div class="table-wrap mt-l">
+      <table>
+        <thead><tr><th>Stage</th><th>Capability</th><th>Where India is</th><th>Score</th><th>Grade</th></tr></thead>
+        <tbody>
+          <tr><td rowspan="4"><strong>Pretraining</strong></td><td>Accelerator fleet</td><td>Exists, but split across 14 providers and shared nationally</td><td>2</td><td><span class="chip chip-soft">A</span></td></tr>
+          <tr><td>Leading-edge fabrication</td><td>None. Dholera is 28nm, first silicon targeted 2026-28</td><td>1</td><td><span class="chip">B</span></td></tr>
+          <tr><td>Chip design talent</td><td>Genuine depth, but see the caution below</td><td>4</td><td><span class="chip chip-neg">D</span></td></tr>
+          <tr><td>Frontier training experience</td><td>Thin. No Indian run above roughly 10<sup>24</sup> FLOP is publicly documented</td><td>2</td><td><span class="chip chip-neg">D</span></td></tr>
+
+          <tr><td rowspan="4"><strong>Post-training</strong></td><td>Instruction and preference data</td><td>Strong latent advantage: 22 scheduled languages, deep annotation labour pool</td><td>4</td><td><span class="chip">C</span></td></tr>
+          <tr><td>RL and reward modelling</td><td>Emerging. Several firms run these pipelines in production</td><td>3</td><td><span class="chip">C</span></td></tr>
+          <tr><td>Verifiable-reward environments</td><td>Near zero published by any Indian institution</td><td>1</td><td><span class="chip chip-neg">D</span></td></tr>
+          <tr><td>Compute sufficiency</td><td>Sufficient today, by a wide margin. See N.03</td><td>5</td><td><span class="chip chip-soft">A</span></td></tr>
+
+          <tr><td rowspan="4"><strong>Inference</strong></td><td>Serving capacity</td><td>Order 10<sup>12</sup> output tokens a day on stated assumptions</td><td>4</td><td><span class="chip">B</span></td></tr>
+          <tr><td>AI-ready halls</td><td>The real bottleneck. Estate built for 5-10 kW racks</td><td>2</td><td><span class="chip">C</span></td></tr>
+          <tr><td>Serving software skill</td><td>Good and improving. Open source lowers the barrier</td><td>4</td><td><span class="chip">C</span></td></tr>
+          <tr><td>Power availability</td><td>Not binding nationally, binding locally in Mumbai and Chennai</td><td>3</td><td><span class="chip">B</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <span class="source">Full table with evidence and sources: <a class="link" href="assets/data/india-position.csv" download>india-position.csv</a>.</span>
+
+    <div class="card mt-l" style="border-left:3px solid var(--negative);max-width:84ch">
+      <span class="chip chip-neg">A number worth being sceptical about</span>
+      <h3 class="h-feature" style="margin:14px 0 12px;font-size:26px">"India has 20% of the world's chip design workforce"</h3>
+      <p class="body-s">This appears in ministerial statements, industry reports and roughly every article on Indian semiconductors, including several published this month. We tried to trace it to a primary source and could not. There is no published methodology, no denominator, and no definition of who counts as a design engineer.</p>
+      <p class="body-s">It may well be roughly right. India plainly has deep design capability, and the global captive centres are real. But a figure this load-bearing should have a source, and repeating it without one is how policy gets built on sand. We have graded it D and used it nowhere in the calculations on this page.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ N.06 CONTROLS ============================ -->
+<section class="section deep" id="controls">
+  <div class="container">
+    <span class="eyebrow">N.06</span>
+    <h2 class="h-section" style="margin:14px 0 12px;max-width:28ch">Which export control bites at which stage</h2>
+    <p class="body-s prose" style="margin-bottom:30px">India is not an embargoed destination for any of these. That is the important starting point, and it is often lost. The exposure is second-order: queue position, pricing power, compliance burden, and the standing possibility that the rules change. Two of the instruments below have already been imposed and withdrawn once.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Instrument</th><th>Stage it hits</th><th>Direct effect on India</th><th>The second-order effect, which is the real one</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Advanced computing IC controls</strong><br><span class="meta" style="text-transform:none;letter-spacing:0">ECCN 3A090/4A090, 2022 onward</span></td><td>Pretraining, inference</td><td>None directly. Licences generally available</td><td>India queues behind US and allied buyers. Pricing power sits entirely with the seller</td></tr>
+          <tr><td><strong>AI Diffusion Framework</strong><br><span class="meta" style="text-transform:none;letter-spacing:0">Issued Jan 2025, rescinded May 2025</span></td><td>All</td><td>India was placed in the middle tier before it was withdrawn</td><td>The template exists and is drafted. It can be reinstated in weeks by a different administration</td></tr>
+          <tr><td><strong>HBM controls</strong><br><span class="meta" style="text-transform:none;letter-spacing:0">Dec 2024</span></td><td>Pretraining, inference</td><td>No restriction on India</td><td>Tightens the single most supply-constrained input in the accelerator bill of materials</td></tr>
+          <tr><td><strong>Equipment controls</strong><br><span class="meta" style="text-transform:none;letter-spacing:0">US, Netherlands, Japan, 2023 onward</span></td><td>Pretraining</td><td>India's 28nm plans sit below the thresholds</td><td>Fixes India's fab ambitions at mature nodes for the foreseeable future. This is a ceiling, not a wall</td></tr>
+          <tr><td><strong>Affiliates rule</strong><br><span class="meta" style="text-transform:none;letter-spacing:0">Suspended to 10 Nov 2026</span></td><td>All</td><td>Indian operators with complex ownership come into scope on resumption</td><td>Compliance cost lands on exactly the mid-size operators the IndiaAI Mission empanelled</td></tr>
+          <tr><td><strong>Section 232 tariffs</strong><br><span class="meta" style="text-transform:none;letter-spacing:0">Jan 2026</span></td><td>All</td><td>Raises landed cost of anything routed through the US</td><td>Strengthens the case for buying direct from Asian assembly rather than through US entities</td></tr>
+          <tr><td><strong>Chip Security Act</strong><br><span class="meta" style="text-transform:none;letter-spacing:0">House approval Mar 2026</span></td><td>All</td><td>Would embed location attestation in the chips themselves</td><td>Converts a one-time export decision into a permanent operational dependency. The most consequential item on this list</td></tr>
+          <tr><td><strong>EDA controls</strong><br><span class="meta" style="text-transform:none;letter-spacing:0">2022 onward</span></td><td>Pretraining, upstream</td><td>India's design industry runs on the same three vendors</td><td>A licensing action against an Indian entity takes effect inside one billing cycle. No shipment needs to be stopped</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <span class="source">Full table with dates and citations: <a class="link" href="assets/data/export-controls.csv" download>export-controls.csv</a>. Primary sources are BIS rules and Federal Register notices as dated; the Chip Security Act had passed committee for a full House vote as of 26 March 2026 and was not law at the time of writing.</span>
+
+    <div class="strip strip-4 mt-l reveal">
+      <div class="panel">
+        <span class="panel-code">01</span>
+        <div class="bubble"><span class="bubble-who">Ira</span>But India isn't on any of the lists. So we're fine?</div>
+        <div class="panel-art"><div class="cast" data-char="ira" data-mood="happy" data-size="92"></div></div>
+      </div>
+      <div class="panel dots">
+        <span class="panel-code">02</span>
+        <div class="bubble right"><span class="bubble-who">Echo</span>The diffusion rule put India in the middle tier in January 2025. It was withdrawn in May. Nothing about India changed in between.</div>
+        <div class="panel-art"><div class="cast" data-char="echo" data-mood="blank" data-size="92"></div></div>
+      </div>
+      <div class="panel">
+        <span class="panel-code">03</span>
+        <div class="caption-box">The thing to plan against</div>
+        <p class="panel-note">Not a ban. Volatility. The rules moved four times in eighteen months, in both directions. Predictability is the commodity India is actually short of.</p>
+      </div>
+      <div class="panel dots-gold">
+        <span class="panel-code">04</span>
+        <span class="sfx sfx-s">Which changes the ask</span>
+        <p class="panel-note" style="margin-top:12px">If the problem were denial, the answer would be indigenisation. Because the problem is volatility, the answer is duration: multi-year commitments, second sources, and stages that need less of the volatile input.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ N.07 SCENARIOS ============================ -->
+<section class="section" id="scenarios">
+  <div class="container">
+    <span class="eyebrow">N.07</span>
+    <h2 class="h-section" style="margin:14px 0 12px;max-width:26ch">Four dials, and what they do</h2>
+    <p class="body-s prose" style="margin-bottom:30px">Not a forecast, and it has no probabilities in it. It is a way of finding out which variable your conclusion is actually resting on. The arithmetic prints under the result so you can disagree with the specific number rather than the general vibe.</p>
+
+    <div data-widget="scenario" class="reveal"></div>
+
+    <div class="split-3 mt-l">
+      <div>
+        <span class="meta">Scenario we ran: the expensive mistake</span>
+        <p class="body-s mt-s">Build dial to maximum, environments dial to zero. You end up with 100,000 accelerators, high-density halls, and nothing distinctive to run on them. A very costly way to serve other people's models.</p>
+      </div>
+      <div>
+        <span class="meta">Scenario we ran: the exposed case</span>
+        <p class="body-s mt-s">Licensing tightens while the domestic build is still on trend. Training capacity collapses. Serving capacity barely moves. That asymmetry is the single strongest argument for weighting inference now.</p>
+      </div>
+      <div>
+        <span class="meta">Scenario we ran: the interesting case</span>
+        <p class="body-s mt-s">Modest hardware, serious environments. India ends up exporting maintained evaluation and reward environments for languages and domains nobody else covers. Small budget, genuine leverage, no import licence required.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ N.08 GEOPOLITICAL ============================ -->
+<section class="section deep" id="geo">
+  <div class="container">
+    <span class="eyebrow">N.08 &middot; Options, part one</span>
+    <h2 class="h-section" style="margin:14px 0 12px;max-width:26ch">Geopolitical and strategic options</h2>
+    <p class="body-s prose" style="margin-bottom:34px">These are things India would do with other countries and firms. They are options, not recommendations, and each carries a cost we have tried to state honestly.</p>
+
+    <div class="rowlist">
+      <div class="rowlist-item"><span><span class="code-no">G.01</span> <b style="font-weight:500">Buy duration rather than volume</b>
+      <span class="body-s" style="display:block;margin-top:6px">The scarce commodity is predictability, not chips. A multi-year supply undertaking with defined volumes, negotiated government to government, is worth more than a larger one-off allocation. <b>Cost:</b> locks India into a vendor generation and reduces bargaining room later.</span></span></div>
+
+      <div class="rowlist-item"><span><span class="code-no">G.02</span> <b style="font-weight:500">Go around the sharpest chokepoint, not through it</b>
+      <span class="body-s" style="display:block;margin-top:6px">Accelerators score 7,793 on HHI at leverage 5. Assembly and packaging score 1,444 at leverage 1. India already has three operating ATMP plants. Advanced packaging capacity is queue-constrained rather than licence-constrained, which makes it the one hardware layer where money alone buys entry. <b>Cost:</b> packaging is capital-hungry and India would be a late entrant against incumbents with a decade of yield learning.</span></span></div>
+
+      <div class="rowlist-item"><span><span class="code-no">G.03</span> <b style="font-weight:500">Treat HBM as the thing to secure, not logic</b>
+      <span class="body-s" style="display:block;margin-top:6px">Three suppliers, sold out through 2026, on the control list since December 2024. Micron already packages memory at Sanand. Deepening that relationship into HBM assembly is a narrower and more achievable ask than a leading-edge fab. <b>Cost:</b> back-end memory packaging is not front-end memory fabrication, and the gap between them is larger than it looks.</span></span></div>
+
+      <div class="rowlist-item"><span><span class="code-no">G.04</span> <b style="font-weight:500">Build the coalition nobody has built: the middle tier</b>
+      <span class="body-s" style="display:block;margin-top:6px">The diffusion rule created a category of countries with capital, engineers and no leading-edge fab. India, the Gulf states, Japan on some inputs, parts of Europe. That group has never negotiated together on compute access and has more combined purchasing power than any of them alone. <b>Cost:</b> members have incompatible relationships with Washington, and the coalition would be read as a bloc.</span></span></div>
+
+      <div class="rowlist-item"><span><span class="code-no">G.05</span> <b style="font-weight:500">Export environments, not engineers</b>
+      <span class="body-s" style="display:block;margin-top:6px">The one input with no supplier and no control instrument. Whoever builds maintained verifiable-reward environments for law, medicine, agriculture and Indian-language reasoning owns something the frontier labs need and cannot buy. India has the domain institutions and the annotation base. This is the only item on the list that creates leverage rather than reducing exposure. <b>Cost:</b> requires sustained institutional funding of unglamorous work with no announceable groundbreaking.</span></span></div>
+
+      <div class="rowlist-item"><span><span class="code-no">G.06</span> <b style="font-weight:500">Hedge on open weights deliberately, and say so</b>
+      <span class="body-s" style="display:block;margin-top:6px">Licences bind future releases; weights already downloaded cannot be recalled. A stated national policy of maintaining local mirrors of significant open releases costs almost nothing and removes an entire class of disruption. <b>Cost:</b> open weights trail the frontier, and depending on them means accepting a capability lag.</span></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ N.09 POLICY ============================ -->
+<section class="section" id="policy">
+  <div class="container">
+    <span class="eyebrow">N.09 &middot; Options, part two</span>
+    <h2 class="h-section" style="margin:14px 0 12px;max-width:26ch">Domestic policy options</h2>
+    <p class="body-s prose" style="margin-bottom:34px">These India can do alone, and most of them are cheap. Several are administrative rather than budgetary, which is unusual in this area.</p>
+
+    <div class="rowlist">
+      <div class="rowlist-item"><span><span class="code-no">P.01</span> <b style="font-weight:500">Publish cluster topology, not just GPU counts</b>
+      <span class="body-s" style="display:block;margin-top:6px">"38,000 GPUs" is not a capability statement. The largest contiguous, high-bandwidth-connected block is. Requiring empanelled providers to report it would cost nothing and would immediately reveal whether India has a training machine or a serving estate. On current evidence it is the second. <b>Effort:</b> a reporting line in the existing empanelment contract.</span></span></div>
+
+      <div class="rowlist-item"><span><span class="code-no">P.02</span> <b style="font-weight:500">One anchor cluster instead of more distributed capacity</b>
+      <span class="body-s" style="display:block;margin-top:6px">Fragmentation, not scarcity, is what stops India pretraining. A single reserved block of a few thousand tightly coupled accelerators, bookable in month-long slots, would change what is possible more than another 20,000 cards spread across fourteen providers. <b>Effort:</b> a scheduling and procurement decision, not new money.</span></span></div>
+
+      <div class="rowlist-item"><span><span class="code-no">P.03</span> <b style="font-weight:500">Fund environments the way ISRO funds test facilities</b>
+      <span class="body-s" style="display:block;margin-top:6px">Verifiable-reward environments are infrastructure, not research output. They need decade-long maintenance funding, staff who are not judged on papers, and domain institutions in the loop. India has the model for this in its space and standards bodies and has never applied it to software. <b>Effort:</b> small budget, hard institutional design.</span></span></div>
+
+      <div class="rowlist-item"><span><span class="code-no">P.04</span> <b style="font-weight:500">Write high-density into data centre policy now</b>
+      <span class="body-s" style="display:block;margin-top:6px">Infrastructure status and state incentives are written around megawatts and floor area. Neither predicts whether a hall can take a 120 kW rack. Tying incentives to rack density and liquid-cooling readiness would redirect private capital at zero fiscal cost. <b>Effort:</b> amend existing incentive criteria.</span></span></div>
+
+      <div class="rowlist-item"><span><span class="code-no">P.05</span> <b style="font-weight:500">Disclose the answer-time budget in any public evaluation</b>
+      <span class="body-s" style="display:block;margin-top:6px">Chapter 04 argued that a benchmark score without a compute budget is not comparable to anything. India funds model development and will increasingly evaluate models. Requiring the budget alongside the score, on anything publicly funded, is free and would put India ahead of most regulators on a point they have all missed. <b>Effort:</b> one clause in grant conditions.</span></span></div>
+
+      <div class="rowlist-item"><span><span class="code-no">P.06</span> <b style="font-weight:500">Stop citing the 20% design workforce figure until someone sources it</b>
+      <span class="body-s" style="display:block;margin-top:6px">It may be right. Nobody has shown the working, and it is now load-bearing in strategy documents. Commissioning a proper labour-market census of the Indian semiconductor and AI workforce would cost a rounding error against the ISM outlay and would replace a slogan with a baseline. <b>Effort:</b> one survey.</span></span></div>
+    </div>
+
+    <div class="sticker gold mt-l" style="max-width:84ch">
+      <div class="cast" data-char="vera" data-mood="pass" data-size="76"></div>
+      <div class="sticker-txt"><b>Notice what is not on this list</b>A leading-edge fab. Not because it would not be useful, but because nothing in the analysis above suggests it is the binding constraint on anything India is trying to do in the next five years. It is the most expensive answer to a question the data does not ask.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ N.10 METHOD ============================ -->
+<section class="section deep" id="method">
+  <div class="container">
+    <span class="eyebrow">N.10</span>
+    <h2 class="h-section" style="margin:14px 0 12px;max-width:26ch">How every number here was worked out</h2>
+    <p class="body-s prose" style="margin-bottom:34px">If you disagree with a conclusion, the arithmetic below is where to attack it. All four datasets are plain CSV and can be edited and reloaded.</p>
+
+    <div class="split-even" style="margin-bottom:34px">
+      <div class="card">
+        <span class="meta">Datasets</span>
+        <h3 class="h-card" style="margin:8px 0 12px">Download and check</h3>
+        <ul class="body-s" style="padding-left:18px;line-height:2">
+          <li><a class="link" href="assets/data/chokepoints.csv" download>chokepoints.csv</a> &mdash; 17 inputs, shares, HHI, leverage</li>
+          <li><a class="link" href="assets/data/india-compute.csv" download>india-compute.csv</a> &mdash; fleet, capacity, trade</li>
+          <li><a class="link" href="assets/data/india-position.csv" download>india-position.csv</a> &mdash; capability scores with evidence</li>
+          <li><a class="link" href="assets/data/export-controls.csv" download>export-controls.csv</a> &mdash; instruments and effects</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="meta">Source grades</span>
+        <h3 class="h-card" style="margin:8px 0 12px">What the letters mean</h3>
+        <p class="body-s"><b>A</b> &mdash; primary: government release, company filing, technical report with method.<br>
+        <b>B</b> &mdash; reputable secondary with stated method.<br>
+        <b>C</b> &mdash; industry estimate, method not published.<br>
+        <b>D</b> &mdash; widely repeated, primary source not traceable. Used for context only, never in a calculation.</p>
+      </div>
+    </div>
+
+    <div class="deflist-wrap">
+      <dl class="deflist">
+        <dt>HHI</dt>
+        <dd>Sum of squared percentage market shares, 0 to 10,000, as used in competition review. Only genuinely single-firm shares are squared. Unnamed residual share is modelled as maximally fragmented and contributes nothing, so <b>every HHI on this page is a lower bound on true concentration</b>, not a point estimate. Shares are from Counterpoint Research (HBM, DRAM), company filings and industry revenue estimates as listed per row.</dd>
+
+        <dt>Control leverage</dt>
+        <dd>Our own 1 to 5 scale, and the most contestable thing here. 1: no control instrument, product is open or forkable. 2: no instrument today but plausible. 3: no instrument, but supply is allocated by contract and queueing is severe. 4: an instrument exists and has been used. 5: an instrument exists, has been used, and takes effect without any shipment being stopped. The scores are judgement calls; the basis for each is in the CSV so you can rescore them.</dd>
+
+        <dt>Stage exposure index</dt>
+        <dd>For each stage, take the inputs that stage uses, normalise HHI to 0-1 and leverage to 0-1, combine with the weights the reader sets, discount inputs scoring leverage 1 by up to 60% for openness, then take the unweighted mean across inputs. An ordinal comparison between stages, nothing more. It is not a probability and should never be quoted as one.</dd>
+
+        <dt>Fleet throughput</dt>
+        <dd>38,000 accelerators (MeitY/IndiaAI, Dec 2025) &times; 989.5 TFLOP/s dense BF16 (NVIDIA H100 SXM datasheet) &times; 40% model FLOP utilisation = 1.50 &times; 10<sup>19</sup> FLOP/s, or 1.30 &times; 10<sup>24</sup> FLOP per day. GPU-hours per day = 38,000 &times; 24 = 912,000. The fleet is mixed in reality; treating it as H100-equivalent is a simplification stated here and adjustable in the calculator.</dd>
+
+        <dt>The DeepSeek comparisons</dt>
+        <dd>2,788,000 GPU-hours for V3 pretraining and 147,000 for R1 reinforcement learning, both as disclosed in the respective technical reports. Divided by 912,000 GPU-hours per day gives 3.06 days and 3.9 hours. These are the cleanest published frontier figures available; almost no other lab discloses them, and one lab's numbers should not be generalised.</dd>
+
+        <dt>Serving capacity</dt>
+        <dd>312 aggregate output tokens per second per accelerator for a 70-billion-parameter model under continuous batching, derived from a commonly reported 2,500 tokens/s across an 8-way tensor-parallel group. 38,000 &times; 312 = 11.9 million tokens/s, or 1.02 &times; 10<sup>12</sup> per day. At 5,000 output tokens per user per day that is 205 million daily users. Order of magnitude, not a service-level guarantee: real throughput varies several-fold with model size, quantisation, context length and latency target.</dd>
+
+        <dt>Power and rack density</dt>
+        <dd>700 W per accelerator (H100 SXM datasheet), PUE 1.5. 38,000 GPUs = 27 MW IT load, 40 MW total; 100,000 = 70 MW IT, 105 MW total. National colocation IT load 1,600 MW (JLL, June 2026), giving 1.7% and 4.4%. Racks assume the hall density divided by 0.7 kW per accelerator, and 200 racks per hall. Modern reference point: NVIDIA GB200 NVL72 at 72 accelerators and roughly 120 kW per rack.</dd>
+
+        <dt>Growth rates</dt>
+        <dd>Compound annual growth computed directly from endpoints: (1,600/520)<sup>1/6</sup> &minus; 1 = 20.6% for 2020-2026, and (1,500/520)<sup>1/5</sup> &minus; 1 = 23.6% for 2020-2025. The 2029 requirement is (6,000/1,600)<sup>1/3</sup> &minus; 1 = 55.4%. <b>These are fitted growth rates, not forecasts.</b> With four observations a regression would produce confidence intervals with no meaning, so we have not run one. Anyone who quotes a t-statistic on this series is selling something.</dd>
+
+        <dt>Scenario engine</dt>
+        <dd>Multiplicative, with every multiplier printed under the output. Domestic build 0.9-2.63&times; (2.63 is the stated 100,000 target over 38,000), licensing posture 1.15-0.35&times;, supply 1.1-0.55&times;. The housing discount is 0.35 unless high-density halls are selected. Environment readiness is scored but deliberately does not enter the hardware arithmetic, because it cannot be bought with accelerators. The multipliers are illustrative and chosen to span a plausible range; they are not estimated from anything.</dd>
+      </dl>
+    </div>
+
+    <div class="aside mt-l" style="max-width:82ch">
+      <span class="aside-title">What we could not do</span>
+      <p>We could not get firm-level Indian GPU deployment by provider, because it is not published. We could not verify installed-versus-empanelled counts beyond mid-2025. We could not source the 20% design workforce claim. And the control leverage scale is ours, which means the exposure index inherits our judgement about what counts as controllable. Those four gaps are where this analysis would change most if better data appeared.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section ink">
+  <div class="container">
+    <div class="split">
+      <div>
+        <span class="eyebrow">Chapter 06, in one line</span>
+        <h2 class="h-section" style="margin:16px 0 20px;max-width:26ch">India has been counting the input it has most of, and not counting the one it has none of.</h2>
+        <p class="lede" style="color:rgba(255,255,255,0.85);max-width:52ch">Accelerators are announceable. Environments are not. The arithmetic says the second matters more.</p>
+      </div>
+      <div style="display:flex;align-items:flex-end">
+        <a class="btn btn-gold" href="05-reference.html#start">The reading list &rarr;</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="pager">
+  <a href="04-policy.html"><span class="meta">&larr; Previous</span><span style="display:block;font-size:19px;margin-top:6px">Chapter 04 &middot; Why It Matters</span></a>
+  <a class="next" href="05-reference.html"><span class="meta">Next &rarr;</span><span style="display:block;font-size:19px;margin-top:6px">Chapter 05 &middot; Reading Room</span></a>
+</div>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <p class="footer-tag">Pretraining built the capability.<br>Post-training made it usable.<br>Inference decides who can afford it.</p>
+      <p class="footer-addr" style="margin-top:24px">High-Tech Geopolitics Programme,<br>Takshashila Institution, Bengaluru. A draft for discussion.</p>
+    </div>
+    <div>
+      <h4>Chapters</h4>
+      <ul>
+        <li><a href="index.html">The Map</a></li>
+        <li><a href="02-post-training.html">Post-Training</a></li>
+        <li><a href="03-inference.html">Inference</a></li>
+        <li><a href="04-policy.html">Policy</a></li>
+        <li><a href="06-india.html">India</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Data</h4>
+      <ul>
+        <li><a href="assets/data/chokepoints.csv" download>chokepoints.csv</a></li>
+        <li><a href="assets/data/india-compute.csv" download>india-compute.csv</a></li>
+        <li><a href="assets/data/india-position.csv" download>india-position.csv</a></li>
+        <li><a href="assets/data/export-controls.csv" download>export-controls.csv</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Sources</h4>
+      <ul>
+        <li><a href="https://epoch.ai/trends" rel="noopener">Epoch AI Trends <span class="arrow">&#8599;</span></a></li>
+        <li><a href="https://counterpointresearch.com/en/insights/global-dram-and-hbm-market-share" rel="noopener">Counterpoint HBM share <span class="arrow">&#8599;</span></a></li>
+        <li><a href="https://arxiv.org/abs/2501.12948" rel="noopener">DeepSeek-R1 report <span class="arrow">&#8599;</span></a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-base">
+    <span>September 2026 &middot; Draft for discussion &middot; Prepared with an AI assistant</span>
+    <span>Every panel carries its sources</span>
+  </div>
+</footer>
+
+<script src="assets/js/comic.js"></script>
+<script src="assets/js/widgets-train.js"></script>
+<script src="assets/js/widgets-india.js"></script>
+<script src="assets/js/guide.js"></script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+stage,capability,india_status,score_1to5,evidence,source,grade
+Pretraining,Frontier-scale accelerator fleet,"Fleet exists but is fragmented across 14 providers and shared nationally",2,"38,000 GPUs empanelled; no single contiguous cluster disclosed above a few thousand","MeitY / IndiaAI 2026",A
+Pretraining,Leading-edge fabrication,"None. Dholera is 28nm and targets first silicon 2026-28",1,"India holds roughly 0.1% of global wafer capacity","India Semiconductor Mission project list 2026",B
+Pretraining,Chip design talent,"Genuine depth. The most-cited strength, and the least verified number in Indian tech policy",4,"~20% of global semiconductor design workforce is the standard claim; primary source not traceable","Widely repeated in industry and ministerial statements",D
+Pretraining,Frontier training expertise,"Thin. Few teams have run a multi-thousand-GPU job end to end",2,"No Indian pretraining run above ~10^24 FLOP has been publicly documented","Absence of published evidence",D
+Post-training,Instruction and preference data,"Strong latent advantage: 22 scheduled languages, large annotation labour pool",4,"BharatGen and AI4Bharat have built multilingual corpora at scale","Public project disclosures 2025-2026",C
+Post-training,RL and reward modelling capability,"Emerging. Several startups run RLHF and DPO pipelines in production",3,"Sarvam, Krutrim and others have shipped post-trained models","Company disclosures 2025-2026",C
+Post-training,Verifiable-reward environments,"Near zero. Nobody in India has published a maintained RL environment suite",1,"No Indian equivalent of a maintained agentic environment corpus is public","Absence of published evidence",D
+Post-training,Compute sufficiency for post-training,"Sufficient today. This is the finding that surprises people",5,"DeepSeek-R1's entire RL run was 147k GPU-hours, under 4 hours of India's fleet","DeepSeek-AI technical report 2025; own calculation",A
+Inference,Serving capacity,"Adequate for national-scale assistant workloads at current model sizes",4,"Fleet output capacity is order 10^12 tokens/day on stated assumptions","Own calculation",B
+Inference,AI-ready data centre halls,"The real bottleneck. Estate is built for 5-10 kW racks, not 40-130 kW",2,"1.6 GW national IT load, but high-density liquid-cooled halls are a small fraction","JLL 2026; rack density from vendor specifications",C
+Inference,Serving software expertise,"Good and improving. Open source lowers the barrier",4,"vLLM and SGLang are open source and widely deployed in India","Project telemetry; industry practice",C
+Inference,Power availability and cost,"Not binding nationally; binding locally in Mumbai and Chennai",3,"100,000 GPUs is ~105 MW with cooling, about 4% of national DC IT load","Own calculation",B

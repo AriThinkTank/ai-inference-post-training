@@ -1,0 +1,430 @@
+[
+ {
+  "component": "EUV lithography scanners",
+  "layer": "hardware",
+  "pre": 1,
+  "post": 0,
+  "inf": 0,
+  "firms": [
+   [
+    "ASML",
+    100
+   ]
+  ],
+  "resid": 0,
+  "hhi": 10000,
+  "top1": 100,
+  "lev": 5,
+  "basis": "Dutch export licensing since 2019; US FDPR reach through US-origin components",
+  "src": "ASML annual report FY2025; Dutch government licensing notices",
+  "grade": "A"
+ },
+ {
+  "component": "Leading-edge logic foundry (5nm and below)",
+  "layer": "hardware",
+  "pre": 1,
+  "post": 1,
+  "inf": 1,
+  "firms": [
+   [
+    "TSMC",
+    90
+   ],
+   [
+    "Samsung Foundry",
+    8
+   ],
+   [
+    "Intel Foundry",
+    2
+   ]
+  ],
+  "resid": 0,
+  "hhi": 8168,
+  "top1": 90,
+  "lev": 4,
+  "basis": "US foreign direct product rule reaches any fab using US equipment",
+  "src": "Company filings; TrendForce foundry revenue share Q1 2026",
+  "grade": "B"
+ },
+ {
+  "component": "HBM stacked memory",
+  "layer": "hardware",
+  "pre": 1,
+  "post": 1,
+  "inf": 1,
+  "firms": [
+   [
+    "SK hynix",
+    58
+   ],
+   [
+    "Samsung",
+    21
+   ],
+   [
+    "Micron",
+    21
+   ]
+  ],
+  "resid": 0,
+  "hhi": 4246,
+  "top1": 58,
+  "lev": 4,
+  "basis": "HBM above bandwidth thresholds added to the US Commerce Control List in Dec 2024",
+  "src": "Counterpoint Research, HBM revenue share Q1 2026",
+  "grade": "A"
+ },
+ {
+  "component": "Advanced packaging (CoWoS class)",
+  "layer": "hardware",
+  "pre": 1,
+  "post": 1,
+  "inf": 1,
+  "firms": [
+   [
+    "TSMC",
+    70
+   ],
+   [
+    "Samsung",
+    10
+   ]
+  ],
+  "resid": 20,
+  "hhi": 5000,
+  "top1": 70,
+  "lev": 3,
+  "basis": "No direct control instrument, but capacity is contracted years ahead; queueing is the barrier",
+  "src": "TSMC capacity disclosures; industry capacity estimates 2026",
+  "grade": "C"
+ },
+ {
+  "component": "Merchant AI accelerators",
+  "layer": "hardware",
+  "pre": 1,
+  "post": 1,
+  "inf": 1,
+  "firms": [
+   [
+    "NVIDIA",
+    88
+   ],
+   [
+    "AMD",
+    7
+   ]
+  ],
+  "resid": 5,
+  "hhi": 7793,
+  "top1": 88,
+  "lev": 5,
+  "basis": "ECCN 3A090/4A090 licence requirement; country-tier review policy; the single sharpest instrument",
+  "src": "BIS rules of 13 Jan 2025 and 13 Jan 2026; vendor revenue disclosures",
+  "grade": "A"
+ },
+ {
+  "component": "Commodity DRAM",
+  "layer": "hardware",
+  "pre": 1,
+  "post": 1,
+  "inf": 1,
+  "firms": [
+   [
+    "Samsung",
+    38
+   ],
+   [
+    "SK hynix",
+    29
+   ],
+   [
+    "Micron",
+    22
+   ]
+  ],
+  "resid": 11,
+  "hhi": 2769,
+  "top1": 38,
+  "lev": 2,
+  "basis": "Only the highest-bandwidth grades are controlled; the rest trades freely",
+  "src": "Counterpoint Research, DRAM revenue share Q1 2026",
+  "grade": "A"
+ },
+ {
+  "component": "NAND and storage",
+  "layer": "hardware",
+  "pre": 1,
+  "post": 1,
+  "inf": 1,
+  "firms": [
+   [
+    "Samsung",
+    33
+   ],
+   [
+    "SK hynix",
+    21
+   ]
+  ],
+  "resid": 46,
+  "hhi": 1530,
+  "top1": 33,
+  "lev": 1,
+  "basis": "Effectively uncontrolled",
+  "src": "Industry revenue share estimates 2026",
+  "grade": "C"
+ },
+ {
+  "component": "High-end networking fabric",
+  "layer": "hardware",
+  "pre": 1,
+  "post": 1,
+  "inf": 0,
+  "firms": [
+   [
+    "NVIDIA (Mellanox)",
+    70
+   ],
+   [
+    "Broadcom",
+    20
+   ]
+  ],
+  "resid": 10,
+  "hhi": 5300,
+  "top1": 70,
+  "lev": 3,
+  "basis": "Bundled into accelerator licences; switch silicon partly caught by advanced computing rules",
+  "src": "Vendor disclosures; BIS advanced computing rules",
+  "grade": "C"
+ },
+ {
+  "component": "Optical transceivers",
+  "layer": "hardware",
+  "pre": 1,
+  "post": 1,
+  "inf": 1,
+  "firms": [
+   [
+    "Innolight",
+    26
+   ],
+   [
+    "Eoptolink",
+    19
+   ],
+   [
+    "Coherent",
+    20
+   ]
+  ],
+  "resid": 35,
+  "hhi": 1437,
+  "top1": 26,
+  "lev": 1,
+  "basis": "Uncontrolled; supply is China-heavy, which is a different kind of exposure",
+  "src": "Industry revenue share estimates 2026",
+  "grade": "C"
+ },
+ {
+  "component": "Power and cooling plant",
+  "layer": "hardware",
+  "pre": 1,
+  "post": 1,
+  "inf": 1,
+  "firms": [
+   [
+    "Vertiv",
+    25
+   ],
+   [
+    "Schneider Electric",
+    20
+   ]
+  ],
+  "resid": 55,
+  "hhi": 1025,
+  "top1": 25,
+  "lev": 1,
+  "basis": "Uncontrolled. Liquid cooling skills are scarce but not restricted",
+  "src": "Industry revenue share estimates 2026",
+  "grade": "C"
+ },
+ {
+  "component": "Server assembly and ODM",
+  "layer": "hardware",
+  "pre": 1,
+  "post": 1,
+  "inf": 1,
+  "firms": [
+   [
+    "Foxconn",
+    30
+   ],
+   [
+    "Quanta",
+    20
+   ],
+   [
+    "Wistron",
+    12
+   ]
+  ],
+  "resid": 38,
+  "hhi": 1444,
+  "top1": 30,
+  "lev": 1,
+  "basis": "Uncontrolled as a category; the least concentrated hardware layer in the stack",
+  "src": "Industry revenue share estimates 2026",
+  "grade": "C"
+ },
+ {
+  "component": "EDA tool chains",
+  "layer": "software",
+  "pre": 1,
+  "post": 0,
+  "inf": 0,
+  "firms": [
+   [
+    "Synopsys",
+    32
+   ],
+   [
+    "Cadence",
+    30
+   ],
+   [
+    "Siemens EDA",
+    13
+   ]
+  ],
+  "resid": 25,
+  "hhi": 2093,
+  "top1": 32,
+  "lev": 5,
+  "basis": "Named in successive BIS actions; cloud-delivered, licence-metered and revocable overnight",
+  "src": "Company annual reports FY2025; BIS entity list actions",
+  "grade": "B"
+ },
+ {
+  "component": "Accelerator programming stack",
+  "layer": "software",
+  "pre": 1,
+  "post": 1,
+  "inf": 1,
+  "firms": [
+   [
+    "NVIDIA CUDA",
+    90
+   ],
+   [
+    "AMD ROCm",
+    6
+   ]
+  ],
+  "resid": 4,
+  "hhi": 8136,
+  "top1": 90,
+  "lev": 4,
+  "basis": "Proprietary, licensed, revocable, and not forkable. Concentration plus control",
+  "src": "Vendor licence terms; developer survey data 2026",
+  "grade": "B"
+ },
+ {
+  "component": "Deep learning framework",
+  "layer": "software",
+  "pre": 1,
+  "post": 1,
+  "inf": 1,
+  "firms": [
+   [
+    "PyTorch",
+    63
+   ],
+   [
+    "JAX",
+    12
+   ]
+  ],
+  "resid": 25,
+  "hhi": 4113,
+  "top1": 63,
+  "lev": 1,
+  "basis": "Permissively licensed and forkable. High concentration, almost no control leverage",
+  "src": "PyTorch Foundation; developer survey data 2026",
+  "grade": "B"
+ },
+ {
+  "component": "Inference serving engines",
+  "layer": "software",
+  "pre": 0,
+  "post": 0,
+  "inf": 1,
+  "firms": [
+   [
+    "vLLM",
+    45
+   ],
+   [
+    "SGLang",
+    20
+   ],
+   [
+    "TensorRT-LLM",
+    15
+   ]
+  ],
+  "resid": 20,
+  "hhi": 2650,
+  "top1": 45,
+  "lev": 1,
+  "basis": "Two of the top three are open source. A fork is a weekend, not a programme",
+  "src": "Project telemetry and industry surveys 2026",
+  "grade": "C"
+ },
+ {
+  "component": "Open model weights",
+  "layer": "software",
+  "pre": 0,
+  "post": 1,
+  "inf": 1,
+  "firms": [
+   [
+    "Llama family",
+    35
+   ],
+   [
+    "Qwen family",
+    30
+   ]
+  ],
+  "resid": 35,
+  "hhi": 2125,
+  "top1": 35,
+  "lev": 2,
+  "basis": "Licences are revocable going forward, but weights already downloaded cannot be recalled",
+  "src": "Model licence terms; public download statistics 2026",
+  "grade": "C"
+ },
+ {
+  "component": "Verifiable-reward environments",
+  "layer": "software",
+  "pre": 0,
+  "post": 1,
+  "inf": 0,
+  "firms": [
+   [
+    "Frontier labs, in house",
+    80
+   ]
+  ],
+  "resid": 20,
+  "hhi": 6400,
+  "top1": 80,
+  "lev": 3,
+  "basis": "Never exported, never published. The least visible chokepoint in the whole stack",
+  "src": "Inferred from published post-training reports 2025-2026",
+  "grade": "D"
+ }
+]
