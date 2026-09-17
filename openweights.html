@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What Open Weights Actually Relieve &middot; Takshashila</title>
+<meta name="description" content="Open weights as chokepoint relief for India, the four-month capability lag, and how many years an export control actually buys.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;500&family=Bungee&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/takshashila.css">
+</head>
+<body>
+
+<div class="progress" aria-hidden="true"></div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-mark" href="index.html">Three Stages, Three Problems <span>Takshashila</span></a>
+    <button class="nav-toggle" type="button" aria-expanded="false">Menu</button>
+    <div class="nav-links">
+      <a class="nav-link" href="index.html">Overview</a>
+      <a class="nav-link" href="money.html">Money</a>
+      <a class="nav-link" href="exposure.html">Chokepoints</a>
+      <a class="nav-link" href="openweights.html" aria-current="page">Open Weights</a>
+      <a class="nav-link" href="trends.html">Trends</a>
+      <a class="nav-link" href="india.html">India</a>
+      <a class="nav-link" href="method.html">Data &amp; Method</a>
+    </div>
+  </div>
+</nav>
+
+<header class="section">
+  <div class="container">
+    <p class="crumbs" style="margin-bottom:26px"><a href="index.html">Overview</a> / Open weights</p>
+    <span class="chapter-no">04</span>
+    <h1 class="page-title" style="margin:10px 0 26px;max-width:20ch;font-size:54px;line-height:1.03;letter-spacing:-0.025em">What Open Weights <em>Actually</em> Relieve</h1>
+    <p class="lede" style="max-width:62ch">Open weights are talked about as though they either solve everything or nothing. They do neither. They relieve some chokepoints almost completely, leave others untouched, and do nothing at all about the two lines that post-training actually runs on.</p>
+  </div>
+</header>
+
+<section class="section deep">
+  <div class="container">
+    <span class="eyebrow">The measurement</span>
+    <h2 class="h-section" style="margin:14px 0 12px;max-width:26ch">Four months behind, and holding</h2>
+    <p class="body-s prose" style="margin-bottom:30px">Epoch AI tracks open and closed capability on a composite index. Since January 2026 the best open-weight models have trailed the best closed models by an average of four months, or eight index points with a 90% confidence interval of 7 to 11. Their earlier analysis, covering January 2023 to October 2025, put it at three months.</p>
+
+    <div class="gapless cols-4">
+      <div><span class="meta">The gap today</span><div class="kpi kpi-gold" style="margin:10px 0 4px">4 months</div><p class="body-s">Roughly one minor version. Epoch compares it to the distance between GPT-5 and GPT-5.5.</p></div>
+      <div><span class="meta">In index points</span><div class="kpi kpi-gold" style="margin:10px 0 4px">8 ECI</div><p class="body-s">90% confidence interval 7 to 11. Requiring strict dominance rather than a statistical tie pushes it to about six months.</p></div>
+      <div><span class="meta">Direction of travel</span><div class="kpi kpi-gold" style="margin:10px 0 4px">Widening</div><p class="body-s">Three months to four. Small, but not the closing gap the open-weight case usually assumes.</p></div>
+      <div><span class="meta">Who publishes them</span><div class="kpi kpi-gold" style="margin:10px 0 4px">China</div><p class="body-s">Chinese laboratories now lead open-weight rankings. Epoch puts Chinese models about 7 months behind the US frontier since 2023.</p></div>
+    </div>
+    <span class="source">Epoch AI, <a class="link" href="https://epoch.ai/data-insights/open-closed-eci-gap" target="_blank" rel="noopener">Open models lag state-of-the-art closed models by 4 months</a>, 29 May 2026, and the October 2025 Data Insight. Epoch note two honest caveats: open models may overfit public benchmarks, and closed laboratories withhold their best systems from public comparison, so the true lag may be larger.</span>
+
+    <div class="sticker mt-l" style="max-width:86ch">
+      <div class="cast" data-char="ira" data-mood="doubt" data-size="76"></div>
+      <div class="sticker-txt"><b>The bit that should worry an Indian planner</b>Most usable open weights now come from Chinese laboratories, which themselves trail the US frontier by about seven months. A country relying on open weights inherits both lags rather than one, and it inherits a dependency on the release decisions of a third country it has no leverage over.</div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <span class="eyebrow">Line by line</span>
+    <h2 class="h-section" style="margin:14px 0 12px;max-width:26ch">Which chokepoints open weights actually loosen</h2>
+    <p class="body-s prose" style="margin-bottom:34px">Scored on the same 0 to 1 control leverage scale used across this dashboard, with and without a usable open-weight starting point.</p>
+    <div data-widget="openw" class="reveal"></div>
+
+    <div class="split mt-l">
+      <div class="card" style="border-left:3px solid var(--positive)">
+        <span class="chip chip-soft">The big relief</span>
+        <h3 class="h-feature" style="margin:14px 0 12px;font-size:26px">Open weights make the pretraining problem go away by making it unnecessary</h3>
+        <p class="body-s">Start from published weights and you skip the one job that needs thousands of accelerators wired together as a single machine. The interconnect line, which is 11% of a pretraining budget and the hardest thing to buy, drops out entirely. So does the need for a contiguous cluster, which is India's actual constraint rather than the headline GPU count.</p>
+        <p class="body-s">This is not a small point. It converts India's hardest hardware problem into somebody else's solved problem.</p>
+      </div>
+      <div class="card" style="border-left:3px solid var(--negative)">
+        <span class="chip chip-neg">The non-relief</span>
+        <h3 class="h-feature" style="margin:14px 0 12px;font-size:26px">And they do nothing about the two lines that carry 70% of the post-training bill</h3>
+        <p class="body-s">Published weights arrive without the data that shaped them and without the environments they were trained against. That is not an oversight. Those are the assets, and no laboratory publishes them.</p>
+        <p class="body-s">Which is why a released open model is hard to push much further. You have the artefact and none of the tooling that made it, and buying the tooling is the expensive part.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section deep">
+  <div class="container">
+    <span class="eyebrow">The equation</span>
+    <h2 class="h-section" style="margin:14px 0 12px;max-width:28ch">How many years does an export control actually buy?</h2>
+    <p class="body-s prose" style="margin-bottom:30px">Controls are usually discussed as though they either work or fail. A better question is how long they delay somebody, and that is answerable. Two rates do the work: algorithmic efficiency improves at about three times a year, and hardware price-performance at about 1.3 times a year. Both reach a restricted country anyway, through published research and open weights.</p>
+
+    <div class="card" style="border-left:3px solid var(--wine);max-width:78ch;margin-bottom:34px">
+      <span class="meta">Equation E5, derived from E4</span>
+      <p class="body-s" style="font-family:var(--mono);font-size:15px;margin:12px 0"><b>T = ln(R) &divide; ln(&alpha; &middot; h)</b></p>
+      <p class="body-s">T is years of delay. R is how many times short of the frontier a country's accessible effective compute is. &alpha; is algorithmic efficiency gain per year, h is hardware price-performance gain per year. It follows from writing effective compute as C<sub>eff</sub>(t) = C<sub>phys</sub> &times; &alpha;<sup>t</sup> and asking when the restricted party reaches today's frontier requirement.</p>
+    </div>
+
+    <div data-widget="denial" class="reveal"></div>
+
+    <div class="aside mt-l" style="max-width:82ch">
+      <span class="aside-title">What this does and does not show</span>
+      <p>It shows when compute stops being the binding constraint. It says nothing about whether the people, the data and the environments are in place to use that compute. On the evidence elsewhere on this dashboard, for India those bind first, which means the delay an export control buys against India is shorter than the delay India imposes on itself by not funding the other half of the bill.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <span class="eyebrow">What follows</span>
+    <h2 class="h-section" style="margin:14px 0 34px;max-width:26ch">Three things an Indian policymaker could do with this</h2>
+    <div class="rowlist">
+      <div class="rowlist-item"><span><span class="code-no">O.01</span> <b style="font-weight:500">Mirror significant open releases as stated national policy</b>
+      <span class="body-s" style="display:block;margin-top:6px">A licence binds future releases. Weights already downloaded cannot be recalled by anyone, in any jurisdiction. Maintaining national mirrors costs a rounding error and removes an entire class of disruption. <b>Cost:</b> accepting a four-month capability lag, and a dependency on Chinese release decisions.</span></span></div>
+      <div class="rowlist-item"><span><span class="code-no">O.02</span> <b style="font-weight:500">Spend on the half open weights do not supply</b>
+      <span class="body-s" style="display:block;margin-top:6px">If pretraining is solved by somebody else's publication, the marginal rupee should go to data and environments, which nobody publishes and which are 70% of the post-training bill. This is the clearest spending implication on the whole dashboard. <b>Cost:</b> unglamorous, with no groundbreaking to announce.</span></span></div>
+      <div class="rowlist-item"><span><span class="code-no">O.03</span> <b style="font-weight:500">Treat the programming stack as the software chokepoint, not the framework</b>
+      <span class="body-s" style="display:block;margin-top:6px">PyTorch is 63% concentrated and permissively licensed, so it is close to harmless. CUDA is 90% concentrated, proprietary and revocable, and open weights do nothing about it. Any Indian sovereignty effort in AI software that targets frameworks rather than the accelerator programming layer is aiming at the wrong thing. <b>Cost:</b> the alternative stacks are genuinely less mature.</span></span></div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <p class="footer-tag">Pretraining buys hardware.<br>Post-training buys people.<br>Inference buys buildings and power.</p>
+      <p class="footer-addr" style="margin-top:24px">High-Tech Geopolitics Programme,<br>Takshashila Institution, Bengaluru. A draft for discussion.</p>
+    </div>
+    <div>
+      <h4>Pages</h4>
+      <ul>
+        <li><a href="index.html">Overview</a></li>
+        <li><a href="money.html">Where the Money Goes</a></li>
+        <li><a href="exposure.html">Chokepoints</a></li>
+        <li><a href="openweights.html">Open Weights</a></li>
+        <li><a href="trends.html">Trends</a></li>
+        <li><a href="india.html">India</a></li>
+        <li><a href="method.html">Data &amp; Method</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Data</h4>
+      <ul>
+        <li><a href="assets/data/cost-stack.csv" download>cost-stack.csv</a></li>
+        <li><a href="assets/data/stage-costs.csv" download>stage-costs.csv</a></li>
+        <li><a href="assets/data/india-fit.csv" download>india-fit.csv</a></li>
+        <li><a href="assets/data/controls.csv" download>controls.csv</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Key sources</h4>
+      <ul>
+        <li><a href="https://arxiv.org/abs/2405.21015" rel="noopener">Cottier et al., training costs <span class="arrow">&#8599;</span></a></li>
+        <li><a href="https://epoch.ai/trends" rel="noopener">Epoch AI Trends <span class="arrow">&#8599;</span></a></li>
+        <li><a href="https://arxiv.org/abs/2501.12948" rel="noopener">DeepSeek-R1 report <span class="arrow">&#8599;</span></a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-base">
+    <span>September 2026 &middot; Draft for discussion &middot; Prepared with an AI assistant</span>
+    <span>Every figure carries its source</span>
+  </div>
+</footer>
+
+<script src="assets/js/comic.js"></script>
+<script src="assets/js/dash.js"></script>
+<script src="assets/js/dash2.js"></script>
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How the Chokepoints Have Moved &middot; Takshashila</title>
+<meta name="description" content="Frontier training cost, inference price decline, the open-closed gap and India capacity, charted over time with fitted growth rates.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;500&family=Bungee&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/takshashila.css">
+</head>
+<body>
+
+<div class="progress" aria-hidden="true"></div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-mark" href="index.html">Three Stages, Three Problems <span>Takshashila</span></a>
+    <button class="nav-toggle" type="button" aria-expanded="false">Menu</button>
+    <div class="nav-links">
+      <a class="nav-link" href="index.html">Overview</a>
+      <a class="nav-link" href="money.html">Money</a>
+      <a class="nav-link" href="exposure.html">Chokepoints</a>
+      <a class="nav-link" href="openweights.html">Open Weights</a>
+      <a class="nav-link" href="trends.html" aria-current="page">Trends</a>
+      <a class="nav-link" href="india.html">India</a>
+      <a class="nav-link" href="method.html">Data &amp; Method</a>
+    </div>
+  </div>
+</nav>
+
+<header class="section">
+  <div class="container">
+    <p class="crumbs" style="margin-bottom:26px"><a href="index.html">Overview</a> / Trends</p>
+    <span class="chapter-no">05</span>
+    <h1 class="page-title" style="margin:10px 0 26px;max-width:20ch;font-size:54px;line-height:1.03;letter-spacing:-0.025em">How the Chokepoints Have <em>Moved</em></h1>
+    <p class="lede" style="max-width:62ch">Two of these lines are running in opposite directions at extraordinary speed, and the gap between them is the single most important fact in AI economics.</p>
+  </div>
+</header>
+
+<section class="section deep">
+  <div class="container">
+    <span class="eyebrow">Five series</span>
+    <h2 class="h-section" style="margin:14px 0 34px;max-width:24ch">Pick one and read the growth rate</h2>
+    <div data-widget="trends" class="reveal"></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <span class="eyebrow">The scissors</span>
+    <h2 class="h-section" style="margin:14px 0 12px;max-width:28ch">Making the frontier costs more every year. Reaching last year&rsquo;s frontier costs less.</h2>
+    <p class="body-s prose" style="margin-bottom:34px">These two trends are the whole strategic picture, and they point in opposite directions.</p>
+
+    <div class="split-even">
+      <div class="card" style="border-left:3px solid var(--wine)">
+        <span class="chip">Going up</span>
+        <h3 class="h-feature" style="margin:14px 0 10px;font-size:26px">Frontier training cost, about doubling a year</h3>
+        <p class="body-s">$4.6m for GPT-3 in 2020. $79m for GPT-4 in 2023. $191m for Gemini Ultra in 2024. A range of $200m to $500m for the 2026 class. That is a compound rate above 100% a year, and it puts the frontier further out of reach for every country every year.</p>
+      </div>
+      <div class="card" style="border-left:3px solid var(--gold)">
+        <span class="chip chip-gold">Coming down</span>
+        <h3 class="h-feature" style="margin:14px 0 10px;font-size:26px">Price of a fixed capability, about 90% a year</h3>
+        <p class="body-s">GPT-3 quality cost $60 per million tokens in 2021 and $0.06 by 2024. A thousandfold fall in three years. Epoch AI measures a median decline of 50 times a year across capability milestones, rising to about 200 times a year for models released since January 2024.</p>
+      </div>
+    </div>
+
+    <div class="sticker gold mt-l" style="max-width:86ch">
+      <div class="cast" data-char="echo" data-mood="think" data-size="76"></div>
+      <div class="sticker-txt"><b>What the scissors mean for a country like India</b>Chasing the frontier gets harder every year and is a race India will not win on capital. Deploying last year&rsquo;s frontier gets dramatically cheaper every year, and is a race India can win on scale, languages and cost. The two curves are not a dilemma. They are an instruction.</div>
+    </div>
+    <span class="source">Frontier costs: Stanford AI Index with Epoch AI for 2023 and 2024, Epoch AI cost model elsewhere. Price decline: a16z LLMflation and Epoch AI, <a class="link" href="https://epoch.ai/data-insights/llm-inference-price-trends" target="_blank" rel="noopener">LLM Inference Price Trends</a>. The decline ranges from 9 to 900 times a year depending on the capability milestone, so the median is a summary of a very wide distribution.</span>
+  </div>
+</section>
+
+<section class="section deep">
+  <div class="container">
+    <span class="eyebrow">Where the decline comes from</span>
+    <h2 class="h-section" style="margin:14px 0 12px;max-width:26ch">Three forces, and only one of them can be restricted</h2>
+
+    <div class="gapless cols-3">
+      <div>
+        <span class="code-no">Force 1</span>
+        <h3 class="h-card" style="margin:8px 0 10px">Algorithmic efficiency, about 3&times; a year</h3>
+        <p class="body-s">Better methods for the same result. Estimated at roughly three times a year by Ho and colleagues via Epoch AI, and independently at about three times a year by Gundlach and colleagues after stripping out competition and hardware effects.</p>
+      </div>
+      <div>
+        <span class="code-no">Force 2</span>
+        <h3 class="h-card" style="margin:8px 0 10px">Hardware price-performance, about 1.3&times; a year</h3>
+        <p class="body-s">More computation per dollar of silicon. The slowest of the three, and the only one an export control reaches.</p>
+      </div>
+      <div>
+        <span class="code-no">Force 3</span>
+        <h3 class="h-card" style="margin:8px 0 10px">Competition</h3>
+        <p class="body-s">Providers undercutting each other. Large, volatile, and the reason headline price declines look faster than underlying efficiency gains.</p>
+      </div>
+    </div>
+
+    <div class="aside mt-l" style="max-width:82ch">
+      <span class="aside-title">The asymmetry worth naming</span>
+      <p>Algorithmic efficiency travels through published papers and open weights, and arrives in India at the same time as everywhere else. Hardware price-performance arrives through purchase, and can be slowed. So an export control slows the 1.3&times; and leaves the 3&times; untouched, which is why the delay it buys is measured in a small number of years rather than in decades. The denial half-life calculator on the <a class="link" href="openweights.html">open weights page</a> puts a number on it.</p>
+    </div>
+    <span class="source">Ho et al. 2024 via Epoch AI; Gundlach et al., <a class="link" href="https://arxiv.org/abs/2511.23455" target="_blank" rel="noopener">arXiv:2511.23455</a>; Epoch AI hardware price-performance estimates.</span>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <span class="eyebrow">India&rsquo;s own lines</span>
+    <h2 class="h-section" style="margin:14px 0 34px;max-width:26ch">Two Indian series, and one that needs a discontinuity</h2>
+    <div class="split">
+      <div class="stack-m">
+        <div class="card">
+          <span class="meta">Achieved, 2020 to 2026</span>
+          <div class="kpi kpi-gold" style="margin:10px 0 4px">20.6%</div>
+          <p class="body-s">Compound annual growth in Indian colocation data centre capacity. A real and creditable rate.</p>
+        </div>
+        <div class="card">
+          <span class="meta">Required, 2026 to 2029</span>
+          <div class="kpi kpi-gold" style="margin:10px 0 4px">55.4%</div>
+          <p class="body-s">Growth needed to reach the 6 GW projection. That is 2.7 times the rate India has managed for six years, sustained for three more.</p>
+        </div>
+      </div>
+      <div class="card" style="border-left:3px solid var(--wine)">
+        <h3 class="h-feature" style="margin:0 0 12px;font-size:26px">How to read that gap</h3>
+        <p class="body-s">It does not make the projection wrong. Capital commitments have genuinely stepped up and 2025 added a record amount of capacity. It does mean the projection assumes a discontinuity rather than a trend, and anyone planning against it should say which discontinuity they are relying on.</p>
+        <p class="body-s">With four observations a growth rate can be fitted but inference cannot be done, and no confidence interval is quoted here because none would mean anything.</p>
+      </div>
+    </div>
+    <span class="source">Capacity figures from JM Financial and CBRE via Systemiq, February 2026, and JLL, June and September 2026. Growth rates by equation E8, computed from endpoints.</span>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <p class="footer-tag">Pretraining buys hardware.<br>Post-training buys people.<br>Inference buys buildings and power.</p>
+      <p class="footer-addr" style="margin-top:24px">High-Tech Geopolitics Programme,<br>Takshashila Institution, Bengaluru. A draft for discussion.</p>
+    </div>
+    <div>
+      <h4>Pages</h4>
+      <ul>
+        <li><a href="index.html">Overview</a></li>
+        <li><a href="money.html">Where the Money Goes</a></li>
+        <li><a href="exposure.html">Chokepoints</a></li>
+        <li><a href="openweights.html">Open Weights</a></li>
+        <li><a href="trends.html">Trends</a></li>
+        <li><a href="india.html">India</a></li>
+        <li><a href="method.html">Data &amp; Method</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Data</h4>
+      <ul>
+        <li><a href="assets/data/cost-stack.csv" download>cost-stack.csv</a></li>
+        <li><a href="assets/data/stage-costs.csv" download>stage-costs.csv</a></li>
+        <li><a href="assets/data/india-fit.csv" download>india-fit.csv</a></li>
+        <li><a href="assets/data/controls.csv" download>controls.csv</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Key sources</h4>
+      <ul>
+        <li><a href="https://arxiv.org/abs/2405.21015" rel="noopener">Cottier et al., training costs <span class="arrow">&#8599;</span></a></li>
+        <li><a href="https://epoch.ai/trends" rel="noopener">Epoch AI Trends <span class="arrow">&#8599;</span></a></li>
+        <li><a href="https://arxiv.org/abs/2501.12948" rel="noopener">DeepSeek-R1 report <span class="arrow">&#8599;</span></a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-base">
+    <span>September 2026 &middot; Draft for discussion &middot; Prepared with an AI assistant</span>
+    <span>Every figure carries its source</span>
+  </div>
+</footer>
+
+<script src="assets/js/comic.js"></script>
+<script src="assets/js/dash.js"></script>
+<script src="assets/js/dash2.js"></script>
+</body>
+</html>

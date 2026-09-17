@@ -1,0 +1,16 @@
+stage,component,cost_share_pct,control_leverage_0to1,substitutability_0to1,note,source,grade
+Pretraining,AI accelerators,33,1.00,0.10,"Top-bin chips only. Older parts cannot substitute because memory bandwidth and interconnect are the point","Cottier et al., arXiv:2405.21015; vendor pricing",A
+Pretraining,R&D staff,30,0.00,0.00,"Salaries and equity. Cottier puts staff at 29-49% of total development cost","Cottier et al., arXiv:2405.21015",A
+Pretraining,Server components,18,0.20,0.70,"Chassis, CPUs, storage. Cottier range 15-22% of total","Cottier et al., arXiv:2405.21015",A
+Pretraining,Cluster interconnect,11,0.60,0.30,"The part that turns many chips into one machine. Cottier range 9-13%","Cottier et al., arXiv:2405.21015",A
+Pretraining,Energy,4,0.00,0.00,"Cottier range 2-6%. Small in money, decisive in siting","Cottier et al., arXiv:2405.21015",A
+Pretraining,Data acquisition,4,0.20,0.50,"Licensing and cleaning. Rising, still small at this stage","Industry estimates 2026",C
+Post-training,Human preference and expert data,45,0.00,0.00,"Generalist comparisons $0.50-8 each; expert domain work $20-100+ each","Vendor pricing surveys 2026",C
+Post-training,Reinforcement environments,25,0.00,0.00,"One interface environment about $20,000; a complex application clone about $300,000; expert-authored tasks $200-2,000 each","SemiAnalysis via industry review 2026",C
+Post-training,Compute,20,0.80,0.50,"DeepSeek-R1's entire reinforcement learning stage was 147,000 GPU-hours, about $294,000 at rented rates","DeepSeek-AI R1 technical report 2025",A
+Post-training,Research staff,10,0.00,0.00,"Small teams. The scarce input is experience, not headcount","Industry estimates 2026",C
+Inference,AI accelerators amortised,50,1.00,0.60,"Older generations, lower-spec parts and quantised models all work. That is what makes it substitutable","Vendor pricing; own calculation",B
+Inference,Energy,18,0.00,0.00,"Continuous draw, follows user demand. A domestic cost entirely","IEA data centre electricity data 2024-2030",A
+Inference,Data centre facility,17,0.00,0.00,"Shell, power plant, cooling. Built locally, financed locally","JLL India capacity and capex figures 2026",B
+Inference,Networking and storage,7,0.60,0.50,"Matters far less than in training. Ordinary Ethernet suffices","Austin et al., How To Scale Your Model ch. 7",B
+Inference,Engineering staff,8,0.00,0.00,"Serving engineers. Open source has lowered this barrier sharply","Industry estimates 2026",C

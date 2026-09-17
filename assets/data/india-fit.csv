@@ -1,0 +1,16 @@
+stage,cost_component,share_of_stage_cost_pct,india_capability_1to5,why,source,grade
+Pretraining,AI accelerators,33,2,"38,000 GPUs empanelled but split across 14 providers; no disclosed contiguous cluster above a few thousand","MeitY / IndiaAI, Dec 2025",A
+Pretraining,R&D staff,30,3,"Deep engineering base, thin frontier-run experience. No Indian run above roughly 1e24 FLOP is documented","Absence of published evidence",D
+Pretraining,Server components,18,3,"Assembly and integration capability exists and is growing","Industry estimates 2026",C
+Pretraining,Cluster interconnect,11,1,"No domestic capability. Bundled with the accelerator purchase","Vendor disclosures",C
+Pretraining,Energy,4,3,"Available nationally; constrained in Mumbai and Chennai","JLL 2026",B
+Pretraining,Data acquisition,4,4,"Large multilingual corpora exist through public projects","Public project disclosures 2025-2026",C
+Post-training,Human preference and expert data,45,5,"22 scheduled languages, a large credentialed professional base, and an established annotation industry","Industry structure; own assessment",C
+Post-training,Reinforcement environments,25,1,"No maintained environment suite published by any Indian institution","Absence of published evidence",D
+Post-training,Compute,20,5,"DeepSeek-R1's whole RL stage is under four hours of the national fleet","Own calculation from disclosed GPU-hours",A
+Post-training,Research staff,10,3,"Several firms run these pipelines in production","Company disclosures 2025-2026",C
+Inference,AI accelerators amortised,50,3,"Adequate for current serving loads; older parts are usable here","Own calculation",B
+Inference,Energy,18,3,"Not binding nationally, binding locally","JLL 2026",B
+Inference,Data centre facility,17,2,"1,600 MW exists but was built for 5-10 kW racks, not 40-130 kW","JLL 2026; vendor rack specifications",C
+Inference,Networking and storage,7,3,"Commodity, widely available","Industry estimates 2026",C
+Inference,Engineering staff,8,4,"Strong and improving. The serving stack is largely open source","Industry practice",C

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>India, Measured Against the Bill &middot; Takshashila</title>
+<meta name="description" content="Indian capability weighted by where the money is, with scenarios and options.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;500&family=Bungee&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/takshashila.css">
+</head>
+<body>
+<div class="progress" aria-hidden="true"></div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-mark" href="index.html">Three Stages, Three Problems <span>Takshashila</span></a>
+    <button class="nav-toggle" type="button" aria-expanded="false">Menu</button>
+    <div class="nav-links">
+      <a class="nav-link" href="index.html">Overview</a>
+      <a class="nav-link" href="money.html">Money</a>
+      <a class="nav-link" href="exposure.html">Chokepoints</a>
+      <a class="nav-link" href="openweights.html">Open Weights</a>
+      <a class="nav-link" href="trends.html">Trends</a>
+      <a class="nav-link" href="india.html" aria-current="page">India</a>
+      <a class="nav-link" href="method.html">Data &amp; Method</a>
+    </div>
+  </div>
+</nav>
+
+<header class="section">
+  <div class="container">
+    <p class="crumbs" style="margin-bottom:26px"><a href="index.html">Overview</a> / India</p>
+    <span class="chapter-no">03</span>
+    <h1 class="page-title" style="margin:10px 0 26px;max-width:18ch;font-size:54px;line-height:1.03;letter-spacing:-0.025em">India, Measured Against the <em>Bill</em></h1>
+    <p class="lede" style="max-width:62ch">Being good at something that costs almost nothing does not help. So each capability is weighted by how much of the stage budget it actually accounts for.</p>
+  </div>
+</header>
+
+<section class="section deep">
+  <div class="container">
+    <span class="eyebrow">Capability against cost</span>
+    <h2 class="h-section" style="margin:14px 0 34px;max-width:26ch">Where India is strong, and whether it matters</h2>
+    <div data-widget="indiafit" class="reveal"></div>
+
+    <div class="split mt-l">
+      <div class="card" style="border-left:3px solid var(--positive)">
+        <span class="chip chip-soft">The strength</span>
+        <h3 class="h-feature" style="margin:14px 0 12px;font-size:26px">India scores highest on the two lines that carry most of the post-training bill</h3>
+        <p class="body-s">Human data at 45% of the bill and compute at 20%. On data India has twenty-two scheduled languages, a large credentialed professional base and an established annotation industry. On compute the national fleet already delivers more than this stage needs.</p>
+        <p class="body-s">That combination does not exist anywhere else at this price. It is the closest thing India has to a natural advantage in AI.</p>
+      </div>
+      <div class="card" style="border-left:3px solid var(--negative)">
+        <span class="chip chip-neg">The gap</span>
+        <h3 class="h-feature" style="margin:14px 0 12px;font-size:26px">And lowest on the line that carries a quarter of it</h3>
+        <p class="body-s">Reinforcement environments. No Indian institution has published a maintained suite. There is no supplier to buy from, no export control preventing it, and no current programme funding it.</p>
+        <p class="body-s">A quarter of the cost of the stage India is best placed to win, and the spending on it is approximately zero.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <span class="eyebrow">Three numbers</span>
+    <h2 class="h-section" style="margin:14px 0 34px;max-width:24ch">The arithmetic behind the position</h2>
+
+    <div class="strip reveal">
+      <div class="panel dots-gold">
+        <span class="panel-code">01</span>
+        <span class="sfx sfx-l">3.9 hours</span>
+        <p class="panel-note" style="margin-top:14px;font-size:15px">DeepSeek-R1's whole reinforcement learning stage was 147,000 GPU-hours. India's 38,000 empanelled accelerators deliver 912,000 GPU-hours a day. That run is under four hours of the national fleet.</p>
+        <span class="scribble scribble-arrow" style="margin-top:10px">compute is not the constraint here</span>
+      </div>
+      <div class="panel dots">
+        <span class="panel-code">02</span>
+        <span class="sfx sfx-l">1.7%</span>
+        <p class="panel-note" style="margin-top:14px;font-size:15px">All 38,000 accelerators draw about 27 MW. India has roughly 1,600 MW of colocation capacity. The problem was never total power. A modern rack needs 40 to 130 kilowatts and most Indian halls were built for 5 to 10.</p>
+        <span class="scribble scribble-arrow" style="margin-top:10px">it's kilowatts per rack</span>
+      </div>
+      <div class="panel">
+        <span class="panel-code">03</span>
+        <span class="sfx sfx-l">Zero</span>
+        <p class="panel-note" style="margin-top:14px;font-size:15px">Maintained reinforcement environments published by an Indian institution. A quarter of the post-training bill, no export control on it, and nothing being spent.</p>
+        <div class="panel-art"><div class="cast" data-char="vera" data-mood="fail" data-size="86"></div></div>
+      </div>
+    </div>
+    <span class="source">GPU-hours from the DeepSeek-AI R1 technical report. Fleet size from MeitY and IndiaAI, December 2025. Power arithmetic at 700 W per accelerator; capacity from JLL, June 2026. Full workings on the <a class="link" href="method.html">method page</a>.</span>
+  </div>
+</section>
+
+<section class="section deep">
+  <div class="container">
+    <span class="eyebrow">Scenarios</span>
+    <h2 class="h-section" style="margin:14px 0 12px;max-width:26ch">Four dials, and which one actually matters</h2>
+    <p class="body-s prose" style="margin-bottom:34px">Not a forecast, and it contains no probabilities. It is a way of finding out which variable a conclusion is resting on. Most people find the build dial moves the headline number and the data dial moves the verdict.</p>
+    <div data-widget="scenario" class="reveal"></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <span class="eyebrow">Options, part one</span>
+    <h2 class="h-section" style="margin:14px 0 12px;max-width:24ch">What to do abroad</h2>
+    <p class="body-s prose" style="margin-bottom:34px">Things India would do with other countries and firms. Each carries a cost, stated.</p>
+
+    <div class="rowlist">
+      <div class="rowlist-item"><span><span class="code-no">G.01</span> <b style="font-weight:500">Negotiate for duration, not volume</b>
+      <span class="body-s" style="display:block;margin-top:6px">The scarce commodity is predictability. A multi-year supply undertaking with defined quantities is worth more to anyone financing a data centre than a larger one-off allocation, though the second makes the better announcement. <b>Cost:</b> locks India into a vendor generation and narrows later bargaining room.</span></span></div>
+
+      <div class="rowlist-item"><span><span class="code-no">G.02</span> <b style="font-weight:500">Go around the tightest points, not through them</b>
+      <span class="body-s" style="display:block;margin-top:6px">Lithography and accelerators are closed. Packaging and assembly are not: that layer is fragmented, has no export control pointed at it, and is short of capacity rather than permission. India has three operating packaging plants already. <b>Cost:</b> capital-hungry, and India would enter late against incumbents with a decade of yield learning.</span></span></div>
+
+      <div class="rowlist-item"><span><span class="code-no">G.03</span> <b style="font-weight:500">Treat memory as the hardware ask, not logic</b>
+      <span class="body-s" style="display:block;margin-top:6px">Stacked memory is three suppliers, sold out, and controlled since December 2024. Micron already packages memory at Sanand. Deepening that towards high-bandwidth assembly is narrower and more winnable than a leading-edge fab. <b>Cost:</b> back-end packaging is not front-end fabrication, and the gap between them is larger than it looks.</span></span></div>
+
+      <div class="rowlist-item"><span><span class="code-no">G.04</span> <b style="font-weight:500">Convene the middle tier</b>
+      <span class="body-s" style="display:block;margin-top:6px">The diffusion rule created a category: countries with capital and engineers but no advanced fab, from the Gulf to parts of Europe. They have never bargained together over compute access, though jointly they buy more than any one of them. <b>Cost:</b> members have incompatible relationships with Washington and the group would be read as a bloc.</span></span></div>
+
+      <div class="rowlist-item"><span><span class="code-no">G.05</span> <b style="font-weight:500">Sell environments, not engineers</b>
+      <span class="body-s" style="display:block;margin-top:6px">The one input with no supplier and no control instrument. Whoever builds maintained graded environments for law, medicine, agriculture and Indian-language reasoning owns something frontier laboratories need and cannot buy. This is the only option here that creates leverage rather than reducing exposure. <b>Cost:</b> requires sustained funding of unglamorous work with no groundbreaking to announce.</span></span></div>
+
+      <div class="rowlist-item"><span><span class="code-no">G.06</span> <b style="font-weight:500">Mirror open weights as stated policy</b>
+      <span class="body-s" style="display:block;margin-top:6px">A licence binds future releases; weights already downloaded cannot be recalled. Keeping national mirrors of significant open releases costs almost nothing and removes a whole class of disruption. <b>Cost:</b> open weights trail the frontier, so this means accepting a capability lag.</span></span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section deep">
+  <div class="container">
+    <span class="eyebrow">Options, part two</span>
+    <h2 class="h-section" style="margin:14px 0 12px;max-width:24ch">What to do at home</h2>
+    <p class="body-s prose" style="margin-bottom:34px">India can do all of these alone, and four of the six are administrative rather than budgetary.</p>
+
+    <div class="rowlist">
+      <div class="rowlist-item"><span><span class="code-no">P.01</span> <b style="font-weight:500">Report cluster size, not GPU totals</b>
+      <span class="body-s" style="display:block;margin-top:6px">Thirty-eight thousand chips across fourteen providers is a serving estate, not a training machine. Requiring empanelled providers to report their largest contiguous, high-bandwidth-connected block would reveal which one India actually has. <b>Effort:</b> a reporting line in the existing contract.</span></span></div>
+
+      <div class="rowlist-item"><span><span class="code-no">P.02</span> <b style="font-weight:500">Reserve one anchor cluster</b>
+      <span class="body-s" style="display:block;margin-top:6px">Fragmentation rather than scarcity is what prevents Indian pretraining. A single reserved block of a few thousand tightly connected accelerators, bookable in month-long slots, changes more than another twenty thousand cards spread thinly. <b>Effort:</b> a scheduling decision, not new money.</span></span></div>
+
+      <div class="rowlist-item"><span><span class="code-no">P.03</span> <b style="font-weight:500">Fund environments the way test facilities get funded</b>
+      <span class="body-s" style="display:block;margin-top:6px">A quarter of the post-training bill, and infrastructure rather than research output. It needs decade-long maintenance funding, staff not judged on papers, and domain institutions in the loop. India has this model in its space and standards bodies and has never applied it to software. <b>Effort:</b> small budget, hard institutional design.</span></span></div>
+
+      <div class="rowlist-item"><span><span class="code-no">P.04</span> <b style="font-weight:500">Write rack density into data centre incentives</b>
+      <span class="body-s" style="display:block;margin-top:6px">Infrastructure status and state incentives are written around megawatts and floor area, neither of which predicts whether a hall can take a 120 kW rack. Tying incentives to density and cooling readiness redirects private capital at no fiscal cost. <b>Effort:</b> amend existing criteria.</span></span></div>
+
+      <div class="rowlist-item"><span><span class="code-no">P.05</span> <b style="font-weight:500">Make publicly funded evaluations state the compute budget</b>
+      <span class="body-s" style="display:block;margin-top:6px">The same model can be run cheaply, or given time to think and several attempts at each question, and the second scores far higher while costing many times more. A benchmark score without that setting tells a buyer nothing. <b>Effort:</b> one clause in grant conditions and tender templates.</span></span></div>
+
+      <div class="rowlist-item"><span><span class="code-no">P.06</span> <b style="font-weight:500">Count the workforce properly</b>
+      <span class="body-s" style="display:block;margin-top:6px">The claim that India holds 20% of the world's chip design workforce appears in ministerial statements and strategy documents. It has no traceable primary source, no published method and no denominator. A census would cost a rounding error against the semiconductor mission's outlay. <b>Effort:</b> one survey.</span></span></div>
+    </div>
+
+    <div class="sticker gold mt-l" style="max-width:86ch">
+      <div class="cast" data-char="vera" data-mood="pass" data-size="76"></div>
+      <div class="sticker-txt"><b>Notice what is not on either list</b>A leading-edge fab. Not because it would be useless, but because nothing in the cost analysis suggests it binds on anything India is trying to do in the next five years. It is the most expensive answer to a question the numbers do not ask.</div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <p class="footer-tag">Pretraining buys hardware.<br>Post-training buys people.<br>Inference buys buildings and power.</p>
+      <p class="footer-addr" style="margin-top:24px">High-Tech Geopolitics Programme,<br>Takshashila Institution, Bengaluru. A draft for discussion.</p>
+    </div>
+    <div>
+      <h4>Pages</h4>
+      <ul>
+        <li><a href="index.html">Overview</a></li>
+        <li><a href="money.html">Where the Money Goes</a></li>
+        <li><a href="exposure.html">Chokepoints</a></li>
+        <li><a href="openweights.html">Open Weights</a></li>
+        <li><a href="trends.html">Trends</a></li>
+        <li><a href="india.html">India</a></li>
+        <li><a href="method.html">Data &amp; Method</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Data</h4>
+      <ul>
+        <li><a href="assets/data/cost-stack.csv" download>cost-stack.csv</a></li>
+        <li><a href="assets/data/stage-costs.csv" download>stage-costs.csv</a></li>
+        <li><a href="assets/data/india-fit.csv" download>india-fit.csv</a></li>
+        <li><a href="assets/data/controls.csv" download>controls.csv</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Key sources</h4>
+      <ul>
+        <li><a href="https://arxiv.org/abs/2405.21015" rel="noopener">Cottier et al., training costs <span class="arrow">&#8599;</span></a></li>
+        <li><a href="https://epoch.ai/trends" rel="noopener">Epoch AI Trends <span class="arrow">&#8599;</span></a></li>
+        <li><a href="https://arxiv.org/abs/2501.12948" rel="noopener">DeepSeek-R1 report <span class="arrow">&#8599;</span></a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-base">
+    <span>September 2026 &middot; Draft for discussion &middot; Prepared with an AI assistant</span>
+    <span>Every figure carries its source</span>
+  </div>
+</footer>
+
+<script src="assets/js/comic.js"></script>
+<script src="assets/js/dash.js"></script>
+<script src="assets/js/dash2.js"></script>
+</body>
+</html>

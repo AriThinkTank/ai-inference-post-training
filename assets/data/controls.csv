@@ -1,0 +1,9 @@
+instrument,jurisdiction,status_sep_2026,cost_component_hit,stage_hit,share_of_that_stage_cost_pct,india_effect,source,grade
+Advanced computing chip controls,United States,In force since 2022,AI accelerators,Pretraining and inference,33 and 50,"India is not embargoed. Licences are available. The effect is queue position and price","BIS interim final rules 2022-2024",A
+AI Diffusion Framework,United States,Issued Jan 2025 rescinded May 2025,AI accelerators,All,33 and 50,"India was placed in the middle tier before withdrawal. The drafting still exists","BIS IFR 13 Jan 2025",A
+HBM controls,United States,In force since Dec 2024,AI accelerators,Pretraining and inference,33 and 50,"No direct restriction. Tightens the scarcest input inside the chip","BIS rule Dec 2024",A
+Semiconductor equipment controls,"US, Netherlands, Japan",In force since 2023,Upstream of everything,Pretraining,0,"India's 28nm plans sit below the thresholds. A ceiling rather than a wall","National measures 2023 onward",A
+Section 232 tariffs,United States,In force since Jan 2026,AI accelerators,All,33 and 50,"Raises landed cost of anything routed through the United States","Presidential proclamation 14 Jan 2026",B
+Chip Security Act,United States,Passed committee Mar 2026 not law,AI accelerators,All,33 and 50,"Would embed location attestation. Turns a one-time export decision into a standing dependency","US Congress, 26 Mar 2026",B
+EDA software controls,United States,In force since 2022,Design tools upstream,Pretraining,0,"Cloud-delivered and licence-metered. Effective within one billing cycle","BIS rules; vendor licence terms",B
+No control exists,-,-,"Human data, environments, energy, facilities, staff",Post-training and inference,80 and 43,"Nothing restricts these. They are not sold across borders in a controllable form","Own assessment",B

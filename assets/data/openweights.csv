@@ -1,0 +1,13 @@
+model,publisher,origin,year,type,licence_class,why_it_matters,source,grade
+Llama 2 70B,Meta,United States,2023,Open weights,"Custom licence with usage limits","First widely usable open release at scale","Model card and licence text",A
+Mixtral 8x7B,Mistral,France,2023,Open weights,"Apache 2.0","Showed a small European lab could ship near-frontier open weights","Model card",A
+Llama 3.1 405B,Meta,United States,2024,Open weights,"Custom licence with usage limits","Largest open release of its year; 16,384 H100s for about 54 days","Model card; third-party cost estimates",B
+DeepSeek-V3,DeepSeek,China,2024,Open weights,"MIT for weights","2.79m GPU-hours disclosed, about $5.6m. Reset expectations on cost","DeepSeek-AI technical report",A
+DeepSeek-R1,DeepSeek,China,2025,Open weights,"MIT for weights","Reasoning ability in the open. RL stage 147,000 GPU-hours",  "DeepSeek-AI technical report",A
+Qwen3 235B-A22B,Alibaba,China,2025,Open weights,"Apache 2.0","Sustained Chinese lead in open-weight capability","Model card",A
+gpt-oss-120B,OpenAI,United States,2025,Open weights,"Apache 2.0","US re-entry into open weights after a long absence","Model card",A
+Kimi K2.6,Moonshot,China,2026,Open weights,"Modified MIT","Near the top of open-weight rankings as of mid-2026","Epoch AI ECI tracking",B
+PyTorch,PyTorch Foundation,United States,ongoing,Open source,"BSD-3-Clause","Roughly 63% framework share, forkable, foundation-governed","PyTorch Foundation; developer surveys",B
+vLLM,Community,United States,ongoing,Open source,"Apache 2.0","Leading open serving engine. A fork is a weekend, not a programme","Project repository",A
+SGLang,Community,United States,ongoing,Open source,"Apache 2.0","Second open serving engine; removes single-project dependency","Project repository",A
+CUDA,NVIDIA,United States,ongoing,Proprietary,"Proprietary EULA","About 90% share, revocable, not forkable. The real software chokepoint","Vendor licence terms",B

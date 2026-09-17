@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chokepoints and Controls &middot; Takshashila</title>
+<meta name="description" content="Who supplies each line of the bill, what each export control reaches, and cost-weighted exposure by stage.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;500&family=Bungee&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/takshashila.css">
+</head>
+<body>
+<div class="progress" aria-hidden="true"></div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-mark" href="index.html">Three Stages, Three Problems <span>Takshashila</span></a>
+    <button class="nav-toggle" type="button" aria-expanded="false">Menu</button>
+    <div class="nav-links">
+      <a class="nav-link" href="index.html">Overview</a>
+      <a class="nav-link" href="money.html">Money</a>
+      <a class="nav-link" href="exposure.html" aria-current="page">Chokepoints</a>
+      <a class="nav-link" href="openweights.html">Open Weights</a>
+      <a class="nav-link" href="trends.html">Trends</a>
+      <a class="nav-link" href="india.html">India</a>
+      <a class="nav-link" href="method.html">Data &amp; Method</a>
+    </div>
+  </div>
+</nav>
+
+<header class="section">
+  <div class="container">
+    <p class="crumbs" style="margin-bottom:26px"><a href="index.html">Overview</a> / Chokepoints</p>
+    <span class="chapter-no">02</span>
+    <h1 class="page-title" style="margin:10px 0 26px;max-width:18ch;font-size:54px;line-height:1.03;letter-spacing:-0.025em">Who Holds Each <em>Line</em> of the Bill</h1>
+    <p class="lede" style="max-width:62ch">Counting suppliers is only half the question. What matters is how much of a stage's budget sits with suppliers who can be told to stop, and whether anything else would do the job.</p>
+  </div>
+</header>
+
+<section class="section deep">
+  <div class="container">
+    <span class="eyebrow">The suppliers</span>
+    <h2 class="h-section" style="margin:14px 0 12px;max-width:26ch">Four places where the world has almost no second source</h2>
+    <p class="body-s prose" style="margin-bottom:34px">These four sit inside the accelerator line, which is 33% of a pretraining budget and 50% of an inference budget.</p>
+
+    <div class="gapless cols-4">
+      <div><span class="meta">Lithography machines</span><div class="kpi kpi-gold" style="margin:10px 0 4px">1 firm</div><p class="body-s">ASML makes every advanced one. Dutch licensing since 2019.</p></div>
+      <div><span class="meta">Leading-edge foundry</span><div class="kpi kpi-gold" style="margin:10px 0 4px">~90%</div><p class="body-s">TSMC's share of the most advanced output. Samsung and Intel share the rest.</p></div>
+      <div><span class="meta">Stacked memory</span><div class="kpi kpi-gold" style="margin:10px 0 4px">3 firms</div><p class="body-s">SK hynix 58%, Samsung 21%, Micron 21%. Controlled since December 2024.</p></div>
+      <div><span class="meta">AI accelerators</span><div class="kpi kpi-gold" style="margin:10px 0 4px">~88%</div><p class="body-s">NVIDIA's share of the merchant market. AMD holds most of the remainder.</p></div>
+    </div>
+    <span class="source">Company filings and Counterpoint Research quarterly share data, Q1 2026. All four are graded A or B in the data file.</span>
+
+    <div class="split mt-l">
+      <div class="card" style="border-left:3px solid var(--wine)">
+        <h3 class="h-feature" style="margin:0 0 12px;font-size:26px">And one place where concentration means nothing</h3>
+        <p class="body-s">The software almost every model is built with has roughly 63% share, held by one project. That sounds like a chokepoint and is not one, because it is open source: if the terms ever changed, the code is already on every machine that uses it and can be copied and carried on.</p>
+        <p class="body-s">The programming layer directly beneath it has 90% share and is proprietary. That one is a chokepoint. Same market structure, opposite strategic meaning, and the difference is licensing rather than share.</p>
+      </div>
+      <div class="sticker gold">
+        <div class="cast" data-char="echo" data-mood="point" data-size="76"></div>
+        <div class="sticker-txt"><b>The test to apply</b>Not "how many suppliers are there" but "if this supplier were told to stop selling to India tomorrow, what would break, and for how long". Those two questions have different answers far more often than supply chain reports suggest.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <span class="eyebrow">The instruments</span>
+    <h2 class="h-section" style="margin:14px 0 12px;max-width:26ch">What each export control actually reaches</h2>
+    <p class="body-s prose" style="margin-bottom:34px">Every instrument in force today points at the same line of the bill: the chips. None of them reaches the human data, the environments, the electricity, the buildings or the staff.</p>
+    <div data-widget="controls" class="reveal"></div>
+
+    <div class="split mt-l">
+      <div>
+        <h3 class="h-feature" style="margin-bottom:16px;font-size:30px">India is not blocked. India is exposed to changes of mind.</h3>
+        <p class="body-s prose">No instrument currently embargoes India. Licences are available and chips arrive. The AI Diffusion Framework placed India in a middle tier in January 2025 and was withdrawn in May, with nothing about India having changed in the interval.</p>
+        <p class="body-s prose">The rules moved four times in eighteen months, in both directions. That is the actual problem. A data centre is a seven-year capital commitment and it cannot be planned against an eighteen-month rule cycle.</p>
+      </div>
+      <div class="stack-m">
+        <div class="card">
+          <span class="meta">The instrument to watch</span>
+          <h4 class="h-card" style="margin:8px 0 10px">Location attestation in the chip</h4>
+          <p class="body-s">The Chip Security Act passed committee in March 2026 and is not law. If it becomes law it would turn a one-time export decision into a standing dependency, because the chip keeps reporting where it is for its whole working life.</p>
+        </div>
+        <div class="aside">
+          <span class="aside-title">The instrument nobody needs to write</span>
+          <p>Design software is cloud-delivered and metered by licence. Cutting it off requires no shipment to be stopped and no port to be involved. It works within one billing cycle.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section deep">
+  <div class="container">
+    <span class="eyebrow">Putting the two together</span>
+    <h2 class="h-section" style="margin:14px 0 12px;max-width:28ch">Cost-weighted exposure, by stage</h2>
+    <p class="body-s prose" style="margin-bottom:34px">Take each line of the bill, multiply its share of the budget by how controllable it is, then discount it by how easily something else would do. Sum across the stage. The result ranks the three stages against each other.</p>
+
+    <div data-widget="exposure" class="reveal"></div>
+
+    <div class="split-3 mt-l">
+      <div>
+        <span class="meta">Pretraining, 36</span>
+        <p class="body-s mt-s">Most exposed, and by a distance. The chips are a third of the bill, there is no substitute for top-bin parts, and the interconnect comes bundled with them.</p>
+      </div>
+      <div>
+        <span class="meta">Inference, 22</span>
+        <p class="body-s mt-s">Middling. Chips are half the bill, but older and cheaper parts genuinely work here, and the other half is power and property.</p>
+      </div>
+      <div>
+        <span class="meta">Post-training, 8</span>
+        <p class="body-s mt-s">Barely exposed at all. Four-fifths of the budget buys human judgement, and no country has found a way to license that.</p>
+      </div>
+    </div>
+
+    <div class="sticker mt-l" style="max-width:86ch">
+      <div class="cast" data-char="ira" data-mood="think" data-size="76"></div>
+      <div class="sticker-txt"><b>The awkward implication</b>The stage most exposed to export controls is the one India was least likely to compete in anyway. The stage India could most plausibly lead is the one no control instrument touches. Which means the binding constraint on Indian AI is not export policy at all. It is whether anybody chooses to fund the unglamorous half of the bill.</div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <p class="footer-tag">Pretraining buys hardware.<br>Post-training buys people.<br>Inference buys buildings and power.</p>
+      <p class="footer-addr" style="margin-top:24px">High-Tech Geopolitics Programme,<br>Takshashila Institution, Bengaluru. A draft for discussion.</p>
+    </div>
+    <div>
+      <h4>Pages</h4>
+      <ul>
+        <li><a href="index.html">Overview</a></li>
+        <li><a href="money.html">Where the Money Goes</a></li>
+        <li><a href="exposure.html">Chokepoints</a></li>
+        <li><a href="openweights.html">Open Weights</a></li>
+        <li><a href="trends.html">Trends</a></li>
+        <li><a href="india.html">India</a></li>
+        <li><a href="method.html">Data &amp; Method</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Data</h4>
+      <ul>
+        <li><a href="assets/data/cost-stack.csv" download>cost-stack.csv</a></li>
+        <li><a href="assets/data/stage-costs.csv" download>stage-costs.csv</a></li>
+        <li><a href="assets/data/india-fit.csv" download>india-fit.csv</a></li>
+        <li><a href="assets/data/controls.csv" download>controls.csv</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Key sources</h4>
+      <ul>
+        <li><a href="https://arxiv.org/abs/2405.21015" rel="noopener">Cottier et al., training costs <span class="arrow">&#8599;</span></a></li>
+        <li><a href="https://epoch.ai/trends" rel="noopener">Epoch AI Trends <span class="arrow">&#8599;</span></a></li>
+        <li><a href="https://arxiv.org/abs/2501.12948" rel="noopener">DeepSeek-R1 report <span class="arrow">&#8599;</span></a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-base">
+    <span>September 2026 &middot; Draft for discussion &middot; Prepared with an AI assistant</span>
+    <span>Every figure carries its source</span>
+  </div>
+</footer>
+
+<script src="assets/js/comic.js"></script>
+<script src="assets/js/dash.js"></script>
+<script src="assets/js/dash2.js"></script>
+</body>
+</html>

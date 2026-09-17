@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Where the Money Goes &middot; Takshashila</title>
+<meta name="description" content="The cost stack for pretraining, post-training and inference, line by line.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;500&family=Bungee&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/takshashila.css">
+</head>
+<body>
+<div class="progress" aria-hidden="true"></div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-mark" href="index.html">Three Stages, Three Problems <span>Takshashila</span></a>
+    <button class="nav-toggle" type="button" aria-expanded="false">Menu</button>
+    <div class="nav-links">
+      <a class="nav-link" href="index.html">Overview</a>
+      <a class="nav-link" href="money.html" aria-current="page">Money</a>
+      <a class="nav-link" href="exposure.html">Chokepoints</a>
+      <a class="nav-link" href="openweights.html">Open Weights</a>
+      <a class="nav-link" href="trends.html">Trends</a>
+      <a class="nav-link" href="india.html">India</a>
+      <a class="nav-link" href="method.html">Data &amp; Method</a>
+    </div>
+  </div>
+</nav>
+
+<header class="section">
+  <div class="container">
+    <p class="crumbs" style="margin-bottom:26px"><a href="index.html">Overview</a> / Where the money goes</p>
+    <span class="chapter-no">01</span>
+    <h1 class="page-title" style="margin:10px 0 26px;max-width:16ch;font-size:54px;line-height:1.03;letter-spacing:-0.025em">Where the <em>Money</em> Goes</h1>
+    <p class="lede" style="max-width:62ch">A frontier pretraining run and a serious post-training programme differ by a factor of about forty in cost. They also differ completely in what that money buys, and that second difference is the one with strategic consequences.</p>
+  </div>
+</header>
+
+<section class="section deep">
+  <div class="container">
+    <span class="eyebrow">The cost stack</span>
+    <h2 class="h-section" style="margin:14px 0 12px;max-width:26ch">Every line of the bill, for each stage</h2>
+    <p class="body-s prose" style="margin-bottom:34px">Column width is the size of the bill, segment height is share of it, so the blocks are comparable across stages as well as within them. Wine is something a government somewhere can restrict. Marigold is something nobody can. Every number is editable.</p>
+    <div data-widget="mekko" class="reveal"></div>
+
+    <div class="mt-l">
+      <h3 class="h-feature" style="margin-bottom:8px;font-size:30px">Or one stage at a time, with the money attached</h3>
+      <p class="body-s prose" style="margin-bottom:26px">The same figures as a single-stage view, with a budget dial so the rupee amounts move.</p>
+      <div data-widget="coststack" class="reveal"></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <span class="eyebrow">Reading the stacks</span>
+    <h2 class="h-section" style="margin:14px 0 34px;max-width:26ch">What the three shapes tell you</h2>
+
+    <div class="gapless cols-3">
+      <div>
+        <span class="code-no">Pretraining</span>
+        <h3 class="h-card" style="margin:8px 0 10px">A hardware business</h3>
+        <p class="body-s">62% of the bill is accelerators, servers and interconnect. Staff are the only large line that cannot be restricted, and staff are 30%. This is the stage that looks like semiconductor policy, because that is largely what it is.</p>
+      </div>
+      <div>
+        <span class="code-no">Post-training</span>
+        <h3 class="h-card" style="margin:8px 0 10px">A labour business</h3>
+        <p class="body-s">70% of the bill is human data and graded environments. Compute is a fifth. This looks nothing like semiconductor policy. It looks like professional services, and it is priced like professional services.</p>
+      </div>
+      <div>
+        <span class="code-no">Inference</span>
+        <h3 class="h-card" style="margin:8px 0 10px">A property business</h3>
+        <p class="body-s">Chips still lead at 50%, but power, buildings and staff come to 43%. Anyone who has financed a data centre will recognise this shape. It is much closer to infrastructure than to electronics.</p>
+      </div>
+    </div>
+
+    <div class="split mt-l">
+      <div class="card" style="border-left:3px solid var(--marigold)">
+        <span class="chip chip-gold">The line that surprises people</span>
+        <h3 class="h-feature" style="margin:14px 0 12px;font-size:26px">Reinforcement environments cost real money</h3>
+        <p class="body-s">A single interface turned into a trainable environment runs to about $20,000. A complex application rebuilt as one runs to about $300,000. Individual expert-written tasks go for $200 to $2,000 each, and exclusive rights cost several times the non-exclusive rate.</p>
+        <p class="body-s">These are software engineering budgets, not data budgets. They are also entirely absent from Indian AI spending, and they are a quarter of what a serious post-training programme costs.</p>
+      </div>
+      <div class="stack-m">
+        <div class="sticker">
+          <div class="cast" data-char="vera" data-mood="pass" data-size="76"></div>
+          <div class="sticker-txt"><b>What an environment is, in one sentence</b>A test that a computer can mark on its own, so a model can be trained against it millions of times without a human in the loop.</div>
+        </div>
+        <div class="aside">
+          <span class="aside-title">Why they never appear in trade data</span>
+          <p>They are not sold across borders. Frontier laboratories build them in house and keep them there. Nothing to export means nothing to control, and also nothing to buy.</p>
+        </div>
+      </div>
+    </div>
+    <span class="source">Environment pricing from industry reporting, 2026, and graded C: the figures are consistent across sources but no primary vendor price list is public.</span>
+  </div>
+</section>
+
+<section class="section deep">
+  <div class="container">
+    <span class="eyebrow">The comparison worth keeping</span>
+    <h2 class="h-section" style="margin:14px 0 34px;max-width:28ch">One number does most of the strategic work</h2>
+
+    <div class="strip strip-4 reveal">
+      <div class="panel">
+        <span class="panel-code">01</span>
+        <div class="caption-box">The compute</div>
+        <div class="kpi kpi-gold" style="margin:14px 0 6px">$294k</div>
+        <p class="panel-note">DeepSeek-R1's entire reinforcement learning stage. The run that made reasoning models famous, and the developer published the figure.</p>
+      </div>
+      <div class="panel dots">
+        <span class="panel-code">02</span>
+        <div class="caption-box">The people, generalist rates</div>
+        <div class="kpi kpi-gold" style="margin:14px 0 6px">$500k</div>
+        <p class="panel-note">100,000 preference comparisons at about $5 each. Already larger than the compute bill.</p>
+      </div>
+      <div class="panel dots-gold">
+        <span class="panel-code">03</span>
+        <div class="caption-box">The people, expert rates</div>
+        <div class="kpi kpi-gold" style="margin:14px 0 6px">$6m</div>
+        <p class="panel-note">The same volume from doctors, lawyers or senior engineers, at about $60 each. Twenty times the compute bill.</p>
+      </div>
+      <div class="panel">
+        <span class="panel-code">04</span>
+        <span class="sfx sfx-s">So</span>
+        <p class="panel-note" style="margin-top:12px;font-size:15px">At this stage the binding constraint is finding credentialed people who will do careful work, not finding accelerators. That is a labour market problem, and India is unusually well placed in labour markets.</p>
+      </div>
+    </div>
+    <span class="source">R1 compute from the DeepSeek-AI technical report, graded A. Annotation rates from vendor pricing surveys, 2026, graded C: generalist comparisons $0.50-8, expert domain work $20-100 and above. Volumes follow the InstructGPT recipe.</span>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <p class="footer-tag">Pretraining buys hardware.<br>Post-training buys people.<br>Inference buys buildings and power.</p>
+      <p class="footer-addr" style="margin-top:24px">High-Tech Geopolitics Programme,<br>Takshashila Institution, Bengaluru. A draft for discussion.</p>
+    </div>
+    <div>
+      <h4>Pages</h4>
+      <ul>
+        <li><a href="index.html">Overview</a></li>
+        <li><a href="money.html">Where the Money Goes</a></li>
+        <li><a href="exposure.html">Chokepoints</a></li>
+        <li><a href="openweights.html">Open Weights</a></li>
+        <li><a href="trends.html">Trends</a></li>
+        <li><a href="india.html">India</a></li>
+        <li><a href="method.html">Data &amp; Method</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Data</h4>
+      <ul>
+        <li><a href="assets/data/cost-stack.csv" download>cost-stack.csv</a></li>
+        <li><a href="assets/data/stage-costs.csv" download>stage-costs.csv</a></li>
+        <li><a href="assets/data/india-fit.csv" download>india-fit.csv</a></li>
+        <li><a href="assets/data/controls.csv" download>controls.csv</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Key sources</h4>
+      <ul>
+        <li><a href="https://arxiv.org/abs/2405.21015" rel="noopener">Cottier et al., training costs <span class="arrow">&#8599;</span></a></li>
+        <li><a href="https://epoch.ai/trends" rel="noopener">Epoch AI Trends <span class="arrow">&#8599;</span></a></li>
+        <li><a href="https://arxiv.org/abs/2501.12948" rel="noopener">DeepSeek-R1 report <span class="arrow">&#8599;</span></a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-base">
+    <span>September 2026 &middot; Draft for discussion &middot; Prepared with an AI assistant</span>
+    <span>Every figure carries its source</span>
+  </div>
+</footer>
+
+<script src="assets/js/comic.js"></script>
+<script src="assets/js/dash.js"></script>
+<script src="assets/js/dash2.js"></script>
+</body>
+</html>

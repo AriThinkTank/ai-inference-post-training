@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>After the Model Is Trained — a playbook</title>
-<meta name="description" content="What happens to a language model after pretraining ends, and what it costs to run one. Drawn out in panels, with things to click.">
+<title>Three Stages, Three Problems &middot; Takshashila</title>
+<meta name="description" content="Where the money goes at each stage of AI, who controls each line of the bill, and what that means for India.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;500&family=Bungee&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
@@ -15,237 +15,137 @@
 
 <nav class="nav">
   <div class="nav-inner">
-    <a class="nav-mark" href="index.html">After the Model Is Trained <span>Takshashila</span></a>
+    <a class="nav-mark" href="index.html" aria-current="page">Three Stages, Three Problems <span>Takshashila</span></a>
     <button class="nav-toggle" type="button" aria-expanded="false">Menu</button>
     <div class="nav-links">
-      <a class="nav-link" href="index.html" aria-current="page">The Map</a>
-      <a class="nav-link" href="01-what-pretraining-leaves.html">Next-Token</a>
-      <a class="nav-link" href="01b-inside.html">Inside</a>
-      <a class="nav-link" href="02-post-training.html">Post-Train</a>
-      <a class="nav-link" href="03-inference.html">Inference</a>
-      <a class="nav-link" href="04-policy.html">Policy</a>
-      <a class="nav-link" href="06-india.html">India</a>
-      <a class="nav-link" href="05-reference.html">Reading</a>
+      <a class="nav-link" href="index.html" aria-current="page">Overview</a>
+      <a class="nav-link" href="money.html">Money</a>
+      <a class="nav-link" href="exposure.html">Chokepoints</a>
+      <a class="nav-link" href="openweights.html">Open Weights</a>
+      <a class="nav-link" href="trends.html">Trends</a>
+      <a class="nav-link" href="india.html">India</a>
+      <a class="nav-link" href="method.html">Data &amp; Method</a>
     </div>
   </div>
 </nav>
 
-<!-- ============================ HERO ============================ -->
 <header class="section">
   <div class="container">
     <span class="eyebrow">Takshashila Institution &middot; High-Tech Geopolitics Programme</span>
-    <h1 class="display" style="margin:20px 0 0;max-width:13ch">After the Model <em>Is Trained</em></h1>
-    <span class="sfx sfx-l" style="margin:18px 0 30px">A playbook in panels</span>
-
+    <h1 class="display" style="margin:20px 0 0;max-width:15ch">Three Stages, <em>Three Problems</em></h1>
+    <span class="sfx sfx-l" style="margin:18px 0 30px">Follow the money</span>
     <div class="split">
       <div>
-        <p class="lede">Most explanations of AI stop the moment pretraining ends. Read the internet, predict the next word, scale up, the end.</p>
-        <p class="lede">That's roughly half the story, and lately the less interesting half. This is the rest of it.</p>
-        <p class="body-s prose" style="margin-top:22px">No maths beyond arithmetic. Over thirty things to click. Every number says where it came from, and when the source is a company marking its own homework, it says that too.</p>
+        <p class="lede">Building an AI model, teaching it to behave, and running it for users are three different businesses. They buy different things, from different people, and only one of them is genuinely vulnerable to export controls.</p>
+        <p class="body-s prose" style="margin-top:20px">This dashboard works out where the money goes at each stage, which suppliers hold each line of the bill, and what that means for a country in India's position. No algorithms are explained. The technical detail sits underneath the numbers rather than on the page.</p>
       </div>
       <div class="stack-m">
         <div class="sticker gold">
           <div class="cast" data-char="ira" data-mood="point" data-size="72"></div>
-          <div class="sticker-txt"><b>Start here if you're in a hurry</b>The map below, then chapter 03. That's where the money is.</div>
+          <div class="sticker-txt"><b>The one-line version</b>Pretraining buys hardware. Post-training buys people. Inference buys buildings and power. Only the first is easy to restrict.</div>
         </div>
-        <a class="btn" href="#map">Start with the map &rarr;</a>
+        <a class="btn" href="money.html">Start with the money &rarr;</a>
       </div>
     </div>
   </div>
 </header>
 
-<!-- ============================ OPENING STRIP ============================ -->
 <section class="section deep">
   <div class="container">
-    <span class="eyebrow">Strip 01 &middot; The handover</span>
-    <h2 class="h-section" style="margin:14px 0 34px;max-width:22ch">A machine that has read everything, and can't answer a question</h2>
+    <span class="eyebrow">The finding</span>
+    <h2 class="h-section" style="margin:14px 0 34px;max-width:26ch">Same technology, completely different bills</h2>
 
     <div class="strip reveal">
-      <div class="panel">
-        <span class="panel-code">01</span>
-        <div class="caption-box">Pretraining has just finished. Three hundred billion words have gone in.</div>
-        <div class="bubble"><span class="bubble-who">Ira</span>Right. Ask it something.</div>
-        <div class="panel-art"><div class="cast" data-char="ira" data-mood="happy" data-size="106"></div></div>
-      </div>
-      <div class="panel">
-        <span class="panel-code">02</span>
-        <div class="bubble"><span class="bubble-who">Ira</span>What does the 2019 ethanol import restriction do?</div>
-        <div class="panel-art between">
-          <div class="cast" data-char="ira" data-mood="point" data-size="94"></div>
-          <div class="cast flip" data-char="echo" data-mood="blank" data-size="94"></div>
-        </div>
-      </div>
       <div class="panel dots">
-        <span class="panel-code">03</span>
-        <div class="bubble right"><span class="bubble-who">Echo</span>What does the 2020 sugar levy do? What does the 2021 blending target do? What does&hellip;</div>
-        <span class="scribble scribble-arrow">it just keeps going</span>
-        <div class="panel-art"><div class="cast" data-char="echo" data-mood="blank" data-size="100"></div></div>
+        <span class="panel-code">Stage 1</span>
+        <div class="caption-box">Pretraining &middot; about $350m</div>
+        <span class="sfx sfx-s">62% restricted</span>
+        <p class="panel-note" style="margin-top:12px">Two-thirds of the bill buys chips, servers and the fabric that wires them together. All of it needs somebody else's permission, and there is no second source for the part that matters.</p>
+        <span class="scribble scribble-arrow" style="margin-top:10px">the stage everyone regulates</span>
+      </div>
+      <div class="panel dots-gold">
+        <span class="panel-code">Stage 2</span>
+        <div class="caption-box">Post-training &middot; about $8m</div>
+        <span class="sfx sfx-s">80% untouchable</span>
+        <p class="panel-note" style="margin-top:12px">Four-fifths of the bill buys human judgement: expert comparisons, graded test environments, small research teams. Nobody licenses people. No export control reaches any of it.</p>
+        <span class="scribble scribble-arrow" style="margin-top:10px">the stage nobody regulates</span>
       </div>
       <div class="panel">
-        <span class="panel-code">04</span>
-        <div class="bubble"><span class="bubble-who">Ira</span>It didn't answer me.</div>
-        <div class="bubble right"><span class="bubble-who">Echo</span>You didn't ask me to answer. You asked what comes next. Questions are usually followed by more questions.</div>
-        <div class="panel-art between">
-          <div class="cast" data-char="ira" data-mood="confused" data-size="92"></div>
-          <div class="cast flip" data-char="echo" data-mood="blank" data-size="92"></div>
-        </div>
+        <span class="panel-code">Stage 3</span>
+        <div class="caption-box">Inference &middot; the recurring bill</div>
+        <span class="sfx sfx-s">43% domestic</span>
+        <p class="panel-note" style="margin-top:12px">Chips still lead, but power, buildings and staff are more than two-fifths of the cost, and the chips can be older ones. This is where most of the industry's money now goes.</p>
+        <div class="panel-art"><div class="cast" data-char="echo" data-mood="think" data-size="86"></div></div>
       </div>
-      <div class="panel wide dots-gold">
-        <span class="panel-code">05</span>
-        <span class="sfx sfx-l">The gap</span>
-        <p class="panel-note" style="margin-top:14px;font-size:15px">Echo isn't broken. Nobody has told it to be helpful yet. Everything in this playbook lives in the space between panel 03 and a useful reply.</p>
-        <p class="panel-note" style="margin-top:12px">Two stages fill that space. <b style="font-weight:500">Post-training</b> rewrites the model. <b style="font-weight:500">Inference</b> is what it costs to run afterwards.</p>
-      </div>
+    </div>
+
+    <div class="sticker mt-l" style="max-width:86ch">
+      <div class="cast" data-char="ira" data-mood="doubt" data-size="76"></div>
+      <div class="sticker-txt"><b>Why this matters more than it sounds</b>Export controls were written for stage one, where the money is in hardware. But the stage that decides what a model can actually do, and the stage that decides who can afford to use it, both spend most of their budget on things no control instrument can touch. The policy conversation and the cost structure have come apart.</div>
     </div>
   </div>
 </section>
 
-<!-- ============================ HOW TO READ ============================ -->
 <section class="section">
   <div class="container">
-    <span class="eyebrow">Before you start</span>
-    <h2 class="h-section" style="margin:14px 0 34px;max-width:20ch">Two colours do a lot of work here</h2>
-
-    <div class="split-even">
-      <div class="card" style="border-left:3px solid var(--wine)">
-        <span class="chip">Wine</span>
-        <h3 class="h-feature" style="margin:14px 0 10px;font-size:26px">Something changed the model</h3>
-        <p class="body-s">The weights are different afterwards. This costs a lot, happens rarely, and is what people mean by "training".</p>
-      </div>
-      <div class="card" style="border-left:3px solid var(--marigold)">
-        <span class="chip chip-gold">Marigold</span>
-        <h3 class="h-feature" style="margin:14px 0 10px;font-size:26px">Something cost money per question</h3>
-        <p class="body-s">The model is untouched. You're paying for the answer, and you pay again for the next one. This is now most of the industry's compute bill.</p>
-      </div>
-    </div>
-
-    <div class="split-3 mt-l">
-      <div>
-        <span class="meta">Dotted underlines</span>
-        <p class="body-s mt-s">Hover or tap any term like <b class="def" data-t="kv-cache">KV cache</b> for a definition and a link to the paper it came from.</p>
-      </div>
-      <div>
-        <span class="meta">Yellow boxes</span>
-        <p class="body-s mt-s">Every clickable thing opens with one, telling you what it is, what you're changing, and what to look at.</p>
-      </div>
-      <div>
-        <span class="meta">Grey lines under charts</span>
-        <p class="body-s mt-s">The source. If it says a number is illustrative, it's illustrative. Don't quote it in a paper.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============================ CAST ============================ -->
-<section class="section deep">
-  <div class="container">
-    <span class="eyebrow">The cast</span>
-    <h2 class="h-section" style="margin:14px 0 12px;max-width:22ch">Four characters, doing four real jobs</h2>
-    <p class="body-s prose" style="margin-bottom:34px">They're inventions. What they do isn't. Each one stands in for something that actually exists in the pipeline.</p>
+    <span class="eyebrow">The numbers behind it</span>
+    <h2 class="h-section" style="margin:14px 0 12px;max-width:24ch">What each stage has actually cost</h2>
+    <p class="body-s prose" style="margin-bottom:34px">Published figures, not estimates. The spread between them is the point.</p>
 
     <div class="gapless cols-4">
-      <div style="text-align:left">
-        <div class="cast" data-char="ira" data-mood="happy" data-size="94" style="margin-bottom:14px"></div>
-        <h3 class="h-card">Ira</h3>
-        <p class="meta" style="text-transform:none;letter-spacing:0;margin:4px 0 10px">Ten years old</p>
-        <p class="body-s">Asks the obvious question that everyone else is too embarrassed to ask. Usually the right one.</p>
-      </div>
-      <div style="text-align:left">
-        <div class="cast" data-char="echo" data-mood="blank" data-size="94" style="margin-bottom:14px"></div>
-        <h3 class="h-card">Echo</h3>
-        <p class="meta" style="text-transform:none;letter-spacing:0;margin:4px 0 10px">The model</p>
-        <p class="body-s">Does exactly what it was trained to do, which is rarely what you wanted. Never lies about it either.</p>
-      </div>
-      <div style="text-align:left">
-        <div class="cast" data-char="mark" data-mood="fooled" data-size="94" style="margin-bottom:14px"></div>
-        <h3 class="h-card">Mark</h3>
-        <p class="meta" style="text-transform:none;letter-spacing:0;margin:4px 0 10px">The reward model</p>
-        <p class="body-s">Marks answers on a human's behalf. Means well. Falls for long answers, confident tone and tidy headings.</p>
-      </div>
-      <div style="text-align:left">
-        <div class="cast" data-char="vera" data-mood="pass" data-size="94" style="margin-bottom:14px"></div>
-        <h3 class="h-card">Vera</h3>
-        <p class="meta" style="text-transform:none;letter-spacing:0;margin:4px 0 10px">The verifier</p>
-        <p class="body-s">A program. Runs the code, checks the proof, says pass or fail. Cannot be flattered. Also can't mark an essay.</p>
-      </div>
+      <div><span class="meta">GPT-4 pretraining, 2023</span><div class="kpi kpi-gold" style="margin:10px 0 4px">$79m</div><p class="body-s">Stanford AI Index with Epoch AI, amortised hardware and energy.</p></div>
+      <div><span class="meta">Gemini Ultra pretraining, 2024</span><div class="kpi kpi-gold" style="margin:10px 0 4px">$191m</div><p class="body-s">Same method. About 35 MW of power draw while it ran.</p></div>
+      <div><span class="meta">DeepSeek-V3 pretraining, 2024</span><div class="kpi kpi-gold" style="margin:10px 0 4px">$5.6m</div><p class="body-s">The developer's own figure: 2.79m GPU-hours at $2 an hour.</p></div>
+      <div><span class="meta">DeepSeek-R1 post-training, 2025</span><div class="kpi kpi-gold" style="margin:10px 0 4px">$294k</div><p class="body-s">The entire reinforcement learning stage. 147,000 GPU-hours.</p></div>
     </div>
-  </div>
-</section>
-
-<!-- ============================ THE MAP ============================ -->
-<section class="section" id="map">
-  <div class="container">
-    <span class="eyebrow">The map</span>
-    <h2 class="h-section" style="margin:14px 0 12px;max-width:22ch">Seven stages, and only five of them touch the model</h2>
-    <p class="body-s prose" style="margin-bottom:34px">People say "training" as though it were one event. It's seven, and the last two happen every time you press enter.</p>
-
-    <div data-widget="map" class="reveal"></div>
+    <span class="source">Sources as listed in <a class="link" href="assets/data/stage-costs.csv" download>stage-costs.csv</a>. The V3 and R1 figures are compute only and exclude staff and data, which is exactly why the next page matters.</span>
 
     <div class="split mt-l">
-      <div class="sticker">
-        <div class="cast" data-char="ira" data-mood="doubt" data-size="76"></div>
-        <div class="sticker-txt"><b>Wait, it loops?</b>Yes. Stages 2 to 5 run again and again, often weekly. A frontier model isn't released once. It's more like a newspaper than a bridge.</div>
+      <div class="card" style="border-left:3px solid var(--wine)">
+        <h3 class="h-feature" style="margin:0 0 12px;font-size:26px">Hold those last two numbers together</h3>
+        <p class="body-s">The compute for R1's reinforcement learning cost less than $300,000. A serious set of expert preference comparisons for the same model would cost several million. At this stage the humans cost more than the machines, by a wide margin, and that inverts everything people assume about AI being a capital-intensive business.</p>
       </div>
-      <div class="stack-m">
-        <div><span class="meta">2022</span><p class="body-s mt-s">Almost all the compute went into stage 1. Post-training was a small polish at the end.</p></div>
-        <div><span class="meta">2026</span><p class="body-s mt-s">Stages 2 to 5 take a large and growing share, and stage 7 didn't meaningfully exist three years ago.</p></div>
-        <div><span class="meta">Still argued about</span><p class="body-s mt-s">Whether the later stages create new ability or just uncover what stage 1 already put there. Genuinely unsettled.</p></div>
+      <div class="aside">
+        <span class="aside-title">Which is the interesting bit for India</span>
+        <p>India cannot buy its way to the top of stage one. It has more of what stage two actually needs than almost anyone, and it is not currently spending on it.</p>
       </div>
     </div>
-    <span class="source">Stage naming follows Lambert, <a class="link" href="https://arxiv.org/abs/2504.12501" target="_blank" rel="noopener">arXiv:2504.12501</a>, ch. 3; serving stages follow Austin et al., <a class="link" href="https://jax-ml.github.io/scaling-book" target="_blank" rel="noopener">How To Scale Your Model</a>, ch. 7.</span>
   </div>
 </section>
 
-<!-- ============================ VOCABULARY ============================ -->
 <section class="section deep">
   <div class="container">
-    <span class="eyebrow">Six words</span>
-    <h2 class="h-section" style="margin:14px 0 12px;max-width:24ch">Words that get used as synonyms and aren't</h2>
-    <p class="body-s prose" style="margin-bottom:34px">Most of the confusion in AI policy writing comes from these six. The difference is nearly always about who or what is doing the marking.</p>
-    <div data-widget="vocab" class="reveal"></div>
-  </div>
-</section>
-
-<!-- ============================ CHAPTERS ============================ -->
-<section class="section">
-  <div class="container">
-    <span class="eyebrow">Five chapters</span>
+    <span class="eyebrow">The four pages</span>
     <h2 class="h-section" style="margin:14px 0 34px;max-width:20ch">Where to go next</h2>
-
     <div class="rowlist">
-      <a class="rowlist-item" href="01-what-pretraining-leaves.html">
-        <span><span class="code-no">01</span> <b style="font-weight:500">The Next-Token Machine</b>
-        <span class="body-s" style="display:block;margin-top:4px">What you get for a hundred million dollars, and what you don't. Includes a sampler you can break.</span></span>
+      <a class="rowlist-item" href="money.html">
+        <span><span class="code-no">01</span> <b style="font-weight:500">Where the Money Goes</b>
+        <span class="body-s" style="display:block;margin-top:4px">The cost stack for each stage, line by line, with a budget dial. Which lines are hardware and which are people.</span></span>
+        <span class="meta">8 min &rarr;</span>
+      </a>
+      <a class="rowlist-item" href="exposure.html">
+        <span><span class="code-no">02</span> <b style="font-weight:500">Chokepoints and Controls</b>
+        <span class="body-s" style="display:block;margin-top:4px">Who supplies each line, what each export control instrument actually reaches, and the cost-weighted exposure of each stage.</span></span>
         <span class="meta">10 min &rarr;</span>
       </a>
-      <a class="rowlist-item" href="01b-inside.html">
-        <span><span class="code-no">01&frac12;</span> <b style="font-weight:500">Inside the Machine</b>
-        <span class="body-s" style="display:block;margin-top:4px">Attention, the layer stack, and what temperature, top-k and top-p actually do. Diagrams, and a sampler you can step through one stage at a time.</span></span>
-        <span class="meta">20 min &rarr;</span>
+      <a class="rowlist-item" href="openweights.html">
+        <span><span class="code-no">03</span> <b style="font-weight:500">Open Weights</b>
+        <span class="body-s" style="display:block;margin-top:4px">Which chokepoints open weights actually relieve and which they leave untouched, plus an equation for how many years an export control buys.</span></span>
+        <span class="meta">10 min &rarr;</span>
       </a>
-      <a class="rowlist-item" href="02-post-training.html">
-        <span><span class="code-no">02</span> <b style="font-weight:500">Four Teachers</b>
-        <span class="body-s" style="display:block;margin-top:4px">Copying, ranking, checking, doing. The longest chapter, and the one with the reward-hacking game.</span></span>
-        <span class="meta">25 min &rarr;</span>
+      <a class="rowlist-item" href="trends.html">
+        <span><span class="code-no">04</span> <b style="font-weight:500">Trends</b>
+        <span class="body-s" style="display:block;margin-top:4px">Frontier cost doubling every year while the price of a fixed capability falls ninety per cent a year. The scissors that define the strategy.</span></span>
+        <span class="meta">8 min &rarr;</span>
       </a>
-      <a class="rowlist-item" href="03-inference.html">
-        <span><span class="code-no">03</span> <b style="font-weight:500">The Bill Arrives</b>
-        <span class="body-s" style="display:block;margin-top:4px">Why output tokens cost more than input ones, and why long context is priced like a hotel room.</span></span>
-        <span class="meta">20 min &rarr;</span>
-      </a>
-      <a class="rowlist-item" href="04-policy.html">
-        <span><span class="code-no">04</span> <b style="font-weight:500">Why It Matters</b>
-        <span class="body-s" style="display:block;margin-top:4px">What all of this does to compute thresholds and export controls. Includes what we're least sure about.</span></span>
+      <a class="rowlist-item" href="india.html">
+        <span><span class="code-no">05</span> <b style="font-weight:500">India</b>
+        <span class="body-s" style="display:block;margin-top:4px">Capability scored against where the money is, a scenario engine, and options split into what to do abroad and what to do at home.</span></span>
         <span class="meta">12 min &rarr;</span>
       </a>
-      <a class="rowlist-item" href="06-india.html">
-        <span><span class="code-no">06</span> <b style="font-weight:500">Where India Actually Stands</b>
-        <span class="body-s" style="display:block;margin-top:4px">Hardware, supply chains, export controls and options, with the arithmetic shown and the datasets downloadable. Three findings that cut against the received view.</span></span>
-        <span class="meta">30 min &rarr;</span>
-      </a>
-      <a class="rowlist-item" href="05-reference.html">
-        <span><span class="code-no">05</span> <b style="font-weight:500">Reading Room</b>
-        <span class="body-s" style="display:block;margin-top:4px">Four sources worth a weekend, a glossary, and ten questions to check whether any of it stuck.</span></span>
+      <a class="rowlist-item" href="method.html">
+        <span><span class="code-no">06</span> <b style="font-weight:500">Data and Method</b>
+        <span class="body-s" style="display:block;margin-top:4px">Every calculation, every assumption, every source grade, and four downloadable datasets.</span></span>
         <span class="meta">Reference &rarr;</span>
       </a>
     </div>
@@ -255,43 +155,47 @@
 <footer class="footer">
   <div class="footer-grid">
     <div class="footer-brand">
-      <p class="footer-tag">Pretraining built the capability.<br>Post-training made it usable.<br>Inference decides who can afford it.</p>
+      <p class="footer-tag">Pretraining buys hardware.<br>Post-training buys people.<br>Inference buys buildings and power.</p>
       <p class="footer-addr" style="margin-top:24px">High-Tech Geopolitics Programme,<br>Takshashila Institution, Bengaluru. A draft for discussion.</p>
     </div>
     <div>
-      <h4>Chapters</h4>
+      <h4>Pages</h4>
       <ul>
-        <li><a href="01-what-pretraining-leaves.html">The Next-Token Machine</a></li>
-        <li><a href="02-post-training.html">Post-Training</a></li>
-        <li><a href="03-inference.html">Inference</a></li>
-        <li><a href="04-policy.html">Policy</a></li>
+        <li><a href="index.html">Overview</a></li>
+        <li><a href="money.html">Where the Money Goes</a></li>
+        <li><a href="exposure.html">Chokepoints</a></li>
+        <li><a href="openweights.html">Open Weights</a></li>
+        <li><a href="trends.html">Trends</a></li>
+        <li><a href="india.html">India</a></li>
+        <li><a href="method.html">Data &amp; Method</a></li>
       </ul>
     </div>
     <div>
-      <h4>Reference</h4>
+      <h4>Data</h4>
       <ul>
-        <li><a href="05-reference.html#start">Start Here</a></li>
-        <li><a href="05-reference.html#glossary">Glossary</a></li>
-        <li><a href="05-reference.html#quiz">Ten Questions</a></li>
+        <li><a href="assets/data/cost-stack.csv" download>cost-stack.csv</a></li>
+        <li><a href="assets/data/stage-costs.csv" download>stage-costs.csv</a></li>
+        <li><a href="assets/data/india-fit.csv" download>india-fit.csv</a></li>
+        <li><a href="assets/data/controls.csv" download>controls.csv</a></li>
       </ul>
     </div>
     <div>
-      <h4>Sources</h4>
+      <h4>Key sources</h4>
       <ul>
-        <li><a href="https://rlhfbook.com" rel="noopener">Lambert, RLHF Book <span class="arrow">&#8599;</span></a></li>
-        <li><a href="https://jax-ml.github.io/scaling-book" rel="noopener">Austin et al. <span class="arrow">&#8599;</span></a></li>
+        <li><a href="https://arxiv.org/abs/2405.21015" rel="noopener">Cottier et al., training costs <span class="arrow">&#8599;</span></a></li>
         <li><a href="https://epoch.ai/trends" rel="noopener">Epoch AI Trends <span class="arrow">&#8599;</span></a></li>
+        <li><a href="https://arxiv.org/abs/2501.12948" rel="noopener">DeepSeek-R1 report <span class="arrow">&#8599;</span></a></li>
       </ul>
     </div>
   </div>
   <div class="footer-base">
-    <span>August 2026 &middot; Draft for discussion &middot; Prepared with an AI assistant</span>
-    <span>Every panel carries its sources</span>
+    <span>September 2026 &middot; Draft for discussion &middot; Prepared with an AI assistant</span>
+    <span>Every figure carries its source</span>
   </div>
 </footer>
 
 <script src="assets/js/comic.js"></script>
-<script src="assets/js/widgets-train.js"></script>
-<script src="assets/js/guide.js"></script>
+<script src="assets/js/dash.js"></script>
+<script src="assets/js/dash2.js"></script>
 </body>
 </html>

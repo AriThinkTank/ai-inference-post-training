@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Data and Method &middot; Takshashila</title>
+<meta name="description" content="Every calculation, assumption and source grade, with downloadable datasets.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;500&family=Bungee&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/takshashila.css">
+</head>
+<body>
+<div class="progress" aria-hidden="true"></div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-mark" href="index.html">Three Stages, Three Problems <span>Takshashila</span></a>
+    <button class="nav-toggle" type="button" aria-expanded="false">Menu</button>
+    <div class="nav-links">
+      <a class="nav-link" href="index.html">Overview</a>
+      <a class="nav-link" href="money.html">Money</a>
+      <a class="nav-link" href="exposure.html">Chokepoints</a>
+      <a class="nav-link" href="openweights.html">Open Weights</a>
+      <a class="nav-link" href="trends.html">Trends</a>
+      <a class="nav-link" href="india.html">India</a>
+      <a class="nav-link" href="method.html" aria-current="page">Data &amp; Method</a>
+    </div>
+  </div>
+</nav>
+
+<header class="section">
+  <div class="container">
+    <p class="crumbs" style="margin-bottom:26px"><a href="index.html">Overview</a> / Data and method</p>
+    <span class="chapter-no">04</span>
+    <h1 class="page-title" style="margin:10px 0 26px;max-width:18ch;font-size:54px;line-height:1.03;letter-spacing:-0.025em">How Every Number Was <em>Worked Out</em></h1>
+    <p class="lede" style="max-width:62ch">If a conclusion here looks wrong, this is where to attack it. All four datasets are plain CSV and can be edited and reloaded.</p>
+  </div>
+</header>
+
+<section class="section deep">
+  <div class="container">
+    <div class="split-even">
+      <div class="card">
+        <span class="meta">Datasets</span>
+        <h3 class="h-card" style="margin:8px 0 12px">Download and check</h3>
+        <ul class="body-s" style="padding-left:18px;line-height:2">
+          <li><a class="link" href="assets/data/cost-stack.csv" download>cost-stack.csv</a> &mdash; every cost line, with leverage and substitutability</li>
+          <li><a class="link" href="assets/data/stage-costs.csv" download>stage-costs.csv</a> &mdash; published costs of real runs</li>
+          <li><a class="link" href="assets/data/india-fit.csv" download>india-fit.csv</a> &mdash; capability scores with evidence</li>
+          <li><a class="link" href="assets/data/controls.csv" download>controls.csv</a> &mdash; instruments and what they reach</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="meta">Source grades</span>
+        <h3 class="h-card" style="margin:8px 0 12px">What the letters mean</h3>
+        <p class="body-s"><b>A</b> &mdash; primary: government release, company filing, or a technical report that states its method.<br>
+        <b>B</b> &mdash; reputable secondary with a stated method.<br>
+        <b>C</b> &mdash; industry estimate, method not published.<br>
+        <b>D</b> &mdash; widely repeated, primary source not traceable. Used for context only and never in a calculation.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <span class="eyebrow">The calculations</span>
+    <h2 class="h-section" style="margin:14px 0 34px;max-width:24ch">Line by line</h2>
+
+    <dl class="deflist">
+      <dt>The pretraining cost split</dt>
+      <dd>Taken directly from Cottier et al., <a class="link" href="https://arxiv.org/abs/2405.21015" target="_blank" rel="noopener">arXiv:2405.21015</a>, the most thorough public cost model of frontier training. That paper puts server components at 15-22% of total, cluster interconnect at 9-13%, energy at 2-6%, and states that accelerator chips and staff costs each run to tens of millions. We take the midpoints: accelerators 33%, staff 30%, servers 18%, interconnect 11%, energy 4%, data 4%. The residual to 100% is absorbed into the data line, which is the weakest of the six.</dd>
+
+      <dt>The post-training cost split</dt>
+      <dd>Our own build, and the least firm thing on this dashboard. Compute is anchored to a disclosed figure: DeepSeek-R1's reinforcement learning stage was 147,000 GPU-hours, about $294,000 at $2 per GPU-hour. Human data is anchored to vendor pricing surveys giving $0.50-8 per generalist comparison and $20-100 and above per expert comparison, against the InstructGPT recipe of roughly 100,000 comparisons. Environments are anchored to reported prices of about $20,000 for a single interface environment and about $300,000 for a complex application clone. The resulting split is 45% data, 25% environments, 20% compute, 10% staff. Different volume assumptions move these materially, and anyone reworking them should say which volumes they used.</dd>
+
+      <dt>The inference cost split</dt>
+      <dd>Built from data centre economics rather than model economics, because that is what inference is. Accelerators amortised over a working life dominate at 50%; energy at 18% and facility at 17% follow from typical data centre cost structures at Indian power prices; networking and storage at 7% and engineering staff at 8% make up the remainder. Graded B and C. The lifetime inference bill for any specific model is not public anywhere, which is why <a class="link" href="assets/data/stage-costs.csv" download>stage-costs.csv</a> carries a zero and a grade D against that row rather than an invented figure.</dd>
+
+      <dt>Control leverage, 0 to 1</dt>
+      <dd>Our own scale, and the most contestable thing here. 0 means no instrument exists and none is plausible, as with electricity or staff. 0.2 means competitive supply with a theoretical instrument. 0.6 means an instrument exists but supply is partly substitutable. 0.8 means an instrument exists and has been used. 1.0 means an instrument exists, has been used, and takes effect without any shipment being stopped. The basis for each score sits in the CSV so it can be rescored.</dd>
+
+      <dt>Substitutability, 0 to 1</dt>
+      <dd>How far something cheaper or unrestricted does the same job. Pretraining accelerators score 0.10 because older parts genuinely cannot substitute: memory bandwidth and interconnect are the point. Inference accelerators score 0.60 because older generations, lower-spec parts and compressed models all work. That single difference is what separates the two stages in the exposure index, and it is the assumption to attack first if you disagree with the conclusion.</dd>
+
+      <dt>Cost-weighted exposure</dt>
+      <dd>For each stage: sum of (share of budget &times; control leverage &times; (1 &minus; substitutability)), expressed on a 0-100 scale. On the default weights this gives pretraining 36, inference 22, post-training 8. It is an ordinal comparison between stages. It is not a probability, not a risk score, and should never be quoted as either.</dd>
+
+      <dt>The fleet arithmetic</dt>
+      <dd>38,000 accelerators (MeitY and IndiaAI, December 2025) &times; 24 hours = 912,000 GPU-hours a day. DeepSeek-R1's 147,000 GPU-hours divided by that is 0.16 days, or 3.9 hours. DeepSeek-V3's 2,788,000 GPU-hours is 3.06 days. Both DeepSeek figures are as disclosed in the respective technical reports. Almost no other laboratory discloses them, so one developer's numbers should not be generalised.</dd>
+
+      <dt>Power and rack density</dt>
+      <dd>700 W per accelerator (H100 SXM datasheet). 38,000 accelerators is 27 MW of IT load, about 40 MW with cooling at a power usage effectiveness of 1.5. National colocation IT load is 1,600 MW (JLL, June 2026), so the fleet is 1.7% of it. Rack counts follow from dividing hall design density by 0.7 kW per accelerator. The modern reference point is a rack of 72 accelerators drawing about 120 kW.</dd>
+
+      <dt>Equations used, and where they come from</dt>
+      <dd>Full list with citations in <a class="link" href="assets/data/equations.csv" download>equations.csv</a>. The load-bearing ones:
+      <b>E1</b> training compute C = 6ND (Hoffmann et al., Chinchilla, arXiv:2203.15556; Kaplan et al., arXiv:2001.08361).
+      <b>E2</b> Herfindahl-Hirschman Index, the sum of squared percentage shares (US DOJ and FTC Merger Guidelines 2023).
+      <b>E4</b> effective compute C<sub>eff</sub>(t) = C<sub>phys</sub> &times; &alpha;<sup>t</sup>, with &alpha; the algorithmic efficiency multiplier.
+      <b>E6</b> KV cache memory per token M = 2 &times; L &times; H<sub>kv</sub> &times; d<sub>head</sub> &times; b (Kwon et al., arXiv:2309.06180).
+      <b>E8</b> compound annual growth from endpoints. E3 and E5 are our own constructions and are marked as such.</dd>
+
+      <dt>The denial half-life, equation E5</dt>
+      <dd><b>T = ln(R) &divide; ln(&alpha;h)</b>. Derived by setting C<sub>phys</sub>(&alpha;h)<sup>T</sup> = C<sub>req</sub> and solving for T, where R = C<sub>req</sub> / C<sub>phys</sub>.
+      Parameter values: &alpha; = 3.0 per year, the algorithmic efficiency estimate of Ho et al. 2024 via Epoch AI, corroborated independently at about 3&times; per year by Gundlach et al., <a class="link" href="https://arxiv.org/abs/2511.23455" target="_blank" rel="noopener">arXiv:2511.23455</a>, who isolate algorithmic progress by controlling for competition and dividing out hardware price declines. h = 1.3 per year, Epoch AI's hardware price-performance estimate.
+      Combined rate 3.9&times; per year. Worked example: a country held 30 times short of the frontier reaches today's frontier requirement in ln(30) / ln(3.9) = 2.50 years.
+      <b>The assumption to attack:</b> that efficiency gains reach the restricted party. Open publication and open weights largely ensure this today, but a regime that also restricted publication would break the equation.</dd>
+
+      <dt>The open-weight relief scores</dt>
+      <dd>Control leverage on the same 0-1 scale, scored with and without a usable open-weight starting point. Our judgement, with the reasoning shown per line in the widget. The capability cost of that relief is measured rather than judged: Epoch AI's Capabilities Index puts the open-closed gap at 4 months and 8 ECI points, 90% confidence interval 7 to 11, as of 29 May 2026, widened from 3 months in their October 2025 analysis. Epoch note that open models may overfit public benchmarks and that closed laboratories withhold their best systems, so the true lag is probably larger rather than smaller.</dd>
+
+      <dt>Trend series and growth rates</dt>
+      <dd>All in <a class="link" href="assets/data/trends.csv" download>trends.csv</a>, computed with E8 from first and last observation. Frontier training cost: +105.9% a year across 2020-2026. Price of a fixed capability: &minus;90.0% a year across 2021-2024, a thousandfold fall. Indian data centre capacity: +20.6% a year across 2020-2026 against the +55.4% required to reach the 2029 projection. With three to five observations these are fitted rates and nothing more. No regression is run and no confidence interval is quoted, because with this many points neither would mean anything.</dd>
+
+      <dt>Where the price decline comes from</dt>
+      <dd>Epoch AI measure the price of a fixed capability milestone falling between 9 and 900 times a year depending on the milestone, median about 50 times, rising to about 200 times for models released since January 2024. That headline combines three forces: algorithmic efficiency at about 3&times; a year, hardware price-performance at about 1.3&times; a year, and competition, which is large and volatile. Only the second of the three can be reached by an export control, which is the asymmetry that drives E5.</dd>
+
+      <dt>The scenario engine</dt>
+      <dd>Multiplicative, with every multiplier printed alongside the output. Build 0.9 to 2.63&times; (2.63 is the stated 100,000 target over 38,000), chip access 1.15 to 0.35&times;, housing fraction 0.20 to 1.0. Data and environment readiness is scored but deliberately does not enter the hardware arithmetic, because it cannot be bought with accelerators. The multipliers span a plausible range and are not estimated from anything.</dd>
+    </dl>
+  </div>
+</section>
+
+<section class="section deep">
+  <div class="container">
+    <span class="eyebrow">Honesty section</span>
+    <h2 class="h-section" style="margin:14px 0 34px;max-width:24ch">What we could not do</h2>
+
+    <div class="split">
+      <div class="rowlist">
+        <div class="rowlist-item"><span><b style="font-weight:500">Firm-level Indian GPU deployment</b>
+        <span class="body-s" style="display:block;margin-top:4px">Not published. Installed against empanelled counts cannot be verified beyond mid-2025.</span></span></div>
+        <div class="rowlist-item"><span><b style="font-weight:500">Lifetime inference cost for any named model</b>
+        <span class="body-s" style="display:block;margin-top:4px">No developer discloses it. The 80-90% of lifetime compute figure is widely cited and traces to secondary sources only.</span></span></div>
+        <div class="rowlist-item"><span><b style="font-weight:500">The 20% design workforce claim</b>
+        <span class="body-s" style="display:block;margin-top:4px">Could not be traced to any primary source. Graded D and used in no calculation here.</span></span></div>
+        <div class="rowlist-item"><span><b style="font-weight:500">Environment pricing from a primary source</b>
+        <span class="body-s" style="display:block;margin-top:4px">Consistent across industry reporting but no vendor price list is public. Graded C, and it carries 25% of the post-training split.</span></span></div>
+      </div>
+      <div class="stack-m">
+        <div class="aside">
+          <span class="aside-title">Where this would change most</span>
+          <p>The post-training split is the load-bearing original claim and rests on the weakest data. If expert annotation volumes are much smaller than the InstructGPT recipe suggests, or environment costs much lower, the 8 on the exposure index rises. It would have to rise a long way to change the ordering.</p>
+        </div>
+        <div class="aside">
+          <span class="aside-title">On the frameworks</span>
+          <p>The cost stack, the leverage scale and the exposure index were assembled for this dashboard. They are ways of arranging what is known. No claim to novelty is made for any of them.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <p class="footer-tag">Pretraining buys hardware.<br>Post-training buys people.<br>Inference buys buildings and power.</p>
+      <p class="footer-addr" style="margin-top:24px">High-Tech Geopolitics Programme,<br>Takshashila Institution, Bengaluru. A draft for discussion.</p>
+    </div>
+    <div>
+      <h4>Pages</h4>
+      <ul>
+        <li><a href="index.html">Overview</a></li>
+        <li><a href="money.html">Where the Money Goes</a></li>
+        <li><a href="exposure.html">Chokepoints</a></li>
+        <li><a href="openweights.html">Open Weights</a></li>
+        <li><a href="trends.html">Trends</a></li>
+        <li><a href="india.html">India</a></li>
+        <li><a href="method.html">Data &amp; Method</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Data</h4>
+      <ul>
+        <li><a href="assets/data/cost-stack.csv" download>cost-stack.csv</a></li>
+        <li><a href="assets/data/stage-costs.csv" download>stage-costs.csv</a></li>
+        <li><a href="assets/data/india-fit.csv" download>india-fit.csv</a></li>
+        <li><a href="assets/data/controls.csv" download>controls.csv</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Key sources</h4>
+      <ul>
+        <li><a href="https://arxiv.org/abs/2405.21015" rel="noopener">Cottier et al., training costs <span class="arrow">&#8599;</span></a></li>
+        <li><a href="https://epoch.ai/trends" rel="noopener">Epoch AI Trends <span class="arrow">&#8599;</span></a></li>
+        <li><a href="https://arxiv.org/abs/2501.12948" rel="noopener">DeepSeek-R1 report <span class="arrow">&#8599;</span></a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-base">
+    <span>September 2026 &middot; Draft for discussion &middot; Prepared with an AI assistant</span>
+    <span>Every figure carries its source</span>
+  </div>
+</footer>
+
+<script src="assets/js/comic.js"></script>
+<script src="assets/js/dash.js"></script>
+<script src="assets/js/dash2.js"></script>
+</body>
+</html>

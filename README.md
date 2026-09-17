@@ -1,102 +1,70 @@
-# After the Model Is Trained
+# Three Stages, Three Problems
 
-A five-chapter explainer on post-training and inference, built from a briefing deck prepared for the High-Tech Geopolitics Programme, Takshashila Institution.
+A strategic dashboard on artificial intelligence for policy readers. It works out where the money goes
+at each stage of building and running an AI model, who supplies each line of that bill, which export
+controls reach which line, what open weights relieve, how the chokepoints have moved over time, and
+what all of that means for India.
 
-Plain HTML, CSS and JavaScript. No build step, no framework, no dependencies beyond two Google Fonts loaded from a CDN.
+It deliberately does not explain algorithms. The technical work sits underneath the numbers.
+
+Plain HTML, CSS and JavaScript. No build step, no dependencies beyond two Google Fonts.
 
 ## Deploying to GitHub Pages
 
-1. Create a repository and push the contents of this folder to the root of the default branch.
-
-   ```
-   git init
-   git add .
-   git commit -m "Initial commit"
-   git branch -M main
-   git remote add origin https://github.com/<user>/<repo>.git
-   git push -u origin main
-   ```
-
-2. In the repository, go to **Settings → Pages**.
-3. Under **Source**, choose **Deploy from a branch**. Set the branch to `main` and the folder to `/ (root)`. Save.
-4. The site appears at `https://<user>.github.io/<repo>/` within a minute or two.
-
-The `.nojekyll` file stops GitHub from running the pages through Jekyll, which would otherwise ignore some paths. Leave it in place.
-
-To serve the site from a subdirectory instead, move these files into that directory and choose it in step 3. All internal links are relative, so nothing needs editing.
-
-## Running it locally
-
-Opening `index.html` directly in a browser works. To serve it properly:
+Push the contents of this folder to the root of the default branch, then Settings, Pages, Deploy from
+a branch, `main`, `/ (root)`.
 
 ```
-python3 -m http.server 8000
+git add -A && git commit -m "Update dashboard" && git push
 ```
 
-Then visit `http://localhost:8000`.
+`.nojekyll` is a dotfile: `git add -A` picks it up, a web-interface drag-and-drop does not, and macOS
+Finder hides it. Check with `git ls-files | grep nojekyll`.
 
-## Structure
+## Pages
 
 ```
-index.html                      The map, the cast, the vocabulary
-01-what-pretraining-leaves.html Chapter 01 — the next-token machine
-01b-inside.html                 Chapter 01½ — attention, the stack, the sampler
-02-post-training.html           Chapter 02 — four teachers
-03-inference.html               Chapter 03 — inference
-04-policy.html                  Chapter 04 — why it matters
-06-india.html                   Chapter 06 — the Indian position, with datasets
-05-reference.html               Chapter 05 — reading, glossary, quiz
-assets/css/takshashila.css      The whole design system
-assets/js/comic.js              Cast figures, navigation, scroll behaviour
-assets/js/widgets-train.js      Widgets for chapters 01 and 02, plus shared helpers
-assets/js/widgets-serve.js      Widgets for chapters 03 and 05
-assets/js/widgets-extra.js      Sampler, attention, transformer, RLHF recipe
-assets/js/widgets-india.js      Chokepoint map, fleet calculator, scenario engine
-assets/js/data/*.csv            Source datasets, downloadable from the page
-assets/js/guide.js              Widget briefs and hover definitions
+index.html         Overview and the headline finding
+money.html         Marimekko of all three cost stacks, plus single-stage view
+exposure.html      Suppliers, export controls, cost-weighted exposure
+openweights.html   What open weights relieve, and the denial half-life equation
+trends.html        Five series over time with fitted growth rates
+india.html         Indian capability against the cost stack, scenarios, options
+method.html        Every equation, assumption and source grade
 ```
 
-## The two shared systems
+## Data and scripts
 
-**Widget briefs.** Every `data-widget` gets a yellow explainer injected above it: what it is, what you're changing, what to watch for, and a link to the source. They all live in the `BRIEFS` table at the top of `guide.js`. Edit the text there, not in the widget.
+```
+assets/js/dash.js    Cost stack, exposure, controls, India fit, scenario
+assets/js/dash2.js   Marimekko, denial half-life, open weights, trends
+assets/data/*.csv    Seven datasets, downloadable from the pages
+```
 
-**Diagrams.** Hand-written inline SVG inside `<div class="fig">`. They use the shared `.d-box`, `.d-lbl`, `.d-sub`, `.d-arr` classes so they follow the colour tokens and respond to the stylesheet. Arrowheads come from `<marker id="ah">` and `<marker id="ahg">`, which must be defined once per page — the CSS references those ids, so a page with a figure and no defs gets lines with no heads.
+`dash.js` and `dash2.js` carry their own copies of the cost stack inline so the pages work from
+`file://` without a server. If you edit `cost-stack.csv`, update `STACK` in `dash.js` and `W` in
+`dash2.js` to match.
 
-**Hover definitions.** Write `<b class="def" data-t="kv-cache">KV cache</b>` anywhere and it picks up a definition and a source link from the `DEFS` table in `guide.js`. Fifty-two terms so far. A term with no entry gets a grey underline instead of an orange one, so mistakes are visible rather than silent.
+## Equations
 
-`guide.js` must load last, after the widget scripts.
+Listed with citations in `assets/data/equations.csv`. E1 (training compute), E2 (HHI), E4 (effective
+compute), E6 (KV cache) and E7 (inference price decline) are from the literature. **E3 (cost-weighted
+exposure) and E5 (denial half-life) are our own constructions** and are marked as such everywhere
+they appear.
 
-## How the widgets work
+## Three things to know before extending this
 
-Every interactive element is a `<div data-widget="name">`. On load, the scripts find each one and build it. To add a widget, register it with `T.widget('name', function (node) { ... })` and drop the matching div into a page.
-
-`widgets-train.js` defines the shared helpers, so where both files are used it must be loaded first.
-
-## The datasets
-
-Chapter 06 runs off four CSVs in `assets/data/`. They are plain text, hand-built from named
-sources, and every row carries its source and a grade from A (primary) to D (widely repeated,
-untraceable). Edit them and the page arithmetic follows, except for the figures embedded in
-`widgets-india.js`, which mirror `chokepoints.csv` and must be kept in step by hand.
-
-Two methodological notes that matter if you extend this:
-
-- **Every HHI is a lower bound.** Only genuinely single-firm shares are squared; unnamed
-  residual share is modelled as maximally fragmented and contributes nothing.
-- **Control leverage is our own 1–5 scale**, not a standard measure. The basis for each score
-  is in the CSV so it can be rescored.
+- **The post-training cost split is the load-bearing original claim and rests on the weakest data.**
+  Compute is anchored to a disclosed figure; annotation and environment costs come from vendor pricing
+  surveys with no primary price list behind them.
+- **Control leverage and substitutability are our own 0-1 scales.** They are stage-specific: an
+  accelerator is 0.10 substitutable in pretraining and 0.60 in inference. Keying on the component name
+  alone gives wrong answers for both.
+- **E5 assumes efficiency gains reach the restricted party.** Open publication and open weights ensure
+  that today. A regime restricting publication would break the equation.
 
 ## Editorial conventions
 
-- Wine marks a change to the weights. Marigold marks compute spent per request. This is used consistently and is explained on the cover.
-- Every figure carries its source in the `.source` line beneath it. Where a number comes from a vendor benchmark nobody outside the vendor can reproduce, the source line says so.
-- Illustrative numbers are labelled as illustrative. The KV cache figures are computed from a stated formula so a reader can check them.
-- No emoji, no exclamation marks, no border radius, no drop shadows. These are deliberate, and follow the Takshashila design language.
-
-## Accessibility
-
-Interactive controls are real buttons and inputs, reachable by keyboard, with a visible wine focus ring. Charts carry `role="img"` and a label. Animation is suppressed under `prefers-reduced-motion`. The one known weakness is that a few widgets convey state partly through colour; each also states it in text.
-
-## Corrections
-
-The four points listed under D.05 in chapter 04 are where the material is least secure. Corrections are welcome there first.
+Wine marks something a government somewhere can restrict. Marigold marks something nobody can. Every
+figure carries its source and a grade from A (primary) to D (untraceable). Grade D material is used
+for context and never in a calculation.

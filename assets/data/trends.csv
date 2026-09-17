@@ -1,0 +1,23 @@
+year,series,value,unit,source,grade
+2020,frontier_training_cost,4600000,USD,"Epoch AI cost model; GPT-3",B
+2022,frontier_training_cost,12000000,USD,"Epoch AI cost model; PaLM",B
+2023,frontier_training_cost,79000000,USD,"Stanford AI Index 2024 with Epoch AI; GPT-4",A
+2024,frontier_training_cost,191000000,USD,"Stanford AI Index 2024 with Epoch AI; Gemini Ultra",A
+2026,frontier_training_cost,350000000,USD,"Epoch AI trend and SemiAnalysis range 200-500m",C
+2021,price_gpt3_quality,60.00,USD_per_million_tokens,"a16z LLMflation 2024",B
+2022,price_gpt3_quality,6.00,USD_per_million_tokens,"Interpolated on the log trend between the 2021 and 2024 endpoints",C
+2023,price_gpt3_quality,0.60,USD_per_million_tokens,"Interpolated on the log trend between the 2021 and 2024 endpoints",C
+2024,price_gpt3_quality,0.06,USD_per_million_tokens,"a16z LLMflation 2024",B
+2023,open_closed_lag_months,3,months,"Epoch AI, Oct 2025 analysis covering Jan 2023 to Oct 2025",A
+2025,open_closed_lag_months,3,months,"Epoch AI, Oct 2025 Data Insight",A
+2026,open_closed_lag_months,4,months,"Epoch AI, 29 May 2026 Data Insight; 8 ECI points, 90% CI 7-11",A
+2020,india_datacentre_mw,520,MW,"JM Financial and CBRE via Systemiq, Feb 2026",B
+2024,india_datacentre_mw,1200,MW,"CBRE and JLL estimates",B
+2025,india_datacentre_mw,1500,MW,"JM Financial 2025; CBRE 2025",B
+2026,india_datacentre_mw,1600,MW,"JLL, June 2026",B
+2029,india_datacentre_mw,6000,MW,"JLL projection, Sep 2026",C
+2024,india_gpus,10000,GPUs,"IndiaAI Mission initial target, MeitY RFE Aug 2024",A
+2025,india_gpus,34333,GPUs,"MeitY and IndiaAI, rounds 1 and 2, May 2025",A
+2026,india_gpus,38000,GPUs,"MeitY and IndiaAI, Dec 2025, confirmed Feb 2026",A
+2025,india_electronics_imports,98650,USD_million,"Ministry of Commerce and Industry, FY2024-25",A
+2026,india_electronics_imports,116170,USD_million,"Ministry of Commerce and Industry, FY2025-26",A

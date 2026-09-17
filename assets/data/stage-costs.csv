@@ -1,0 +1,14 @@
+example,stage,year,cost_usd,unit,what_it_bought,source,grade
+GPT-3,Pretraining,2020,4600000,USD,"175bn parameters, roughly 3.1e23 FLOP","Epoch AI cost model; Cottier et al., arXiv:2405.21015",B
+GPT-4,Pretraining,2023,79000000,USD,"Roughly 2e25 FLOP. Stanford AI Index quotes $78m","Stanford AI Index 2024 with Epoch AI",A
+Gemini Ultra,Pretraining,2024,191000000,USD,"Roughly 1e26 FLOP, about 35 MW of power draw","Stanford AI Index 2024 with Epoch AI",A
+Llama 3.1 405B,Pretraining,2024,60000000,USD,"16,384 H100s for about 54 days","Third-party estimate from disclosed GPU-hours",B
+DeepSeek-V3,Pretraining,2024,5576000,USD,"2,788,000 H800 GPU-hours at $2 per hour, as the developer stated","DeepSeek-AI V3 technical report",A
+Frontier 2026 class,Pretraining,2026,350000000,USD,"1e26 to 1e27 FLOP. Range quoted is $200-500m","Epoch AI trend; SemiAnalysis estimates",C
+DeepSeek-R1 RL stage,Post-training,2025,294000,USD,"147,000 GPU-hours of reinforcement learning","DeepSeek-AI R1 technical report",A
+InstructGPT-style preference set,Post-training,2026,500000,USD,"100,000 generalist comparisons at about $5 each","Vendor pricing surveys 2026; own calculation",C
+Expert domain preference set,Post-training,2026,6000000,USD,"100,000 expert comparisons at about $60 each","Vendor pricing surveys 2026; own calculation",C
+One interface environment,Post-training,2026,20000,USD,"A single website turned into a trainable environment","SemiAnalysis via industry review 2026",C
+One application clone environment,Post-training,2026,300000,USD,"A complex application rebuilt as a trainable environment","SemiAnalysis via industry review 2026",C
+Lifetime serving of one model,Inference,2026,0,USD,"Estimated at 80-90% of a model's lifetime compute spend. No single figure is public","Multiple 2026 infrastructure cost reviews",D
+India data centre build,Inference,2026,18300000,USD_per_MW,"$110bn of capex for a 6 GW target implies about $18.3m per MW","JLL, Sep 2026; own calculation",B
