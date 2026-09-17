@@ -147,18 +147,22 @@ img, svg { max-width: 100%; }
 .nav { background: var(--wine); position: sticky; top: 0; z-index: 60; }
 .nav-inner {
   max-width: var(--max); margin: 0 auto; padding: 0 var(--pad-x);
-  min-height: 64px; display: flex; align-items: center; gap: 20px; justify-content: space-between;
+  min-height: 64px; display: flex; align-items: center; gap: 14px; justify-content: space-between;
 }
+/* the brand mark gives way before the links wrap */
+.nav-mark { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+@media (max-width: 1150px) { .nav-mark span { display: none; } }
+@media (max-width: 1040px) { .nav a.nav-link { font-size: 13px; padding: 8px 7px; } }
 .nav-mark {
   font-family: var(--sans); font-size: 15px; color: #fff; text-decoration: none;
   letter-spacing: 0.3px; padding: 8px 0; display: flex; align-items: baseline; gap: 10px;
 }
 .nav-mark span { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; color: rgba(255,255,255,0.55); text-transform: uppercase; }
-.nav-links { display: flex; gap: 8px; flex-wrap: wrap; }
+.nav-links { display: flex; gap: 2px; flex-wrap: nowrap; }
 .nav a.nav-link {
-  font-family: var(--sans); font-size: 14.5px; font-weight: 400; letter-spacing: 0.3px;
-  text-transform: none; color: rgba(255,255,255,0.9); text-decoration: none; padding: 8px 12px;
-  line-height: 1.3; display: block;
+  font-family: var(--sans); font-size: 14px; font-weight: 400; letter-spacing: 0.2px;
+  text-transform: none; color: rgba(255,255,255,0.9); text-decoration: none; padding: 8px 9px;
+  line-height: 1.3; display: block; white-space: nowrap;
 }
 .nav a.nav-link:hover { color: #fff; text-decoration: underline; text-underline-offset: 4px; }
 .nav a.nav-link[aria-current="page"] { color: #fff; border-bottom: 2px solid var(--gold); }
@@ -1139,20 +1143,46 @@ svg .d-dash { stroke: var(--ink-20); stroke-width: 2; stroke-dasharray: 5 4; fil
 .mg-i i.on { background: var(--positive); border-color: var(--ink); }
 
 /* ---------- 3D scatter ---------------------------------------------------- */
-.s3-wrap { border: 2px solid var(--ink); background: var(--paper); padding: 8px;
-  touch-action: none; cursor: grab; }
+.s3-lead { margin-bottom: 4px; }
+.s3-axes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.s3-ax-card { border: 2px solid var(--ink); padding: 14px 15px; background: var(--paper); }
+.s3-ax-n { display: inline-grid; place-items: center; width: 22px; height: 22px;
+  border: 2px solid var(--wine); color: var(--wine); font: 500 11px var(--mono); margin-bottom: 8px; }
+.s3-ax-card b { display: block; font: 500 15px var(--sans); margin-bottom: 5px; }
+
+.s3-grid { display: grid; grid-template-columns: 1.25fr 1fr; gap: 20px; align-items: start; }
+.s3-wrap { border: 2px solid var(--ink); background: var(--paper); padding: 4px;
+  touch-action: none; cursor: grab; align-self: start; }
 .s3-wrap:active { cursor: grabbing; }
 .s3-svg { width: 100%; height: auto; display: block; }
-.s3-edge { stroke: var(--ink-20); stroke-width: 1.5; }
+.s3-edge { stroke: var(--ink-20); stroke-width: 1.4; }
+.s3-zone { fill: rgba(163,40,45,0.07); stroke: rgba(163,40,45,0.35); stroke-width: 1.2; }
 .s3-drop { stroke: var(--ink-20); stroke-width: 1; stroke-dasharray: 2 3; }
-.s3-ax { font: 500 9.5px var(--mono); fill: var(--ink-50); letter-spacing: 0.1em; }
-.s3-lbl { font: 500 12px var(--sans); fill: var(--ink); paint-order: stroke; stroke: var(--paper); stroke-width: 4px; }
-.s3-pt { cursor: pointer; }
-.s3-pt:focus-visible { outline: 2px solid var(--wine); }
-.s3-ctl { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; padding: 12px 4px 4px; }
-.s3-key { font: 400 10px var(--mono); text-transform: uppercase; letter-spacing: 0.09em; color: var(--ink-70); }
-.s3-key i { display: inline-block; width: 11px; height: 11px; border: 1px solid var(--ink);
+.s3-ax { font: 500 9px var(--mono); fill: var(--ink-50); letter-spacing: 0.09em; }
+.s3-lbl { font: 500 11.5px var(--sans); fill: var(--ink); paint-order: stroke;
+  stroke: var(--paper); stroke-width: 4px; }
+
+.s3-panel { border: 2px solid var(--ink); background: var(--deep); padding: 20px 20px 22px; align-self: stretch; }
+.s3-bar { display: grid; grid-template-columns: 96px 1fr 30px; gap: 10px; align-items: center; margin-bottom: 9px; }
+.s3-tr { display: block; height: 16px; background: var(--ink-10); border: 1px solid var(--ink-20); }
+.s3-fl { display: block; height: 100%; transition: width 0.3s ease; }
+.s3-fl.bad { background: var(--negative); }
+.s3-fl.mid { background: var(--gold); }
+.s3-fl.good { background: var(--positive); }
+.s3-bar b { font: 500 13px var(--mono); text-align: right; }
+.s3-empty .s3-list { margin: 10px 0 12px; padding-left: 18px; }
+.s3-empty .s3-list li { font: 500 14px/1.7 var(--sans); color: var(--wine); }
+
+.s3-ctl { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 18px; }
+.s3-key { font: 400 10px var(--mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-70); }
+.s3-key i { display: inline-block; width: 10px; height: 10px; border: 1px solid var(--ink);
   margin: 0 5px 0 12px; vertical-align: -1px; }
+
+@media (max-width: 860px) {
+  .s3-grid { grid-template-columns: 1fr; }
+  .s3-axes { grid-template-columns: 1fr; }
+  .s3-panel { min-height: 0; }
+}
 
 /* ---------- substitute --------------------------------------------------- */
 .sb-svg { width: 100%; height: auto; }

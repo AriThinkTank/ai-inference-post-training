@@ -103,33 +103,60 @@ window.D = window.D || {};
   ];
   var SC = { pre: '#620d3c', post: '#f1a222', inf: '#2f6b6b' };
 
-  D.widget('scatter3d', function (node) {
-    var yaw = 0.6, pitch = 0.35, sel = null, dragging = false, lx = 0, ly = 0, spin = null;
+  var AXIS = {
+    cost: ['Cost share', 'How big a slice of that stage\u2019s budget this line is. A cheap line cannot hurt you much even if it vanishes.'],
+    conc: ['Concentration', 'How few firms supply it, measured as a normalised Herfindahl index. Near 100 means one or two suppliers and no realistic alternative seller.'],
+    sub:  ['Substitutability', 'How well something cheaper or unrestricted does the same job. Near 100 means you barely notice losing the first choice.']
+  };
 
-    var body = D.shell(node, 'Three axes, because two were not enough', 'Drag to rotate',
-      '<div class="s3-wrap"><svg class="s3-svg" viewBox="40 30 560 380"></svg>' +
-      '<div class="s3-ctl"><button class="btn btn-s btn-ghost s3-spin" type="button">Spin</button>' +
-      '<button class="btn btn-s btn-ghost s3-reset" type="button">Reset view</button>' +
-      '<span class="s3-key"><i style="background:#620d3c"></i>Pretraining <i style="background:#f1a222"></i>Post-training <i style="background:#2f6b6b"></i>Inference</span></div></div>' +
-      '<div class="lab-out s3-out"></div>',
-      'Every earlier chart on this dashboard had to drop one of these three dimensions. A cost line matters strategically only if it is ' +
-      'expensive <i>and</i> concentrated <i>and</i> hard to substitute, and that is a genuinely three-dimensional question. ' +
+  D.widget('scatter3d', function (node) {
+    var yaw = 0.6, pitch = 0.35, sel = null, spin = null;
+    var down = null, moved = 0, shown = [];
+
+    var body = D.shell(node, 'The danger corner', 'Drag to rotate, tap a ball',
+      '<div class="s3-lead"></div>' +
+      '<div class="s3-grid">' +
+        '<div class="s3-wrap"><svg class="s3-svg" viewBox="20 52 430 232"></svg></div>' +
+        '<div class="s3-panel"></div>' +
+      '</div>' +
+      '<div class="s3-ctl"></div>',
       'Concentration is normalised HHI from <a class="link" href="assets/data/chokepoints.csv" download>chokepoints.csv</a>; ' +
       'cost share and substitutability from <a class="link" href="assets/data/cost-stack.csv" download>cost-stack.csv</a>. ' +
-      'Drag anywhere in the box to rotate. Keyboard users can tab to any point.');
+      'Ball size is cost share, so the big balls are the expensive lines. Colour is which stage the line belongs to. ' +
+      'Drag anywhere in the box to turn it; the three preset buttons move to fixed viewpoints if dragging is awkward.');
 
-    var svg = body.querySelector('.s3-svg'), out = body.querySelector('.s3-out');
+    var lead = body.querySelector('.s3-lead'), svg = body.querySelector('.s3-svg'),
+        panel = body.querySelector('.s3-panel'), ctl = body.querySelector('.s3-ctl');
+
+    lead.innerHTML =
+      '<p class="body-s" style="margin-bottom:14px">A cost line is only a strategic problem if <b>all three</b> of these are true at once. ' +
+      'That is why it needs a cube rather than a chart.</p>' +
+      '<div class="s3-axes">' +
+      ['cost', 'conc', 'sub'].map(function (k, i) {
+        return '<div class="s3-ax-card"><span class="s3-ax-n">' + (i + 1) + '</span>' +
+          '<b>' + AXIS[k][0] + '</b><span class="body-s">' + AXIS[k][1] + '</span></div>';
+      }).join('') + '</div>' +
+      '<p class="body-s" style="margin:16px 0 20px">Expensive, concentrated and <i>not</i> substitutable is the combination that hurts. ' +
+      'On the cube that is the far corner: right along cost, high on concentration, near the front on substitutability. ' +
+      'Press <b>Show me the danger corner</b> and count how many balls are actually in it.</p>';
+
+    ctl.innerHTML =
+      '<button class="btn btn-s s3-danger" type="button">Show me the danger corner</button>' +
+      '<button class="btn btn-s btn-ghost s3-spin" type="button">Spin</button>' +
+      '<button class="btn btn-s btn-ghost s3-reset" type="button">Reset</button>' +
+      '<span class="s3-key"><i style="background:#620d3c"></i>Pretraining<i style="background:#f1a222"></i>Post-training<i style="background:#2f6b6b"></i>Inference</span>';
 
     function project(x, y, z) {
-      /* unit cube coords -> isometric-ish projection with yaw and pitch */
       var cx = x - 0.5, cy = y - 0.5, cz = z - 0.5;
       var X = cx * Math.cos(yaw) - cz * Math.sin(yaw);
       var Z = cx * Math.sin(yaw) + cz * Math.cos(yaw);
       var Y = cy * Math.cos(pitch) - Z * Math.sin(pitch);
       var depth = cy * Math.sin(pitch) + Z * Math.cos(pitch);
-      var scale = 300 / (2.6 + depth);
-      return { px: 320 + X * scale * 1.5, py: 230 - Y * scale * 1.5, d: depth };
+      var sc = 210 / (2.6 + depth);
+      return { px: 235 + X * sc * 1.5, py: 168 - Y * sc * 1.5, d: depth };
     }
+
+    function danger(p) { return p.cost >= 20 && p.conc >= 50 && p.sub <= 35; }
 
     function draw() {
       var C = [[0,0,0],[1,0,0],[1,0,1],[0,0,1],[0,1,0],[1,1,0],[1,1,1],[0,1,1]];
@@ -140,79 +167,140 @@ window.D = window.D || {};
           '" x2="' + P[e[1]].px.toFixed(1) + '" y2="' + P[e[1]].py.toFixed(1) + '"/>';
       }).join('');
 
-      var pts = PTS.map(function (p) {
+      /* shade the danger corner so it is visible from any angle */
+      var Dc = [project(20/55,0.5,0), project(1,0.5,0), project(1,1,0), project(20/55,1,0),
+                project(20/55,0.5,0.35), project(1,0.5,0.35), project(1,1,0.35), project(20/55,1,0.35)];
+      var zone = '<polygon class="s3-zone" points="' + [4,5,6,7].map(function (i) {
+        return Dc[i].px.toFixed(1) + ',' + Dc[i].py.toFixed(1); }).join(' ') + '"/>' +
+        '<polygon class="s3-zone" points="' + [0,1,2,3].map(function (i) {
+        return Dc[i].px.toFixed(1) + ',' + Dc[i].py.toFixed(1); }).join(' ') + '"/>';
+
+      shown = PTS.map(function (p) {
         var q = project(p.cost / 55, p.conc / 100, p.sub / 100);
-        return { p: p, q: q, r: 4 + (p.cost / 55) * 9 };
+        return { p: p, q: q, r: 4 + (p.cost / 55) * 8 };
       }).sort(function (a, b) { return b.q.d - a.q.d; });
 
-      var dots = pts.map(function (o, i) {
-        var on = sel === o.p.n;
+      var dots = shown.map(function (o) {
+        var on = sel === o.p.n, dz = danger(o.p);
         var base = project(o.p.cost / 55, 0, o.p.sub / 100);
-        return '<g class="s3-pt' + (on ? ' on' : '') + '" data-n="' + D.esc(o.p.n) + '" tabindex="0" role="button" aria-label="' + D.esc(o.p.n) + '">' +
-          '<line class="s3-drop" x1="' + o.q.px.toFixed(1) + '" y1="' + o.q.py.toFixed(1) + '" x2="' + base.px.toFixed(1) + '" y2="' + base.py.toFixed(1) + '"/>' +
+        return '<g class="s3-pt' + (on ? ' on' : '') + '">' +
+          '<line class="s3-drop" x1="' + o.q.px.toFixed(1) + '" y1="' + o.q.py.toFixed(1) +
+            '" x2="' + base.px.toFixed(1) + '" y2="' + base.py.toFixed(1) + '"/>' +
+          (dz ? '<circle cx="' + o.q.px.toFixed(1) + '" cy="' + o.q.py.toFixed(1) + '" r="' + (o.r + 5).toFixed(1) +
+            '" fill="none" stroke="#a3282d" stroke-width="2" stroke-dasharray="3 2"/>' : '') +
           '<circle cx="' + o.q.px.toFixed(1) + '" cy="' + o.q.py.toFixed(1) + '" r="' + (on ? o.r + 3 : o.r).toFixed(1) + '" ' +
-          'fill="' + SC[o.p.s] + '" stroke="#171413" stroke-width="2" opacity="' + (0.55 + 0.45 * (1 - (o.q.d + 1) / 2)).toFixed(2) + '"/>' +
-          (on ? '<text class="s3-lbl" x="' + (o.q.px + o.r + 8).toFixed(1) + '" y="' + (o.q.py + 4).toFixed(1) + '">' + D.esc(o.p.n) + '</text>' : '') +
-          '</g>';
+            'fill="' + SC[o.p.s] + '" stroke="#171413" stroke-width="2" opacity="' +
+            (0.6 + 0.4 * (1 - (o.q.d + 1) / 2)).toFixed(2) + '"/>' +
+          (on ? '<text class="s3-lbl" x="' + (o.q.px + o.r + 8).toFixed(1) + '" y="' + (o.q.py + 4).toFixed(1) + '">' +
+            D.esc(o.p.n) + '</text>' : '') + '</g>';
       }).join('');
 
-      var ax = [
-        [project(1.30, 0, 0), 'COST SHARE'],
-        [project(0, 1.22, 0), 'CONCENTRATION'],
-        [project(0, 0, 1.30), 'SUBSTITUTABILITY']
-      ].map(function (a) {
-        var c = project(0.5, 0.5, 0.5);
-        return '<text class="s3-ax" x="' + a[0].px.toFixed(1) + '" y="' + a[0].py.toFixed(1) +
-          '" text-anchor="' + (a[0].px < c.px - 20 ? 'end' : a[0].px > c.px + 20 ? 'start' : 'middle') + '">' + a[1] + '</text>';
+      var c0 = project(0.5, 0.5, 0.5);
+      var labs = [
+        { p: project(1.34, 0, 0), t: 'COST \u2192' },
+        { p: project(0, 1.26, 0), t: 'CONCENTRATION \u2191' },
+        { p: project(0, 0, 1.34), t: 'SUBSTITUTABLE \u2192' }
+      ];
+      /* at some rotations two axis labels land on top of each other */
+      for (var a1 = 0; a1 < labs.length; a1++) {
+        for (var b1 = a1 + 1; b1 < labs.length; b1++) {
+          if (Math.abs(labs[a1].p.px - labs[b1].p.px) < 90 && Math.abs(labs[a1].p.py - labs[b1].p.py) < 16) {
+            labs[a1].p.py -= 10; labs[b1].p.py += 10;
+          }
+        }
+      }
+      var ax = labs.map(function (a) {
+        return '<text class="s3-ax" x="' + a.p.px.toFixed(1) + '" y="' + a.p.py.toFixed(1) +
+          '" text-anchor="' + (a.p.px < c0.px - 15 ? 'end' : a.p.px > c0.px + 15 ? 'start' : 'middle') + '">' + a.t + '</text>';
       }).join('');
 
-      svg.innerHTML = frame + ax + dots;
-
-      Array.prototype.forEach.call(svg.querySelectorAll('.s3-pt'), function (g) {
-        function pick(e) { e.stopPropagation(); sel = g.getAttribute('data-n'); draw(); say(); }
-        g.addEventListener('click', pick);
-        g.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(e); } });
-      });
+      svg.innerHTML = zone + frame + ax + dots;
     }
 
-    function say() {
-      var p = PTS.filter(function (x) { return x.n === sel; })[0];
-      out.innerHTML = p
-        ? '<b>' + D.esc(p.n) + '</b> \u2014 ' + p.cost + '% of its stage\u2019s bill, concentration ' + p.conc +
-          ' of 100, substitutability ' + p.sub + ' of 100. ' +
-          (p.cost >= 25 && p.conc >= 50 && p.sub <= 35
-            ? 'Expensive, concentrated and hard to replace. This is the corner that actually matters, and there are very few points in it.'
-            : p.conc >= 50 && p.sub >= 55
-              ? 'Concentrated but replaceable, which is why it worries people more than it should.'
-              : p.conc <= 20
-                ? 'Barely concentrated at all. Whatever else is difficult about this line, nobody can withhold it.'
-                : 'Sits between the corners. Worth watching rather than worrying about.')
-        : 'Rotate the box until the far corner faces you: high cost, high concentration, low substitutability. ' +
-          'Only two points sit there, and they are the pretraining accelerator line and reinforcement learning environments. ' +
-          'One of those is the thing export controls were built for. The other has no control on it at all, because nobody sells it. ' +
-          '<span class="meta">Tap any point.</span>';
+    function info() {
+      var p = sel ? PTS.filter(function (x) { return x.n === sel; })[0] : null;
+      if (!p) {
+        var dz = PTS.filter(danger);
+        panel.innerHTML = '<div class="s3-empty"><span class="meta">Nothing selected</span>' +
+          '<p class="body-s">Tap any ball to see its three scores. The <b>' + dz.length + '</b> balls ringed in red are in the danger corner:</p>' +
+          '<ul class="s3-list">' + dz.map(function (x) { return '<li>' + D.esc(x.n) + '</li>'; }).join('') + '</ul>' +
+          '<p class="body-s">One of those is exactly what export controls were designed around. The other has no control on it anywhere in the world, because nobody sells it.</p></div>';
+        return;
+      }
+      var stage = { pre: 'Pretraining', post: 'Post-training', inf: 'Inference' }[p.s];
+      function bar(lbl, v, inv) {
+        var band = inv ? (v <= 35 ? 'bad' : v >= 65 ? 'good' : 'mid') : (v >= 50 ? 'bad' : v <= 20 ? 'good' : 'mid');
+        return '<div class="s3-bar"><span class="meta">' + lbl + '</span>' +
+          '<span class="s3-tr"><span class="s3-fl ' + band + '" style="width:' + v + '%"></span></span>' +
+          '<b>' + v + '</b></div>';
+      }
+      var dz = danger(p);
+      panel.innerHTML = '<span class="chip' + (dz ? ' chip-neg' : ' chip-soft') + '">' +
+          (dz ? 'In the danger corner' : 'Not a chokepoint') + '</span>' +
+        '<h4 class="h-card" style="margin:12px 0 4px">' + D.esc(p.n) + '</h4>' +
+        '<span class="meta" style="display:block;margin-bottom:14px">' + stage + '</span>' +
+        bar('Cost share', p.cost, false) + bar('Concentration', p.conc, false) + bar('Substitutable', p.sub, true) +
+        '<p class="body-s" style="margin-top:14px">' + verdict(p, dz) + '</p>';
     }
 
-    /* rotation by pointer drag, with keyboard equivalents on the buttons */
+    function verdict(p, dz) {
+      if (dz) return 'Expensive, few suppliers, and nothing else does the job. Losing this would genuinely hurt, and there is no quick workaround.';
+      if (p.conc >= 50 && p.sub >= 55) return 'Concentrated, so it looks alarming, but something cheaper does most of the job. This is the line people worry about more than they need to.';
+      if (p.conc <= 20) return 'Barely concentrated at all. Whatever else is hard about this line, nobody can withhold it from you.';
+      if (p.cost < 15) return 'Too small a share of the bill to be decisive on its own, even though supply is tight.';
+      return 'Sits between the corners. Worth monitoring rather than worrying about.';
+    }
+
+    /* ---- interaction ------------------------------------------------------
+       Pointer capture on the container swallows clicks on the SVG children,
+       so selection is done by hit-testing on pointerup instead, and only when
+       the pointer has barely moved. ---------------------------------------- */
     var wrap = body.querySelector('.s3-wrap');
-    wrap.addEventListener('pointerdown', function (e) { dragging = true; lx = e.clientX; ly = e.clientY; wrap.setPointerCapture(e.pointerId); stopSpin(); });
-    wrap.addEventListener('pointermove', function (e) {
-      if (!dragging) return;
-      yaw += (e.clientX - lx) * 0.009; pitch = Math.max(-0.9, Math.min(0.9, pitch + (e.clientY - ly) * 0.006));
-      lx = e.clientX; ly = e.clientY; draw();
+    function localPt(e) {
+      var r = svg.getBoundingClientRect(), vb = svg.viewBox.baseVal;
+      return { x: (e.clientX - r.left) / r.width * vb.width + vb.x,
+               y: (e.clientY - r.top) / r.height * vb.height + vb.y };
+    }
+    wrap.addEventListener('pointerdown', function (e) {
+      down = { x: e.clientX, y: e.clientY }; moved = 0; stopSpin();
+      wrap.setPointerCapture(e.pointerId);
     });
-    wrap.addEventListener('pointerup', function () { dragging = false; });
-    wrap.addEventListener('pointercancel', function () { dragging = false; });
+    wrap.addEventListener('pointermove', function (e) {
+      if (!down) return;
+      var dx = e.clientX - down.x, dy = e.clientY - down.y;
+      moved += Math.abs(dx) + Math.abs(dy);
+      yaw += dx * 0.009; pitch = Math.max(-0.9, Math.min(0.9, pitch + dy * 0.006));
+      down = { x: e.clientX, y: e.clientY };
+      draw();
+    });
+    wrap.addEventListener('pointerup', function (e) {
+      if (down && moved < 6) {
+        var pt = localPt(e), best = null, bd = 1e9;
+        shown.forEach(function (o) {
+          var d = Math.hypot(o.q.px - pt.x, o.q.py - pt.y);
+          if (d < Math.max(o.r + 7, 13) && d < bd) { bd = d; best = o.p.n; }
+        });
+        sel = (best === sel) ? null : best;
+        draw(); info();
+      }
+      down = null;
+    });
+    wrap.addEventListener('pointercancel', function () { down = null; });
 
-    function stopSpin() { if (spin) { cancelAnimationFrame(spin); spin = null; body.querySelector('.s3-spin').textContent = 'Spin'; } }
-    body.querySelector('.s3-spin').addEventListener('click', function () {
+    function stopSpin() { if (spin) { cancelAnimationFrame(spin); spin = null; ctl.querySelector('.s3-spin').textContent = 'Spin'; } }
+    ctl.querySelector('.s3-spin').addEventListener('click', function () {
       if (spin) { stopSpin(); return; }
       this.textContent = 'Stop';
       (function loop() { yaw += 0.006; draw(); spin = requestAnimationFrame(loop); })();
     });
-    body.querySelector('.s3-reset').addEventListener('click', function () { stopSpin(); yaw = 0.6; pitch = 0.35; sel = null; draw(); say(); });
+    ctl.querySelector('.s3-reset').addEventListener('click', function () {
+      stopSpin(); yaw = 0.6; pitch = 0.35; sel = null; draw(); info();
+    });
+    ctl.querySelector('.s3-danger').addEventListener('click', function () {
+      stopSpin(); yaw = -0.72; pitch = 0.22; sel = 'AI accelerators (pretraining)'; draw(); info();
+    });
 
-    draw(); say();
+    draw(); info();
   });
 
   /* =========================================================================

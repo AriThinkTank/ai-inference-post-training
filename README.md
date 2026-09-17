@@ -45,7 +45,11 @@ assets/js/dash3.js   Source triangulation, labour-compute crossover, sensitivity
                      tornado, plus the animation and popover layer
 assets/js/dash4.js   Profit-pool ladder, drag-rotatable 3D scatter, time-and-capital
                      matrix, animated timeline. The 3D projection is hand-rolled
-                     SVG with no library dependency
+                     SVG with no library dependency.
+
+The 3D scatter does NOT use click handlers on the SVG circles. Pointer capture on the
+container swallows child clicks during drag, so selection is done by hit-testing the
+projected coordinates on pointerup, and only when the pointer moved less than 6px.
 assets/data/*.csv    Seven datasets, downloadable from the pages
 ```
 
