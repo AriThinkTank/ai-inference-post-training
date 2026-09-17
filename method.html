@@ -22,6 +22,7 @@
       <a class="nav-link" href="money.html">Money</a>
       <a class="nav-link" href="workings.html">Workings</a>
       <a class="nav-link" href="exposure.html">Chokepoints</a>
+      <a class="nav-link" href="angles.html">Other Angles</a>
       <a class="nav-link" href="openweights.html">Open Weights</a>
       <a class="nav-link" href="trends.html">Trends</a>
       <a class="nav-link" href="india.html">India</a>
@@ -93,6 +94,13 @@
 
       <dt>Power and rack density</dt>
       <dd>700 W per accelerator (H100 SXM datasheet). 38,000 accelerators is 27 MW of IT load, about 40 MW with cooling at a power usage effectiveness of 1.5. National colocation IT load is 1,600 MW (JLL, June 2026), so the fleet is 1.7% of it. Rack counts follow from dividing hall design density by 0.7 kW per accelerator. The modern reference point is a rack of 72 accelerators drawing about 120 kW.</dd>
+
+      <dt>Company margins, and why they are the firmest data here</dt>
+      <dd>NVIDIA fiscal 2026 from the Form 10-K filed with the SEC: revenue $215.9bn, GAAP gross margin 71.1 per cent, operating income $130.4bn giving an operating margin of 60.4. TSMC second quarter 2026 from investor relations: gross 67.7, operating 60.3, net 55.6. SK hynix second quarter 2026: operating profit KRW 60.54tn on revenue KRW 79.32tn, an operating margin of 76 per cent. All graded A because they are audited or company-published.
+      <br><br>Packaging, assembly, data centre operation and annotation margins are industry estimates graded C, because those sectors are fragmented or privately held and do not publish comparable figures. Gross and operating margin are different measures and the table says which each row is; they should not be read across without noticing that.</dd>
+
+      <dt>Time and capital to build a domestic alternative</dt>
+      <dd>Our own estimates, and the softest numbers on this dashboard. They establish orders of magnitude and relative ordering rather than costings. Capital figures are indicative programme cost to reach a credible domestic capability, not to match world-leading scale. Where a timeline is set by equipment India cannot import rather than by money, the entry says so, because in those cases no budget decision changes the answer.</dd>
 
       <dt>How the three headline claims were tested</dt>
       <dd>Set out in full on the <a class="link" href="workings.html">workings page</a>, which is the right place to start if you intend to cite anything from here. In short: the inference split was checked against four independent estimates and survived, landing inside a 53 to 61 per cent range. The pretraining split survived but our figure sits near the favourable end of the published range rather than in the middle, so we now quote a range. The post-training claim did not survive as written, because reinforcement learning compute has scaled far beyond the DeepSeek disclosure it was anchored to; it has been replaced with a scale-dependent version and a calculated crossing point.</dd>
@@ -175,6 +183,7 @@
         <li><a href="money.html">Where the Money Goes</a></li>
         <li><a href="workings.html">Testing the Claims</a></li>
         <li><a href="exposure.html">Chokepoints</a></li>
+        <li><a href="angles.html">Other Angles</a></li>
         <li><a href="openweights.html">Open Weights</a></li>
         <li><a href="trends.html">Trends</a></li>
         <li><a href="india.html">India</a></li>
@@ -209,5 +218,6 @@
 <script src="assets/js/dash.js"></script>
 <script src="assets/js/dash2.js"></script>
 <script src="assets/js/dash3.js"></script>
+<script src="assets/js/dash4.js"></script>
 </body>
 </html>

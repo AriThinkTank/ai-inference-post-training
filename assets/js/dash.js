@@ -141,7 +141,7 @@ window.D = window.D || {};
           ', substitutability ' + d.sub.toFixed(2) + '.</span>'
         : '<b>' + dom + '% of the ' + stage.toLowerCase() + ' bill</b> is spent on things no export control can touch: people, electricity, buildings, data. ' +
           (stage === 'Post-training'
-            ? 'That is the highest of any stage, and it is why post-training is a labour market rather than a hardware market.'
+            ? 'That is the highest of any stage: 45% human data, 25% environments and 10% staff. At the light recipe shown here it makes post-training a labour market rather than a hardware market, though at frontier reinforcement learning intensity the compute line grows until it overtakes everything else.'
             : stage === 'Pretraining'
               ? 'That is the lowest of any stage. Two-thirds of a pretraining budget buys things that need somebody else\u2019s permission.'
               : 'Facilities and power are a bigger line here than most people expect, and both are built locally.') +
@@ -192,7 +192,7 @@ window.D = window.D || {};
         return '<div class="ex-row"><span class="ex-lbl">' + r.s + '</span>' +
           '<span class="ex-track"><span class="ex-fill' + (r.v === mx ? ' hot' : '') + '" style="width:' + Math.min(100, r.v) + '%"></span></span>' +
           '<span class="ex-num">' + r.v.toFixed(0) + '</span>' +
-          '<span class="meta ex-n">' + domesticShare(r.s) + '% untouchable</span></div>';
+          '<span class="meta ex-n">' + domesticShare(r.s) + '% out of reach</span></div>';
       }).join('');
 
       var pre = vals[0].v, post = vals[1].v, inf = vals[2].v;
@@ -200,7 +200,7 @@ window.D = window.D || {};
         '</b>, post-training <b>' + post.toFixed(0) + '</b>. Post-training comes out ' +
         (pre / post).toFixed(1) + ' times less exposed than pretraining. ' +
         'Drag either slider to an extreme and the ordering holds, because it is driven by where the money sits rather than by the weights. ' +
-        'Two-thirds of a pretraining budget buys restricted hardware. Four-fifths of a post-training budget buys people, and nobody licenses people.';
+        'Two-thirds of a pretraining budget buys restricted hardware. Four-fifths of a light post-training budget buys people and the environments they build, and nobody licenses people. That second figure only holds below roughly half of pretraining compute spent on reinforcement learning; above it, compute takes over.';
     }
 
     ctl.querySelector('.ex-wa').addEventListener('input', function () { wLev = +this.value / 100; render(); });
@@ -363,8 +363,8 @@ window.D = window.D || {};
         '<div><span class="meta">Users served daily</span><div class="kpi kpi-gold">' + users.toFixed(0) + 'm</div></div></div>';
 
       var verdict;
-      if (v.data <= 1 && v.dom >= 2) verdict = '<b>The expensive mistake.</b> Hardware bought, and nothing distinctive to run on it. On the cost stack, this is spending heavily on the 20% line while ignoring the 70% line.';
-      else if (v.ctrl >= 3 && v.dom <= 1) verdict = '<b>The exposed case.</b> Restriction arrives while the build is still on trend. Note that post-training capacity barely moves, because four-fifths of that budget was never importable.';
+      if (v.data <= 1 && v.dom >= 2) verdict = '<b>The expensive mistake.</b> Hardware bought, and nothing distinctive to run on it. On the cost stack, this is spending heavily on the compute line while ignoring the data and environment lines that carry 70% of a light post-training bill.';
+      else if (v.ctrl >= 3 && v.dom <= 1) verdict = '<b>The exposed case.</b> Restriction arrives while the build is still on trend. Note that post-training capacity barely moves at light reinforcement learning intensity, because four-fifths of that budget was never importable.';
       else if (v.data >= 3 && v.halls >= 2) verdict = '<b>The interesting case.</b> Modest hardware, serious data and environments. This is the configuration where India sells something the frontier labs cannot buy elsewhere.';
       else if (v.ctrl >= 3 && v.data >= 3) verdict = '<b>Restriction bites a smaller surface.</b> With data and environments in hand, a licensing squeeze slows India rather than stopping it. That is what hedging buys.';
       else verdict = 'Middle of the road. Push one dial to an extreme and watch which output moves. The build dial moves the headline; the data dial moves the verdict.';

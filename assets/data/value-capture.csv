@@ -1,0 +1,12 @@
+layer,company_or_type,metric,value_pct,period,revenue_usd_bn,source,grade,india_entry
+Memory (HBM and DRAM),SK hynix,Operating margin,76,Q2 2026,58.0,"SK hynix quarterly results, Q2 2026 (revenue KRW 79.32tn, operating profit KRW 60.54tn)",A,"Micron packages memory at Sanand; back-end assembly only"
+Memory (HBM and DRAM),SK hynix,Operating margin,72,Q1 2026,38.0,"SK hynix quarterly results, Q1 2026",A,"Same"
+AI accelerators,NVIDIA,Gross margin,71.1,FY2026,215.9,"NVIDIA Form 10-K, FY ended 25 Jan 2026, filed with the SEC",A,"None. Design and supply are entirely foreign"
+AI accelerators,NVIDIA,Operating margin,60.4,FY2026,215.9,"NVIDIA Form 10-K FY2026: operating income $130.4bn on revenue $215.9bn",A,"None"
+Leading-edge foundry,TSMC,Gross margin,67.7,Q2 2026,40.2,"TSMC investor relations, Q2 2026 quarterly results",A,"None at leading edge; Dholera targets 28nm"
+Leading-edge foundry,TSMC,Operating margin,60.3,Q2 2026,40.2,"TSMC investor relations, Q2 2026 quarterly results",A,"None"
+Server assembly and ODM,Foxconn and peers,Operating margin,3,2025,0,"Industry estimate for contract electronics manufacturing, typically 2-4%",C,"Real and growing. India assembles at scale already"
+Advanced packaging (OSAT),ASE and Amkor,Operating margin,13,2025,0,"Industry estimate for outsourced assembly and test",C,"Three ATMP plants operating; the most winnable hardware layer"
+Data centre operation,Colocation and neocloud,Gross margin,25,2025,0,"Industry estimate; wide spread between colocation and GPU-as-a-service",C,"Established Indian industry, 1,600 MW installed"
+Human data and annotation,Surge AI,Revenue run rate,0,2026,1.4,"Reported annual revenue run rate, private company, not audited",C,"India's clearest comparative advantage"
+Human data and annotation,Sector,Gross margin,40,2026,0,"Industry estimate for managed annotation services; expert tiers command more",C,"Same"

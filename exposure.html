@@ -22,6 +22,7 @@
       <a class="nav-link" href="money.html">Money</a>
       <a class="nav-link" href="workings.html">Workings</a>
       <a class="nav-link" href="exposure.html" aria-current="page">Chokepoints</a>
+      <a class="nav-link" href="angles.html">Other Angles</a>
       <a class="nav-link" href="openweights.html">Open Weights</a>
       <a class="nav-link" href="trends.html">Trends</a>
       <a class="nav-link" href="india.html">India</a>
@@ -99,7 +100,8 @@
   <div class="container">
     <span class="eyebrow">Putting the two together</span>
     <h2 class="h-section" style="margin:14px 0 12px;max-width:28ch">Cost-weighted exposure, by stage</h2>
-    <p class="body-s prose" style="margin-bottom:34px">Take each line of the bill, multiply its share of the budget by how controllable it is, then discount it by how easily something else would do. Sum across the stage. The result ranks the three stages against each other.</p>
+    <p class="body-s prose" style="margin-bottom:22px">Take each line of the bill, multiply its share of the budget by how controllable it is, then discount it by how easily something else would do. Sum across the stage. The result ranks the three stages against each other.</p>
+    <p class="body-s prose" style="margin-bottom:34px">One caveat before the numbers. The post-training figure assumes a light recipe, of the kind a country would run to specialise an existing open model. At frontier reinforcement learning intensity the compute line grows until it dominates the bill, and the exposure index rises with it. <a class="link" href="workings.html">We tested this claim and it did not survive as first written</a>, so the 8 below is the floor of a range rather than a settled value.</p>
 
     <div data-widget="exposure" class="reveal"></div>
 
@@ -114,7 +116,7 @@
       </div>
       <div>
         <span class="meta">Post-training, 8</span>
-        <p class="body-s mt-s">Barely exposed at all. Four-fifths of the budget buys human judgement, and no country has found a way to license that.</p>
+        <p class="body-s mt-s">Barely exposed at all, at the light recipe India would realistically run. Four-fifths of that budget buys human judgement and the environments built around it, and no country has found a way to license people. Push reinforcement learning to frontier intensity and this figure rises sharply, because compute is the one line here that can be restricted. <a class="link" href="workings.html#crossover">The crossing point is calculated here.</a></p>
       </div>
     </div>
 
@@ -138,6 +140,7 @@
         <li><a href="money.html">Where the Money Goes</a></li>
         <li><a href="workings.html">Testing the Claims</a></li>
         <li><a href="exposure.html">Chokepoints</a></li>
+        <li><a href="angles.html">Other Angles</a></li>
         <li><a href="openweights.html">Open Weights</a></li>
         <li><a href="trends.html">Trends</a></li>
         <li><a href="india.html">India</a></li>
@@ -172,5 +175,6 @@
 <script src="assets/js/dash.js"></script>
 <script src="assets/js/dash2.js"></script>
 <script src="assets/js/dash3.js"></script>
+<script src="assets/js/dash4.js"></script>
 </body>
 </html>

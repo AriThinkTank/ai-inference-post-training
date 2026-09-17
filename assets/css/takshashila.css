@@ -1118,3 +1118,66 @@ svg .d-dash { stroke: var(--ink-20); stroke-width: 2; stroke-dasharray: 5 4; fil
   .deflist dt { margin-top: 20px; }
   .deflist dd { margin-left: 0; }
 }
+
+/* ---------- margins / profit pool ---------------------------------------- */
+.mg-head { display: grid; grid-template-columns: 1fr 200px 110px; gap: 14px;
+  padding-bottom: 10px; border-bottom: 2px solid var(--ink); }
+.mg-head span { font: 400 10px var(--mono); text-transform: uppercase; letter-spacing: 0.11em; color: var(--ink-50); }
+.mg-row { display: grid; grid-template-columns: 1fr 200px 110px; gap: 14px; align-items: center;
+  width: 100%; background: var(--paper); border: 0; border-bottom: var(--rule);
+  text-align: left; cursor: pointer; font: inherit; padding: 14px 0; }
+.mg-row:hover { background: var(--deep); }
+.mg-row.on { background: var(--gold-soft); }
+.mg-l { font: 500 14.5px/1.3 var(--sans); }
+.mg-l i { display: block; font-style: normal; margin-top: 3px; }
+.mg-m { display: flex; gap: 10px; align-items: center; }
+.mg-track { display: block; flex: 1; height: 18px; background: var(--ink-10); }
+.mg-fill { display: block; height: 100%; background: var(--wine); }
+.mg-m b { font: 500 14px var(--mono); color: var(--wine); min-width: 42px; text-align: right; }
+.mg-i { display: flex; gap: 4px; }
+.mg-i i { width: 15px; height: 15px; border: 1px solid var(--ink-20); display: block; }
+.mg-i i.on { background: var(--positive); border-color: var(--ink); }
+
+/* ---------- 3D scatter ---------------------------------------------------- */
+.s3-wrap { border: 2px solid var(--ink); background: var(--paper); padding: 8px;
+  touch-action: none; cursor: grab; }
+.s3-wrap:active { cursor: grabbing; }
+.s3-svg { width: 100%; height: auto; display: block; }
+.s3-edge { stroke: var(--ink-20); stroke-width: 1.5; }
+.s3-drop { stroke: var(--ink-20); stroke-width: 1; stroke-dasharray: 2 3; }
+.s3-ax { font: 500 9.5px var(--mono); fill: var(--ink-50); letter-spacing: 0.1em; }
+.s3-lbl { font: 500 12px var(--sans); fill: var(--ink); paint-order: stroke; stroke: var(--paper); stroke-width: 4px; }
+.s3-pt { cursor: pointer; }
+.s3-pt:focus-visible { outline: 2px solid var(--wine); }
+.s3-ctl { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; padding: 12px 4px 4px; }
+.s3-key { font: 400 10px var(--mono); text-transform: uppercase; letter-spacing: 0.09em; color: var(--ink-70); }
+.s3-key i { display: inline-block; width: 11px; height: 11px; border: 1px solid var(--ink);
+  margin: 0 5px 0 12px; vertical-align: -1px; }
+
+/* ---------- substitute --------------------------------------------------- */
+.sb-svg { width: 100%; height: auto; }
+.sb-n { font: 500 12px var(--sans); fill: var(--ink-50); }
+.sb-n.ok { fill: var(--ink); }
+.sb-rule { stroke: var(--ink-10); stroke-width: 1; }
+.sb-dot { cursor: pointer; }
+.sb-dot:focus-visible { outline: 2px solid var(--wine); }
+
+/* ---------- timeline ----------------------------------------------------- */
+.tl-svg { width: 100%; height: auto; }
+.tl-up { fill: none; stroke: var(--wine); stroke-width: 3; }
+.tl-dn { fill: none; stroke: var(--gold); stroke-width: 3; }
+.tl-lab { font: 500 12px var(--mono); paint-order: stroke; stroke: var(--paper); stroke-width: 4px; }
+.tl-lab.up { fill: var(--wine); }
+.tl-lab.dn { fill: #a8703a; }
+.tl-ctl { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+
+@media (max-width: 800px) {
+  .mg-head, .mg-row { grid-template-columns: 1fr 120px; }
+  .mg-head span:nth-child(3), .mg-i { display: none; }
+}
+/* method page carries long currency and code strings in definition lists */
+.deflist dd, .deflist dt { min-width: 0; }
+@media (max-width: 620px) { .deflist dd { font-size: 13.5px; } }
+/* the workings and method pages use full-sentence definition terms, which the
+   original nowrap rule was never written for */
+.deflist dt { white-space: normal; }

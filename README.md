@@ -28,6 +28,8 @@ index.html         Overview and the headline finding
 money.html         Marimekko of all three cost stacks, plus single-stage view
 workings.html      The three headline claims tested against independent sources
 exposure.html      Suppliers, export controls, cost-weighted exposure
+angles.html        Profit pools from company filings, a 3D chokepoint view,
+                   and what India could build by when
 openweights.html   What open weights relieve, and the denial half-life equation
 trends.html        Five series over time with fitted growth rates
 india.html         Indian capability against the cost stack, scenarios, options
@@ -41,6 +43,9 @@ assets/js/dash.js    Cost stack, exposure, controls, India fit, scenario
 assets/js/dash2.js   Marimekko, denial half-life, open weights, trends
 assets/js/dash3.js   Source triangulation, labour-compute crossover, sensitivity
                      tornado, plus the animation and popover layer
+assets/js/dash4.js   Profit-pool ladder, drag-rotatable 3D scatter, time-and-capital
+                     matrix, animated timeline. The 3D projection is hand-rolled
+                     SVG with no library dependency
 assets/data/*.csv    Seven datasets, downloadable from the pages
 ```
 
@@ -84,6 +89,18 @@ substitutability in inference. The tornado chart on `workings.html` shows it mov
   alone gives wrong answers for both.
 - **E5 assumes efficiency gains reach the restricted party.** Open publication and open weights ensure
   that today. A regime restricting publication would break the equation.
+
+## Terminology that caused a bug once
+
+Three different percentages describe the same cost stack and are easy to confuse:
+
+- **Hardware share** — accelerators, servers and interconnect only. Pretraining: 62%.
+- **Reached by a control** — every line with non-zero control leverage, which adds the partly
+  restricted data line. Pretraining: 66%.
+- **Out of reach** — lines with zero leverage: staff, energy, buildings. Pretraining: 34%.
+
+An earlier version used "restricted" for the first and "untouchable" for the third, which made 62
+and 66 look like a contradiction. Chart labels now say "reached by a control" explicitly.
 
 ## Editorial conventions
 

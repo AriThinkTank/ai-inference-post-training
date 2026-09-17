@@ -83,7 +83,7 @@ window.D = window.D || {};
         });
         var dom = rows.reduce(function (a, r) { return a + (r[2] ? 0 : r[1]); }, 0) / sum * 100;
         svg += '<text class="mk-f" x="' + (c.x + c.w / 2) + '" y="' + (PT + CH + 22) + '" text-anchor="middle">' +
-          Math.round(dom) + '% untouchable</text>';
+          Math.round(100 - dom) + '% reached by a control, ' + Math.round(dom) + '% not</text>';
         svg += '<text class="mk-f2" x="' + (c.x + c.w / 2) + '" y="' + (PT + CH + 38) + '" text-anchor="middle">exposure ' +
           D.exposureFromRows(rows, c.s).toFixed(0) + '</text>';
       });
