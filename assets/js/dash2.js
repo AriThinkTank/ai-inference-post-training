@@ -378,7 +378,7 @@ window.D = window.D || {};
       function fmt(v) {
         if (s.unit === '$') return D.money(v);
         if (s.unit === '$/Mtok') return '$' + (v >= 1 ? v.toFixed(0) : v.toFixed(2));
-        return v.toLocaleString('en-IN') + ' ' + s.unit;
+        return v.toLocaleString('en-US') + ' ' + s.unit;
       }
       var n = x1 - x0, g = Math.pow(ys[ys.length - 1] / ys[0], 1 / n) - 1;
 

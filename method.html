@@ -20,11 +20,12 @@
     <div class="nav-links">
       <a class="nav-link" href="index.html">Overview</a>
       <a class="nav-link" href="money.html">Money</a>
+      <a class="nav-link" href="workings.html">Workings</a>
       <a class="nav-link" href="exposure.html">Chokepoints</a>
       <a class="nav-link" href="openweights.html">Open Weights</a>
       <a class="nav-link" href="trends.html">Trends</a>
       <a class="nav-link" href="india.html">India</a>
-      <a class="nav-link" href="method.html" aria-current="page">Data &amp; Method</a>
+      <a class="nav-link" href="method.html" aria-current="page">Method</a>
     </div>
   </div>
 </nav>
@@ -92,6 +93,15 @@
 
       <dt>Power and rack density</dt>
       <dd>700 W per accelerator (H100 SXM datasheet). 38,000 accelerators is 27 MW of IT load, about 40 MW with cooling at a power usage effectiveness of 1.5. National colocation IT load is 1,600 MW (JLL, June 2026), so the fleet is 1.7% of it. Rack counts follow from dividing hall design density by 0.7 kW per accelerator. The modern reference point is a rack of 72 accelerators drawing about 120 kW.</dd>
+
+      <dt>How the three headline claims were tested</dt>
+      <dd>Set out in full on the <a class="link" href="workings.html">workings page</a>, which is the right place to start if you intend to cite anything from here. In short: the inference split was checked against four independent estimates and survived, landing inside a 53 to 61 per cent range. The pretraining split survived but our figure sits near the favourable end of the published range rather than in the middle, so we now quote a range. The post-training claim did not survive as written, because reinforcement learning compute has scaled far beyond the DeepSeek disclosure it was anchored to; it has been replaced with a scale-dependent version and a calculated crossing point.</dd>
+
+      <dt>The labour-to-compute crossover in post-training</dt>
+      <dd>Compute cost = RL intensity &times; 2,788,000 pretraining GPU-hours &times; $2 per GPU-hour, both figures from DeepSeek's own V3 and R1 reports. Non-compute cost = comparisons &times; price each, plus interface environments at $20,000 and application clones at $300,000, plus a research team at about $1m. At the default inputs the crossing point is <b>50.2 per cent</b> of pretraining compute; with expert-rate comparisons it moves to <b>148.9 per cent</b>. Disclosed reference points: DeepSeek-R1-Zero at 3.75 per cent, DeepSeek-R1 at 5.3, Cursor Composer 1.5 above 100.</dd>
+
+      <dt>Sensitivity: which input carries the conclusion</dt>
+      <dd>A one-at-a-time test on the inference exposure index. Taking each input to both ends of its plausible range while holding the rest at default, the index moves furthest on <b>accelerator substitutability</b>, which swings it between about 10 and 35 against a default of 22. Every measured input moves it by five points or less. The uncomfortable implication, stated on the workings page rather than hidden here, is that the most influential number in this analysis is a judgement we assigned rather than a figure any source published.</dd>
 
       <dt>Equations used, and where they come from</dt>
       <dd>Full list with citations in <a class="link" href="assets/data/equations.csv" download>equations.csv</a>. The load-bearing ones:
@@ -163,6 +173,7 @@
       <ul>
         <li><a href="index.html">Overview</a></li>
         <li><a href="money.html">Where the Money Goes</a></li>
+        <li><a href="workings.html">Testing the Claims</a></li>
         <li><a href="exposure.html">Chokepoints</a></li>
         <li><a href="openweights.html">Open Weights</a></li>
         <li><a href="trends.html">Trends</a></li>
@@ -197,5 +208,6 @@
 <script src="assets/js/comic.js"></script>
 <script src="assets/js/dash.js"></script>
 <script src="assets/js/dash2.js"></script>
+<script src="assets/js/dash3.js"></script>
 </body>
 </html>

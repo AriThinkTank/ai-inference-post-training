@@ -26,6 +26,7 @@ Finder hides it. Check with `git ls-files | grep nojekyll`.
 ```
 index.html         Overview and the headline finding
 money.html         Marimekko of all three cost stacks, plus single-stage view
+workings.html      The three headline claims tested against independent sources
 exposure.html      Suppliers, export controls, cost-weighted exposure
 openweights.html   What open weights relieve, and the denial half-life equation
 trends.html        Five series over time with fitted growth rates
@@ -38,6 +39,8 @@ method.html        Every equation, assumption and source grade
 ```
 assets/js/dash.js    Cost stack, exposure, controls, India fit, scenario
 assets/js/dash2.js   Marimekko, denial half-life, open weights, trends
+assets/js/dash3.js   Source triangulation, labour-compute crossover, sensitivity
+                     tornado, plus the animation and popover layer
 assets/data/*.csv    Seven datasets, downloadable from the pages
 ```
 
@@ -51,6 +54,25 @@ Listed with citations in `assets/data/equations.csv`. E1 (training compute), E2 
 compute), E6 (KV cache) and E7 (inference price decline) are from the literature. **E3 (cost-weighted
 exposure) and E5 (denial half-life) are our own constructions** and are marked as such everywhere
 they appear.
+
+## On the three headline claims
+
+They were tested and one failed. See `workings.html`.
+
+- **Inference as a property business: survived.** Four independent estimates put the restricted
+  share at 53-61%; we say 57%.
+- **Pretraining as a hardware business: survived, but our 62% sits near the favourable end of
+  Cottier's published range.** At the other end of their staff range hardware is 47%. We now quote
+  a range.
+- **Post-training as a labour business: did not survive as written.** It was anchored to DeepSeek-R1
+  at 5.3% RL compute. Reinforcement learning compute has since scaled by more than tenfold between
+  model generations, and Cursor have disclosed post-training compute exceeding pretraining. The claim
+  is now scale-dependent, with a calculated crossing point at roughly 50% RL intensity for generalist
+  data and 149% for expert data.
+
+**The single most influential number is one we assigned, not one we sourced:** accelerator
+substitutability in inference. The tornado chart on `workings.html` shows it moving the index between
+10 and 35 against a default of 22, while every measured input moves it by five points or less.
 
 ## Three things to know before extending this
 

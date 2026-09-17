@@ -20,11 +20,12 @@
     <div class="nav-links">
       <a class="nav-link" href="index.html" aria-current="page">Overview</a>
       <a class="nav-link" href="money.html">Money</a>
+      <a class="nav-link" href="workings.html">Workings</a>
       <a class="nav-link" href="exposure.html">Chokepoints</a>
       <a class="nav-link" href="openweights.html">Open Weights</a>
       <a class="nav-link" href="trends.html">Trends</a>
       <a class="nav-link" href="india.html">India</a>
-      <a class="nav-link" href="method.html">Data &amp; Method</a>
+      <a class="nav-link" href="method.html">Method</a>
     </div>
   </div>
 </nav>
@@ -42,7 +43,7 @@
       <div class="stack-m">
         <div class="sticker gold">
           <div class="cast" data-char="ira" data-mood="point" data-size="72"></div>
-          <div class="sticker-txt"><b>The one-line version</b>Pretraining buys hardware. Post-training buys people. Inference buys buildings and power. Only the first is easy to restrict.</div>
+          <div class="sticker-txt"><b>The one-line version</b>Pretraining buys hardware. Post-training buys people, up to a point we can calculate. Inference buys chips, buildings and power in roughly equal measure. Only some of that can be restricted, and we have <a class="link" href="workings.html">tested each claim</a> against independent sources.</div>
         </div>
         <a class="btn" href="money.html">Start with the money &rarr;</a>
       </div>
@@ -59,29 +60,29 @@
       <div class="panel dots">
         <span class="panel-code">Stage 1</span>
         <div class="caption-box">Pretraining &middot; about $350m</div>
-        <span class="sfx sfx-s">62% restricted</span>
-        <p class="panel-note" style="margin-top:12px">Two-thirds of the bill buys chips, servers and the fabric that wires them together. All of it needs somebody else's permission, and there is no second source for the part that matters.</p>
+        <span class="sfx sfx-s">47&ndash;65% restricted</span>
+        <p class="panel-note" style="margin-top:12px">Most of the bill buys chips, servers and the fabric that wires them together, all of which need somebody else's permission. The range is wide because the published cost model puts research staff anywhere between 29 and 49 per cent of the total, and hardware takes whatever is left.</p>
         <span class="scribble scribble-arrow" style="margin-top:10px">the stage everyone regulates</span>
       </div>
       <div class="panel dots-gold">
         <span class="panel-code">Stage 2</span>
         <div class="caption-box">Post-training &middot; about $8m</div>
-        <span class="sfx sfx-s">80% untouchable</span>
-        <p class="panel-note" style="margin-top:12px">Four-fifths of the bill buys human judgement: expert comparisons, graded test environments, small research teams. Nobody licenses people. No export control reaches any of it.</p>
+        <span class="sfx sfx-s">80%, then it flips</span>
+        <p class="panel-note" style="margin-top:12px">At the scale India would realistically work at, four-fifths of the bill buys human judgement and nobody licenses people. But push reinforcement learning hard enough and compute takes over. The crossing point is at roughly half of pretraining compute, and the frontier labs have passed it.</p>
         <span class="scribble scribble-arrow" style="margin-top:10px">the stage nobody regulates</span>
       </div>
       <div class="panel">
         <span class="panel-code">Stage 3</span>
         <div class="caption-box">Inference &middot; the recurring bill</div>
-        <span class="sfx sfx-s">43% domestic</span>
-        <p class="panel-note" style="margin-top:12px">Chips still lead, but power, buildings and staff are more than two-fifths of the cost, and the chips can be older ones. This is where most of the industry's money now goes.</p>
+        <span class="sfx sfx-s">39&ndash;47% domestic</span>
+        <p class="panel-note" style="margin-top:12px">Chips still lead, but power, buildings and staff are well over a third of the cost, and the chips here can be older ones. Four independent estimates agree within eight points, which makes this the best-supported of the three claims.</p>
         <div class="panel-art"><div class="cast" data-char="echo" data-mood="think" data-size="86"></div></div>
       </div>
     </div>
 
     <div class="sticker mt-l" style="max-width:86ch">
       <div class="cast" data-char="ira" data-mood="doubt" data-size="76"></div>
-      <div class="sticker-txt"><b>Why this matters more than it sounds</b>Export controls were written for stage one, where the money is in hardware. But the stage that decides what a model can actually do, and the stage that decides who can afford to use it, both spend most of their budget on things no control instrument can touch. The policy conversation and the cost structure have come apart.</div>
+      <div class="sticker-txt"><b>Why this matters more than it sounds</b>Export controls were written for stage one, where the money is in hardware. The stage that decides who can afford to use AI spends nearly half its budget on power and buildings that no instrument reaches. And the stage that decides what a model can actually do spends most of its budget on people, at least until somebody starts running reinforcement learning at frontier scale. The policy conversation assumes one cost structure. There are three, and one of them moves.</div>
     </div>
   </div>
 </section>
@@ -93,10 +94,10 @@
     <p class="body-s prose" style="margin-bottom:34px">Published figures, not estimates. The spread between them is the point.</p>
 
     <div class="gapless cols-4">
-      <div><span class="meta">GPT-4 pretraining, 2023</span><div class="kpi kpi-gold" style="margin:10px 0 4px">$79m</div><p class="body-s">Stanford AI Index with Epoch AI, amortised hardware and energy.</p></div>
-      <div><span class="meta">Gemini Ultra pretraining, 2024</span><div class="kpi kpi-gold" style="margin:10px 0 4px">$191m</div><p class="body-s">Same method. About 35 MW of power draw while it ran.</p></div>
-      <div><span class="meta">DeepSeek-V3 pretraining, 2024</span><div class="kpi kpi-gold" style="margin:10px 0 4px">$5.6m</div><p class="body-s">The developer's own figure: 2.79m GPU-hours at $2 an hour.</p></div>
-      <div><span class="meta">DeepSeek-R1 post-training, 2025</span><div class="kpi kpi-gold" style="margin:10px 0 4px">$294k</div><p class="body-s">The entire reinforcement learning stage. 147,000 GPU-hours.</p></div>
+      <div><span class="meta">GPT-4 pretraining, 2023</span><div class="kpi kpi-gold" style="margin:10px 0 4px">$<span data-count="79" data-dp="0" data-suffix="m">0m</span></div><p class="body-s">Stanford AI Index with Epoch AI, amortised hardware and energy.</p></div>
+      <div><span class="meta">Gemini Ultra pretraining, 2024</span><div class="kpi kpi-gold" style="margin:10px 0 4px">$<span data-count="191" data-dp="0" data-suffix="m">0m</span></div><p class="body-s">Same method. About 35 MW of power draw while it ran.</p></div>
+      <div><span class="meta">DeepSeek-V3 pretraining, 2024</span><div class="kpi kpi-gold" style="margin:10px 0 4px">$<span data-count="5.6" data-dp="1" data-suffix="m">0m</span></div><p class="body-s">The developer's own figure: 2.79m GPU-hours at $2 an hour.</p></div>
+      <div><span class="meta">DeepSeek-R1 post-training, 2025</span><div class="kpi kpi-gold" style="margin:10px 0 4px">$<span data-count="294" data-dp="0" data-suffix="k">0k</span></div><p class="body-s">The entire reinforcement learning stage. 147,000 GPU-hours.</p></div>
     </div>
     <span class="source">Sources as listed in <a class="link" href="assets/data/stage-costs.csv" download>stage-costs.csv</a>. The V3 and R1 figures are compute only and exclude staff and data, which is exactly why the next page matters.</span>
 
@@ -123,28 +124,33 @@
         <span class="body-s" style="display:block;margin-top:4px">The cost stack for each stage, line by line, with a budget dial. Which lines are hardware and which are people.</span></span>
         <span class="meta">8 min &rarr;</span>
       </a>
+      <a class="rowlist-item" href="workings.html">
+        <span><span class="code-no">02</span> <b style="font-weight:500">Testing the Claims</b>
+        <span class="body-s" style="display:block;margin-top:4px">We attacked our own headline. Two claims held, one had to be rewritten. Every calculation, every source, and an honest account of which single assumption is carrying the answer.</span></span>
+        <span class="meta">12 min &rarr;</span>
+      </a>
       <a class="rowlist-item" href="exposure.html">
-        <span><span class="code-no">02</span> <b style="font-weight:500">Chokepoints and Controls</b>
+        <span><span class="code-no">03</span> <b style="font-weight:500">Chokepoints and Controls</b>
         <span class="body-s" style="display:block;margin-top:4px">Who supplies each line, what each export control instrument actually reaches, and the cost-weighted exposure of each stage.</span></span>
         <span class="meta">10 min &rarr;</span>
       </a>
       <a class="rowlist-item" href="openweights.html">
-        <span><span class="code-no">03</span> <b style="font-weight:500">Open Weights</b>
+        <span><span class="code-no">04</span> <b style="font-weight:500">Open Weights</b>
         <span class="body-s" style="display:block;margin-top:4px">Which chokepoints open weights actually relieve and which they leave untouched, plus an equation for how many years an export control buys.</span></span>
         <span class="meta">10 min &rarr;</span>
       </a>
       <a class="rowlist-item" href="trends.html">
-        <span><span class="code-no">04</span> <b style="font-weight:500">Trends</b>
+        <span><span class="code-no">05</span> <b style="font-weight:500">Trends</b>
         <span class="body-s" style="display:block;margin-top:4px">Frontier cost doubling every year while the price of a fixed capability falls ninety per cent a year. The scissors that define the strategy.</span></span>
         <span class="meta">8 min &rarr;</span>
       </a>
       <a class="rowlist-item" href="india.html">
-        <span><span class="code-no">05</span> <b style="font-weight:500">India</b>
+        <span><span class="code-no">06</span> <b style="font-weight:500">India</b>
         <span class="body-s" style="display:block;margin-top:4px">Capability scored against where the money is, a scenario engine, and options split into what to do abroad and what to do at home.</span></span>
         <span class="meta">12 min &rarr;</span>
       </a>
       <a class="rowlist-item" href="method.html">
-        <span><span class="code-no">06</span> <b style="font-weight:500">Data and Method</b>
+        <span><span class="code-no">07</span> <b style="font-weight:500">Data and Method</b>
         <span class="body-s" style="display:block;margin-top:4px">Every calculation, every assumption, every source grade, and four downloadable datasets.</span></span>
         <span class="meta">Reference &rarr;</span>
       </a>
@@ -163,6 +169,7 @@
       <ul>
         <li><a href="index.html">Overview</a></li>
         <li><a href="money.html">Where the Money Goes</a></li>
+        <li><a href="workings.html">Testing the Claims</a></li>
         <li><a href="exposure.html">Chokepoints</a></li>
         <li><a href="openweights.html">Open Weights</a></li>
         <li><a href="trends.html">Trends</a></li>
@@ -197,5 +204,6 @@
 <script src="assets/js/comic.js"></script>
 <script src="assets/js/dash.js"></script>
 <script src="assets/js/dash2.js"></script>
+<script src="assets/js/dash3.js"></script>
 </body>
 </html>

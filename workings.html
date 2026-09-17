@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Testing the Claims &middot; Takshashila</title>
+<meta name="description" content="Testing the three headline claims of this dashboard against independent sources, with every calculation shown and a sensitivity analysis.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;500&family=Bungee&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/takshashila.css">
+</head>
+<body>
+
+<div class="progress" aria-hidden="true"></div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-mark" href="index.html">Three Stages, Three Problems <span>Takshashila</span></a>
+    <button class="nav-toggle" type="button" aria-expanded="false">Menu</button>
+    <div class="nav-links">
+      <a class="nav-link" href="index.html">Overview</a>
+      <a class="nav-link" href="money.html">Money</a>
+      <a class="nav-link" href="workings.html" aria-current="page">Workings</a>
+      <a class="nav-link" href="exposure.html">Chokepoints</a>
+      <a class="nav-link" href="openweights.html">Open Weights</a>
+      <a class="nav-link" href="trends.html">Trends</a>
+      <a class="nav-link" href="india.html">India</a>
+      <a class="nav-link" href="method.html">Method</a>
+    </div>
+  </div>
+</nav>
+
+<header class="section">
+  <div class="container">
+    <p class="crumbs" style="margin-bottom:26px"><a href="index.html">Overview</a> / Testing the claims</p>
+    <span class="chapter-no">02</span>
+    <h1 class="page-title" style="margin:10px 0 26px;max-width:20ch;font-size:54px;line-height:1.03;letter-spacing:-0.025em">Testing Our Own <em>Headline</em></h1>
+    <div class="split">
+      <div>
+        <p class="lede">This dashboard opened with a tidy claim: pretraining is a hardware business, post-training a labour business, inference a property business. Tidy claims deserve to be attacked, so we attacked this one.</p>
+        <p class="body-s prose" style="margin-top:20px">What follows is the whole test. For each of the three claims we went looking for independent estimates of the same quantity, checked whether our figure sat inside the range everyone else found, and then asked which single assumption was doing the most work. Two of the three claims survived. One did not survive as written, and we have rewritten it rather than quietly adjusting the number.</p>
+      </div>
+      <div class="jump">
+        <a href="#verdicts"><b>W.01</b>The three verdicts</a>
+        <a href="#triangulate"><b>W.02</b>The same number, many sources</a>
+        <a href="#crossover"><b>W.03</b>Where the labour claim breaks</a>
+        <a href="#sensitivity"><b>W.04</b>Which assumption carries the answer</a>
+        <a href="#workings"><b>W.05</b>Every calculation, in full</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="section deep" id="verdicts">
+  <div class="container">
+    <span class="eyebrow">W.01</span>
+    <h2 class="h-section" style="margin:14px 0 12px;max-width:26ch">What survived and what did not</h2>
+    <p class="body-s prose" style="margin-bottom:34px">Three claims, three verdicts. We have put the failure first because it is the one that changes what the dashboard concludes, and because burying it further down would be the kind of thing that makes people distrust dashboards.</p>
+
+    <div class="claim">
+      <span class="claim-v broke">Did not survive as written</span>
+      <h3 class="h-feature" style="margin:0 0 12px;font-size:28px">&ldquo;Post-training is a labour business&rdquo;</h3>
+      <p class="body-s prose">We said compute was about a fifth of a post-training budget, and anchored that to the only complete public disclosure: DeepSeek spent 147,000 GPU-hours on reinforcement learning for R1, against 2,788,000 to pretrain the base model. That is 5.3 per cent, and on those numbers the claim is fine.</p>
+      <p class="body-s prose">The trouble is that 2026 does not look like that any more. Reinforcement learning compute has been scaling hard. Reported increases between model generations run to more than tenfold. Cursor have stated outright that post-training compute for Composer 1.5 exceeded the compute used to pretrain the base model, which is the only time any laboratory has said this in plain language. Nathan Lambert, who runs post-training at the Allen Institute, writes that a single ablation run can now take 10,000 to 100,000 GPU-hours and that the trend of rising post-training compute will continue.</p>
+      <p class="body-s prose">So the honest version is not a claim about post-training. It is a claim about <b class="pop" data-pop="How hard you push reinforcement learning, expressed as a percentage of the compute that was used to pretrain the base model. Below roughly 50 per cent the bill is dominated by people. Above it, by machines.">reinforcement learning intensity</b>. Below a certain level, post-training is a labour business. Above it, it is a compute business. We calculate where the line sits in section W.03, and it turns out to be a more useful finding than the one we started with.</p>
+    </div>
+
+    <div class="claim">
+      <span class="claim-v holds">Survived</span>
+      <h3 class="h-feature" style="margin:0 0 12px;font-size:28px">&ldquo;Inference is a property business&rdquo;</h3>
+      <p class="body-s prose">We said 57 per cent of an inference bill goes on things somebody can restrict, leaving 43 per cent on power, buildings and staff that nobody can. Four independent estimates put the restricted share between 53 and 61 per cent, with a mean of 55.3. Our figure sits inside that range and slightly above the middle of it.</p>
+      <p class="body-s prose">The one correction worth making is that the answer depends on what you are measuring. Epoch AI&rsquo;s model of a gigawatt campus is upfront capital, and puts accelerators and servers at 60 per cent. SemiAnalysis measured four-year total cost of ownership on a real cluster and got 46 per cent for the chips themselves, with another 24 per cent covering networking, processors and storage together. Those are different questions with different right answers, and quoting one number without saying which question it answers is how supply chain analysis goes wrong.</p>
+    </div>
+
+    <div class="claim">
+      <span class="claim-v partly">Survived, but we were flattering ourselves</span>
+      <h3 class="h-feature" style="margin:0 0 12px;font-size:28px">&ldquo;Pretraining is a hardware business&rdquo;</h3>
+      <p class="body-s prose">We said 62 per cent of a pretraining budget is hardware. That comes from Cottier and colleagues, whose cost model is the most thorough public work on this, and it is a fair reading of their figures. But their model puts research staff anywhere between 29 and 49 per cent of the total, which is a very wide range, and our 62 per cent for hardware quietly assumes staff sit near the bottom of it.</p>
+      <p class="body-s prose">Take staff at the top of their range instead and hardware falls to 47 per cent. At that point pretraining is very nearly half a labour business too, and the clean contrast we drew with post-training gets blurry. The claim holds in the sense that hardware is the largest single block and the only one anyone can restrict. It does not hold in the sense of being a settled 62 per cent, and we have replaced the point estimate with a range.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="triangulate">
+  <div class="container">
+    <span class="eyebrow">W.02</span>
+    <h2 class="h-section" style="margin:14px 0 12px;max-width:28ch">The same number, asked of several sources</h2>
+    <p class="body-s prose" style="margin-bottom:34px">The most useful test of a cost estimate is whether people who have never spoken to each other arrive at the same place. Below, each row is an independent attempt at the same quantity. The vertical line is our figure. Where a bar sits well away from that line, it is worth knowing why, so tap it.</p>
+    <div data-widget="triangulate" class="reveal"></div>
+  </div>
+</section>
+
+<section class="section deep" id="crossover">
+  <div class="container">
+    <span class="eyebrow">W.03</span>
+    <h2 class="h-section" style="margin:14px 0 12px;max-width:28ch">Where post-training stops being about people</h2>
+    <p class="body-s prose" style="margin-bottom:22px">If the labour claim only holds below a certain scale, the obvious question is where the line sits. That is answerable, because both sides of it can be priced.</p>
+    <p class="body-s prose" style="margin-bottom:22px">On one side, compute. The DeepSeek reports give both the GPU-hours and the rate they valued them at, so reinforcement learning compute can be priced directly from how hard you push it. On the other side, everything that is not compute: the human comparisons, the environments somebody has to build, and a small research team. Those have published price ranges, though weaker ones.</p>
+    <p class="body-s prose" style="margin-bottom:34px">Set the two against each other and there is a crossing point. Below it the people cost more than the machines. Above it the machines cost more. Every input below is yours to change, and the chart redraws.</p>
+    <div data-widget="crossover" class="reveal"></div>
+
+    <div class="split mt-l">
+      <div class="card" style="border-left:3px solid var(--positive)">
+        <span class="chip chip-soft">What this means for India</span>
+        <h3 class="h-feature" style="margin:14px 0 12px;font-size:26px">The realistic Indian play sits a long way inside labour territory</h3>
+        <p class="body-s">India is not going to run frontier-scale reinforcement learning against a proprietary task distribution. What India can realistically do is take a capable open model and specialise it: Indian languages, Indian law, Indian agriculture, Indian clinical practice. That is a light post-training recipe, which on the default inputs sits at five to ten per cent reinforcement learning intensity.</p>
+        <p class="body-s">At that intensity compute is under a fifth of the bill and the rest is human judgement. So the original claim is right about the thing India would actually do, even though it is wrong about what the frontier laboratories are now doing. Those are two different activities that happen to share a name, and conflating them is how the Indian conversation ends up talking about GPUs again.</p>
+      </div>
+      <div class="stack-m">
+        <div class="aside">
+          <span class="aside-title">The number that moves the crossover most</span>
+          <p>Cost per comparison. Generalist work at five dollars puts the crossover at about half of pretraining compute. Expert work at sixty dollars pushes it out past one and a half times, because credentialed judgement is expensive enough to dominate a very large compute bill. India&rsquo;s advantage lies precisely in supplying credentialed judgement at a price nobody else can match.</p>
+        </div>
+        <div class="aside">
+          <span class="aside-title">The weakness to keep in view</span>
+          <p>Compute prices are grade A: disclosed by the developer, in their own report, with the rate stated. Annotation and environment prices are grade C: consistent across industry reporting, but no vendor publishes a price list. So the left side of this calculation is much firmer than the right.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="sensitivity">
+  <div class="container">
+    <span class="eyebrow">W.04</span>
+    <h2 class="h-section" style="margin:14px 0 12px;max-width:28ch">Which assumption is carrying the conclusion?</h2>
+    <p class="body-s prose" style="margin-bottom:22px">A cost model can be right about every number it takes from a source and still be wrong overall, if the thing doing the work is a judgement the authors made. So the last test is to take each input to both ends of its plausible range, one at a time, and see how far the answer moves.</p>
+    <p class="body-s prose" style="margin-bottom:34px">The bars are sorted by how much they move it. The uncomfortable result is at the top.</p>
+    <div data-widget="tornado" class="reveal"></div>
+
+    <div class="sticker gold mt-l" style="max-width:86ch">
+      <div class="cast" data-char="vera" data-mood="fail" data-size="76"></div>
+      <div class="sticker-txt"><b>Read that top bar carefully</b>The input that moves the inference exposure index furthest is how substitutable we judged inference accelerators to be. That is not a measured quantity from any source. It is a number we assigned, on the reasoning that older chips, lower-spec parts and compressed models genuinely do work for serving in a way they do not for training. We think that reasoning is right. But anyone who disagrees with it can move the headline conclusion of this dashboard more than any data source can, and they should know that before they cite us.</div>
+    </div>
+  </div>
+</section>
+
+<section class="section deep" id="workings">
+  <div class="container">
+    <span class="eyebrow">W.05</span>
+    <h2 class="h-section" style="margin:14px 0 12px;max-width:26ch">Every calculation, written out</h2>
+    <p class="body-s prose" style="margin-bottom:34px">Arithmetic rather than assertion. Anything here can be reproduced in a spreadsheet in about ten minutes.</p>
+
+    <dl class="deflist">
+      <dt>The pretraining split</dt>
+      <dd>Cottier and colleagues report, as shares of total development cost: hardware 47 to 65 per cent, research staff 29 to 49, server components 15 to 22, cluster interconnect 9 to 13, energy 2 to 6. They also state that accelerator chips and staff each run to tens of millions of dollars for models like GPT-4.
+      <br><br>We take midpoints, then allocate the hardware total between its named parts: accelerators 33, servers 18, interconnect 11. Staff 30, energy 4, data acquisition 4. That sums to 100 with the data line absorbing the residual, which is why the data line is the weakest of the six.
+      <br><br><b>Restricted share = 33 + 18 + 11 = 62 per cent.</b> Take staff at 49 rather than 30 and the same arithmetic gives 47 per cent, which is the range we now quote.</dd>
+
+      <dt>The inference split, and how it was checked</dt>
+      <dd>Our figures: accelerators 50, energy 18, facility 17, networking and storage 7, engineering staff 8.
+      <br><br>Checked against four sources. Epoch AI&rsquo;s gigawatt campus model, about $38bn of upfront capital: GPUs and servers 60, buildings 20, power 12, cooling 5, network and other 3. SemiAnalysis on a Meta H100 cluster over four years: GPUs 46, networking with processors and storage 24, colocation 20, electricity 9, other 1. Electron Economics: information technology equipment about 53 of all-in capital, range 46 to 64. JLL with Turner and Townsend: accelerators 40 to 60, power 15 to 25, cooling 8 to 15, networking 8 to 12, land and shell 5 to 15.
+      <br><br>To compare them we count accelerators as restricted, plus a third of any bundled networking line, since most of what SemiAnalysis group under networking is commodity processors and storage. <b>That gives 61, 54, 53 and 53 per cent restricted. Mean 55.3, range 53 to 61. Our figure of 57 sits inside it.</b></dd>
+
+      <dt>The post-training crossover</dt>
+      <dd>Compute cost = RL intensity &times; 2,788,000 pretraining GPU-hours &times; $2 per GPU-hour. Both the GPU-hours and the $2 rate are DeepSeek&rsquo;s own, from the V3 and R1 technical reports.
+      <br><br>Non-compute cost = comparisons &times; price each, plus interface environments at $20,000 and application clones at $300,000, plus a research team at about $1m.
+      <br><br>At the defaults, non-compute comes to $2.8m: 100,000 generalist comparisons at $5 is $500,000, twenty interface environments and three clones is $1.3m, staff $1m. Compute equals that when RL compute buys $2.8m of GPU-hours, which is 1,394,000 hours, which is <b>50.2 per cent of pretraining compute</b>.
+      <br><br>Move to expert comparisons at $60 and non-compute rises to $8.3m, pushing the crossover to <b>148.9 per cent</b>. Disclosed points for comparison: DeepSeek-R1-Zero at 3.75 per cent, DeepSeek-R1 at 5.3, Cursor Composer 1.5 above 100.</dd>
+
+      <dt>Cost-weighted exposure, equation E3</dt>
+      <dd>For each stage, sum across cost lines of (share of budget &times; control leverage &times; (1 &minus; substitutability)), on a 0 to 100 scale.
+      <br><br>Inference worked in full: accelerators 0.50 &times; 1.00 &times; (1 &minus; 0.60) = 0.200. Networking 0.07 &times; 0.60 &times; (1 &minus; 0.50) = 0.021. Energy, facility and staff all have leverage zero and contribute nothing. <b>Total 0.221, or 22.1.</b>
+      <br><br>Pretraining: 0.33 &times; 1.00 &times; 0.90 = 0.297, plus servers 0.18 &times; 0.20 &times; 0.30 = 0.011, plus interconnect 0.11 &times; 0.60 &times; 0.70 = 0.046, plus data 0.04 &times; 0.20 &times; 0.50 = 0.004. <b>Total 0.358, or 35.8.</b>
+      <br><br>Post-training: only the compute line carries leverage. 0.20 &times; 0.80 &times; (1 &minus; 0.50) = 0.080. <b>Total 8.0.</b> Note that this uses the light recipe. At frontier reinforcement learning intensity the compute share rises and so does the index, which is the correction section W.03 makes.</dd>
+
+      <dt>Why accelerator substitutability differs by stage</dt>
+      <dd>This is the judgement the tornado chart identifies as load-bearing, so it deserves stating plainly. A pretraining run needs thousands of identical top-specification accelerators wired into one machine, because the memory bandwidth between them is what makes the run possible at all. An older or slower part does not substitute; it fails. We score that 0.10.
+      <br><br>Serving is different. Requests are independent, so a failure spoils one answer rather than a months-long job. Older generations work. Lower-specification parts work. A compressed model at four bits runs on hardware two generations behind. We score that 0.60.
+      <br><br>If you think the right numbers are 0.20 and 0.40, the inference index rises from 22 to about 30 and the gap between the stages narrows considerably. The conclusion survives, but less comfortably, and you should know that.</dd>
+
+      <dt>The denial half-life, equation E5</dt>
+      <dd><b>T = ln(R) &divide; ln(&alpha;h)</b>, derived by setting C<sub>phys</sub>(&alpha;h)<sup>T</sup> = C<sub>req</sub>.
+      <br><br>&alpha; = 3.0 per year, the algorithmic efficiency estimate from Ho and colleagues via Epoch AI, corroborated independently at about three times a year by Gundlach and colleagues, who isolate algorithmic progress by controlling for competition and dividing out hardware price declines. h = 1.3 per year, Epoch AI&rsquo;s hardware price-performance figure. Combined, 3.9 times a year.
+      <br><br>Worked: a country held thirty times short of the frontier reaches today&rsquo;s frontier requirement in ln(30) &divide; ln(3.9) = 2.50 years. At a hundred times short, 3.38 years. At a thousand times, 5.08 years.</dd>
+
+      <dt>Growth rates, equation E8</dt>
+      <dd><b>g = (V<sub>end</sub> &divide; V<sub>start</sub>)<sup>1/n</sup> &minus; 1</b>, from first and last observation.
+      <br><br>Indian data centre capacity, 520 MW in 2020 to 1,600 MW in 2026: (1600 &divide; 520)<sup>1/6</sup> &minus; 1 = <b>20.6 per cent a year</b>. To reach 6,000 MW by 2029 from 1,600 in 2026: (6000 &divide; 1600)<sup>1/3</sup> &minus; 1 = <b>55.4 per cent a year</b>, which is 2.7 times the rate achieved over the previous six.
+      <br><br>Frontier training cost, $4.6m in 2020 to $350m in 2026: <b>105.9 per cent a year</b>. Price of GPT-3-level quality, $60 per million tokens in 2021 to $0.06 in 2024: <b>minus 90 per cent a year</b>.
+      <br><br>With three to five observations these are fitted rates. No regression is run and no confidence interval is quoted, because with this many points neither would mean anything.</dd>
+    </dl>
+  </div>
+</section>
+
+<section class="section ink">
+  <div class="container">
+    <div class="split">
+      <div>
+        <span class="eyebrow">In closing</span>
+        <h2 class="h-section" style="margin:16px 0 20px;max-width:26ch">Two claims held. One had to be rewritten.</h2>
+        <p class="lede" style="color:rgba(255,255,255,0.85);max-width:52ch">The rewritten one turned out to be more useful than the original, because it says something specific about which kind of post-training a country is actually doing.</p>
+      </div>
+      <div style="display:flex;align-items:flex-end">
+        <a class="btn btn-gold" href="india.html">What it means for India &rarr;</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <p class="footer-tag">Pretraining buys hardware.<br>Post-training buys people.<br>Inference buys buildings and power.</p>
+      <p class="footer-addr" style="margin-top:24px">High-Tech Geopolitics Programme,<br>Takshashila Institution, Bengaluru. A draft for discussion.</p>
+    </div>
+    <div>
+      <h4>Pages</h4>
+      <ul>
+        <li><a href="index.html">Overview</a></li>
+        <li><a href="money.html">Where the Money Goes</a></li>
+        <li><a href="workings.html">Testing the Claims</a></li>
+        <li><a href="exposure.html">Chokepoints</a></li>
+        <li><a href="openweights.html">Open Weights</a></li>
+        <li><a href="trends.html">Trends</a></li>
+        <li><a href="india.html">India</a></li>
+        <li><a href="method.html">Data &amp; Method</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Data</h4>
+      <ul>
+        <li><a href="assets/data/cost-stack.csv" download>cost-stack.csv</a></li>
+        <li><a href="assets/data/stage-costs.csv" download>stage-costs.csv</a></li>
+        <li><a href="assets/data/india-fit.csv" download>india-fit.csv</a></li>
+        <li><a href="assets/data/controls.csv" download>controls.csv</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Key sources</h4>
+      <ul>
+        <li><a href="https://arxiv.org/abs/2405.21015" rel="noopener">Cottier et al., training costs <span class="arrow">&#8599;</span></a></li>
+        <li><a href="https://epoch.ai/trends" rel="noopener">Epoch AI Trends <span class="arrow">&#8599;</span></a></li>
+        <li><a href="https://arxiv.org/abs/2501.12948" rel="noopener">DeepSeek-R1 report <span class="arrow">&#8599;</span></a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-base">
+    <span>September 2026 &middot; Draft for discussion &middot; Prepared with an AI assistant</span>
+    <span>Every figure carries its source</span>
+  </div>
+</footer>
+
+<script src="assets/js/comic.js"></script>
+<script src="assets/js/dash.js"></script>
+<script src="assets/js/dash2.js"></script>
+<script src="assets/js/dash3.js"></script>
+</body>
+</html>

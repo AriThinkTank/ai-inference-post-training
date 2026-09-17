@@ -357,8 +357,8 @@ window.D = window.D || {};
       var dataScore = [0, 1, 2.5, 4, 5][v.data];
 
       out.innerHTML = '<div class="gapless cols-4 sc-k">' +
-        '<div><span class="meta">Accelerators by 2028</span><div class="kpi kpi-gold">' + fleet.toLocaleString('en-IN') + '</div></div>' +
-        '<div><span class="meta">Actually housable</span><div class="kpi kpi-gold">' + usable.toLocaleString('en-IN') + '</div></div>' +
+        '<div><span class="meta">Accelerators by 2028</span><div class="kpi kpi-gold">' + fleet.toLocaleString('en-US') + '</div></div>' +
+        '<div><span class="meta">Actually housable</span><div class="kpi kpi-gold">' + usable.toLocaleString('en-US') + '</div></div>' +
         '<div><span class="meta">Post-training runs a day</span><div class="kpi kpi-gold">' + rlRuns.toFixed(1) + '</div></div>' +
         '<div><span class="meta">Users served daily</span><div class="kpi kpi-gold">' + users.toFixed(0) + 'm</div></div></div>';
 
@@ -370,7 +370,7 @@ window.D = window.D || {};
       else verdict = 'Middle of the road. Push one dial to an extreme and watch which output moves. The build dial moves the headline; the data dial moves the verdict.';
 
       say.innerHTML = verdict + '<br><br><span class="meta">Arithmetic: 38,000 &times; ' + domM + ' (build) &times; ' + ctrlM +
-        ' (access) = ' + fleet.toLocaleString('en-IN') + ', of which ' + (hallFrac * 100).toFixed(0) +
+        ' (access) = ' + fleet.toLocaleString('en-US') + ', of which ' + (hallFrac * 100).toFixed(0) +
         '% can be housed at the required rack density. Serving at 312 output tokens per second per accelerator and 5,000 tokens per user per day. ' +
         'Data and environment readiness scores ' + dataScore + ' of 5 and deliberately does not enter the hardware arithmetic, because it cannot be bought with accelerators.</span>';
     }
